@@ -24,9 +24,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BizException.class)
     public ResponseUtil handleBizException(BizException e) {
-        String message = e.getMessageKey() != null
-                ? messageSource.getMessage(e.getMessageKey(), null, LocaleContextHolder.getLocale())
-                : e.getMessage(); // 自定义消息直接使用
+        String message = e.getMessage(); // 优先使用构造时解析的消息
+        if (e.getMessage().startsWith("Unknown error")) { // 资源缺失时重新解析
+            try {
+                message = messageSource.getMessage(String.valueOf(e.getCode()), null, LocaleContextHolder.getLocale());
+            } catch (Exception ex) {
+                message = "Unknown error: code=" + e.getCode();
+            }
+        }
         return ResponseUtil.error(e.getCode(), message);
     }
 
@@ -34,7 +39,7 @@ public class GlobalExceptionHandler {
     public ResponseUtil handleBindException(BindException e) {
         String defaultMessage = e.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
         logger.error("Bind error: {}", defaultMessage);
-        String message = messageSource.getMessage("error.default_validation", null, LocaleContextHolder.getLocale());
+        String message = messageSource.getMessage("400", new Object[]{defaultMessage}, LocaleContextHolder.getLocale());
         return ResponseUtil.error(HttpStatus.BAD_REQUEST.value(), message);
     }
 
@@ -42,14 +47,14 @@ public class GlobalExceptionHandler {
     public ResponseUtil handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         String defaultMessage = e.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
         logger.error("Validation error: {}", defaultMessage);
-        String message = messageSource.getMessage("error.default_validation", null, LocaleContextHolder.getLocale());
+        String message = messageSource.getMessage("400", new Object[]{defaultMessage}, LocaleContextHolder.getLocale());
         return ResponseUtil.error(HttpStatus.BAD_REQUEST.value(), message);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseUtil handleGenericException(Exception e) {
         logger.error("Unexpected error", e);
-        String message = messageSource.getMessage("error.internal_server_error", null, LocaleContextHolder.getLocale());
+        String message = messageSource.getMessage("5000", null, LocaleContextHolder.getLocale());
         return ResponseUtil.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), message);
     }
 }

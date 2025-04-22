@@ -114,9 +114,9 @@ public class ResponseUtil extends HashMap<String, Object> {
         return ResponseUtil.error(msg, null);
     }
 
-    public static ResponseUtil error(BizException e) {
-        return ResponseUtil.error(e.getCode(), e.getMsg());
-    }
+//    public static ResponseUtil error(BizException e) {
+//        return ResponseUtil.error(e.getCode(), e.getMsg());
+//    }
 
     /**
      * 返回错误消息
