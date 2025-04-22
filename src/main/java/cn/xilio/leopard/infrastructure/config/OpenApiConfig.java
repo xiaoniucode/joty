@@ -1,4 +1,4 @@
-package cn.xilio.leopard.api.config;
+package cn.xilio.leopard.infrastructure.config;
 
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -13,7 +13,23 @@ public class OpenApiConfig {
     public GroupedOpenApi adminApi() {
         return GroupedOpenApi.builder()
                 .group("Leopard-Admin")
-                .packagesToScan("cn.xilio.leopard.api.controller")
+                .packagesToScan("cn.xilio.leopard.api.admin.controller")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi portalApi() {
+        return GroupedOpenApi.builder()
+                .group("Leopard-Portal")
+                .packagesToScan("cn.xilio.leopard.api.portal.controller")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi openApi() {
+        return GroupedOpenApi.builder()
+                .group("Leopard-Open")
+                .packagesToScan("cn.xilio.leopard.api.open.controller")
                 .build();
     }
 
