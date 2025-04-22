@@ -1,13 +1,20 @@
 package cn.xilio.leopard.common.util;
 
-import cn.xilio.turtle.core.BizException;
+
+import cn.xilio.leopard.common.exception.BizException;
 import com.google.gson.Gson;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
 
-
+/**
+ * @Project Leopard
+ * @Description
+ * @Author xilio
+ * @Website https://xilio.cn
+ * @Copyright (c) 2025 xilio. All Rights Reserved.
+ */
 public class Result extends HashMap<String, Object> {
     private static final long serialVersionUID = 1L;
 
