@@ -1,4 +1,4 @@
-package cn.xilio.leopard.infrastructure.config;
+package cn.xilio.leopard.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
