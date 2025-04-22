@@ -23,7 +23,6 @@ public class GlobalExceptionHandler {
     public ResponseUtil bindExceptionHandler(BindException e) {
         logger.error(e.getBindingResult().getFieldErrors().get(0).getDefaultMessage());
         return ResponseUtil.error(HttpStatus.BAD_REQUEST.value(), e.getBindingResult().getFieldErrors().get(0).getDefaultMessage());
-
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

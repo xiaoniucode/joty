@@ -1,0 +1,25 @@
+package cn.xilio.leopard.domain.shorturl.listener;
+
+import cn.xilio.leopard.domain.shorturl.event.ShortUrlClickedEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ShortUrlClickedListener {
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+    //@Autowired
+    //private StatsRepository statsRepository;
+
+    @Async
+    @EventListener
+    public void handleClick(ShortUrlClickedEvent event) {
+        String shortCode = event.getShortCode();
+        redisTemplate.opsForValue().increment("stats:click:" + shortCode);
+        // 异步批量更新 MySQL
+        //statsRepository.incrementClickCount(shortCode);
+    }
+}
