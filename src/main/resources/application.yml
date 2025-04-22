@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: leopard
+  task:
+    execution:
+      pool:
+        core-size: 50      # CPU\u6838\u5FC3\u6570\u00D72
+        max-size: 500      # \u6700\u5927\u7EBF\u7A0B\u6570
+        queue-capacity: 0  # \u4F7F\u7528SynchronousQueue
+        keep-alive: 60s
