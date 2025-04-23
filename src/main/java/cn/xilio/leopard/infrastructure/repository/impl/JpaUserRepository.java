@@ -16,6 +16,8 @@ public class JpaUserRepository implements UserRepository {
     public void saveUser() {
         userEntityRepository.save(new User());
     }
+
+
 }
 
 @Repository
@@ -23,3 +25,4 @@ interface UserEntityRepository extends JpaRepository<User, String> {
 
 
 }
+
