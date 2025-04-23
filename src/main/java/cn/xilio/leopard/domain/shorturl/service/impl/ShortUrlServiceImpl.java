@@ -7,6 +7,7 @@ import cn.xilio.leopard.api.portal.dto.response.CreateSingleShortUrlResponse;
 import cn.xilio.leopard.common.page.PageRequest;
 import cn.xilio.leopard.common.page.PageResponse;
 import cn.xilio.leopard.domain.shorturl.event.ShortUrlClickedEvent;
+import cn.xilio.leopard.domain.shorturl.event.ShortUrlCreatedEvent;
 import cn.xilio.leopard.domain.shorturl.model.ShortUrl;
 import cn.xilio.leopard.domain.shorturl.service.ShortUrlService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,14 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 public class ShortUrlServiceImpl implements ShortUrlService {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
+    private Lock lock = new ReentrantLock();
 
     //todo test
     public String getLongUrl(String shortCode, String ip) {
@@ -36,6 +40,17 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      */
     @Override
     public CreateSingleShortUrlResponse createSingle(CreateSingleShortUrlRequest request) {
+        lock.lock();
+        try {
+
+        } catch (Exception e) {
+
+        } finally {
+            lock.unlock();
+        }
+
+        //Post short link creation event
+        eventPublisher.publishEvent(new ShortUrlCreatedEvent(this));
         return null;
     }
 
