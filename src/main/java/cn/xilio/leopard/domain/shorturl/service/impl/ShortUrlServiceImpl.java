@@ -108,7 +108,8 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      */
     @Override
     public void deleteShortUrl(List<String> ids) {
-
+        String userId = "1";
+        shortUrlRepository.deleteByIds(ids, userId);
     }
 
     /**
@@ -119,6 +120,18 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      */
     @Override
     public PageResponse<ShortUrl> getShortUrls(PageQuery request) {
-        return shortUrlRepository.page(request,"1");
+        return shortUrlRepository.page(request, "1");
+    }
+
+    /**
+     * Get short link information
+     *
+     * @param id ID
+     * @return Short link information
+     */
+    @Override
+    public ShortUrl getShortUrlInfo(String id) {
+        String userId = "1";
+        return shortUrlRepository.findById(id, userId);
     }
 }

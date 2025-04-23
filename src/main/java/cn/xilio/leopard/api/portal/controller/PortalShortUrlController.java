@@ -4,6 +4,7 @@ import cn.xilio.leopard.api.portal.dto.request.CreateBatchShortUrlRequest;
 import cn.xilio.leopard.api.portal.dto.request.CreateSingleShortUrlRequest;
 import cn.xilio.leopard.common.page.PageQuery;
 import cn.xilio.leopard.common.util.Result;
+import cn.xilio.leopard.domain.shorturl.model.ShortUrl;
 import cn.xilio.leopard.domain.shorturl.service.ShortUrlService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +37,13 @@ public class PortalShortUrlController {
 
     @DeleteMapping(value = "del", name = "Batch delete short links")
     public Result deleteShortUrls(@RequestBody List<String> ids) {
-        //valid ids
         shortUrlService.deleteShortUrl(ids);
         return Result.success();
+    }
+
+    @GetMapping(value = "get", name = "Get short link information")
+    public Result getShortUrlInfo(@RequestParam String id) {
+        return Result.success(shortUrlService.getShortUrlInfo(id));
     }
 
 }

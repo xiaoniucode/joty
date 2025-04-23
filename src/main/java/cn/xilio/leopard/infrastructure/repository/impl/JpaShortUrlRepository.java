@@ -15,6 +15,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Repository
 public class JpaShortUrlRepository implements ShortUrlRepository {
@@ -49,6 +51,40 @@ public class JpaShortUrlRepository implements ShortUrlRepository {
                 entityPage.getSize(),
                 entityPage.hasNext()
         );
+    }
+
+    /**
+     * Batch delete short links
+     *
+     * @param ids    List of short link IDs
+     * @param userId UserId
+     */
+    @Override
+    public void deleteByIds(List<String> ids, String userId) {
+        Specification<ShortUrl> spec = (root, query, cb) ->
+                cb.and(
+                        cb.equal(root.get("createdBy"), userId),
+                        root.get("id").in(ids)
+                );
+        shortUrlEntityRepository.delete(spec);
+    }
+
+    /**
+     * Get short link information
+     *
+     * @param id     Short link ID
+     * @param userId UserId
+     * @return Short link information
+     */
+    @Override
+    public ShortUrl findById(String id, String userId) {
+        Specification<ShortUrl> spec = (root, query, cb) ->
+                cb.and(
+                        cb.equal(root.get("createdBy"), userId),
+                        cb.equal(root.get("id"), id)
+                );
+        return shortUrlEntityRepository.findOne(spec)
+                .orElse(null);
     }
 }
 

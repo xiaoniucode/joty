@@ -43,6 +43,10 @@ public interface ShortUrlService {
      */
     PageResponse<ShortUrl> getShortUrls(PageQuery request);
 
-
-
+    /**
+     * Get short link information
+     * @param id ID
+     * @return Short link information
+     */
+    ShortUrl getShortUrlInfo(String id);
 }
