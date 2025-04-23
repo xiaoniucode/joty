@@ -56,7 +56,7 @@ public class JpaGroupRepository implements GroupRepository {
      */
     @Override
     public Group getById(String groupId) {
-        return null;
+        return groupEntityRepository.findById(groupId).orElse(null);
     }
 
     /**

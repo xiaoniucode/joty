@@ -16,7 +16,7 @@ public class User {
      * 用户ID
      */
     @Id
-    @Column(name = "id", length = 32)
+    @Column(name = "id", length = 64)
     private String id;
 
     /**
@@ -70,13 +70,13 @@ public class User {
     /**
      * 创建者ID
      */
-    @Column(name = "created_by", length = 32, nullable = false)
+    @Column(name = "created_by", length = 64, nullable = false)
     private String createdBy;
 
     /**
      * 更新者ID
      */
-    @Column(name = "updated_by", length = 32)
+    @Column(name = "updated_by", length = 64)
     private String updatedBy;
 
     /**

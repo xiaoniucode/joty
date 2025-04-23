@@ -1,10 +1,7 @@
 package cn.xilio.leopard.domain.shorturl.model;
 
 import cn.xilio.leopard.infrastructure.repository.jpa.Auditable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.SQLDelete;
@@ -25,19 +22,20 @@ public class ShortUrl extends Auditable {
      * 短链接ID
      */
     @Id
-    @Column(name = "id", length = 32)
+    @Column(name = "id", length = 64)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     /**
      * 短链接标题
      */
-    @Column(name = "title", nullable = true, length = 32)
+    @Column(name = "title", nullable = true, length = 64)
     private String title;
 
     /**
      * 分组ID
      */
-    @Column(name = "group_id", length = 32, nullable = false, unique = true)
+    @Column(name = "group_id", length = 64, nullable = false, unique = true)
     private String groupId;
 
     /**
@@ -73,21 +71,21 @@ public class ShortUrl extends Auditable {
     /**
      * 域名
      */
-    @Column(name = "domain", nullable = false, length = 32)
+    @Column(name = "domain", nullable = false, length = 64)
     private String domain;
 
     /**
      * 创建者ID
      */
     @CreatedBy
-    @Column(name = "created_by", length = 32, nullable = false)
+    @Column(name = "created_by", length = 64, nullable = false)
     private String createdBy;
 
     /**
      * 更新者ID
      */
     @LastModifiedBy
-    @Column(name = "updated_by", length = 32)
+    @Column(name = "updated_by", length = 64)
     private String updatedBy;
 
     /**
@@ -95,10 +93,4 @@ public class ShortUrl extends Auditable {
      */
     @Column(name = "remark", length = 50)
     private String remark;
-
-    /**
-     * 创建时间
-     */
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
 }

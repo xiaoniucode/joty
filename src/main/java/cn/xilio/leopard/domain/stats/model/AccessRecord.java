@@ -22,7 +22,7 @@ public class AccessRecord {
      * 访问记录ID
      */
     @Id
-    @Column(name = "id", length = 32)
+    @Column(name = "id", length = 64)
     private String id;
 
     /**
