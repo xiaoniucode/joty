@@ -90,6 +90,11 @@ public class ShortUrl extends Auditable {
     private String updatedBy;
 
     /**
+     * 过期时间，空表示永远不过期
+     */
+    @Column(name = "expire_at")
+    private LocalDateTime expiredAt;
+    /**
      * 备注
      */
     @Column(name = "remark", length = 50)

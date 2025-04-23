@@ -1,6 +1,9 @@
 package cn.xilio.leopard.domain.shorturl.listener;
 
 
+import cn.xilio.leopard.common.exception.BizException;
+import cn.xilio.leopard.common.page.PageRequest;
+import cn.xilio.leopard.common.page.PageResponse;
 import cn.xilio.leopard.domain.shorturl.model.ShortUrl;
 import cn.xilio.leopard.domain.shorturl.service.ShortUrlService;
 import cn.xilio.leopard.domain.shorturl.service.ext.BloomFilterService;
@@ -10,10 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 
 @Component
@@ -30,21 +32,33 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
     }
 
     private void initShortUrlCode() {
-        logger.info("Initialize short link code from database to Bloom filter.");
-        List<String> codes = getShortUrlCode();
-        if (!CollectionUtils.isEmpty(codes)) {
-            for (String code : codes) {
-                bloomFilterService.put(code);
-            }
-        }
-    }
+        logger.info("Starting to initialize short link codes from database to Bloom filter.");
+        int page = 1;
+        int pageSize = 2000;
+        PageResponse<ShortUrl> pageResponse;
 
-    /**
-     *Get short link code, discard expired ones directly.
-     */
-    private List<String> getShortUrlCode() {
-//        List<ShortUrl> list = shortUrlService.ge();
-//        return list.stream().map(ShortUrl::getShortCode).collect(Collectors.toList());
-        return null;
+        try {
+            do {
+                PageRequest pageRequest = PageRequest.of(page, pageSize);
+                pageResponse = shortUrlService.getShortUrls(pageRequest);
+                logger.debug("Processing page {} with {} records.", page, pageResponse.getRecords().size());
+
+                for (ShortUrl shortUrl : pageResponse.getRecords()) {
+                    LocalDateTime expiredAt = shortUrl.getExpiredAt();
+                    String shortCode = shortUrl.getShortCode();
+                    if (!StringUtils.hasText(shortCode) || expiredAt.isBefore(LocalDateTime.now())) {
+                        continue;
+                    }
+                    bloomFilterService.put(shortCode);
+                }
+                // Increasing page numbers
+                page++;
+            } while (pageResponse.getHasMore());
+            logger.info("Finished initializing {} short link codes to Bloom filter.", page * pageSize);
+        } catch (Exception e) {
+            logger.error("Failed to initialize short link codes to Bloom filter.", e);
+            //todo test
+            throw new BizException("Initialization of Bloom filter failed");
+        }
     }
 }
