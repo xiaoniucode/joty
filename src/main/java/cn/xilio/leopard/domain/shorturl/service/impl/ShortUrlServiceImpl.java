@@ -1,6 +1,5 @@
 package cn.xilio.leopard.domain.shorturl.service.impl;
 
-import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.xilio.leopard.api.portal.dto.request.CreateBatchShortUrlRequest;
 import cn.xilio.leopard.api.portal.dto.request.CreateSingleShortUrlRequest;
@@ -10,23 +9,23 @@ import cn.xilio.leopard.common.exception.BizException;
 import cn.xilio.leopard.common.page.PageRequest;
 import cn.xilio.leopard.common.page.PageResponse;
 import cn.xilio.leopard.common.util.WebUtils;
+import cn.xilio.leopard.domain.file.service.UploadService;
 import cn.xilio.leopard.domain.group.model.Group;
 import cn.xilio.leopard.domain.group.service.GroupService;
-import cn.xilio.leopard.domain.shorturl.event.ShortUrlClickedEvent;
 import cn.xilio.leopard.domain.shorturl.event.ShortUrlCreatedEvent;
 import cn.xilio.leopard.domain.shorturl.model.ShortUrl;
 import cn.xilio.leopard.domain.shorturl.repository.ShortUrlRepository;
 import cn.xilio.leopard.domain.shorturl.service.ShortUrlService;
 import cn.xilio.leopard.domain.shorturl.service.ext.BloomFilterService;
+import cn.xilio.leopard.domain.shorturl.service.ext.QRGenerator;
 import cn.xilio.leopard.domain.shorturl.service.ext.ShortCodeGenerator;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -45,6 +44,8 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     private GroupService groupService;
     @Autowired
     private MessageSource messageSource;
+    @Autowired
+    private UploadService uploadService;
     private final Lock lock = new ReentrantLock();
 
     /**
@@ -68,14 +69,17 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                 String salt = RandomUtil.randomString(6);
                 code = shortCodeGenerator.genShortCode(request.originalUrl(), salt);
             }
-            String qrCodeUrl = "";
+            String shortUrl = WebUtils.getDomain() + "/" + code;
+            InputStream inputStream = QRGenerator.generateQRCode(shortUrl);
+            String qrCodeUrl = uploadService.upload(inputStream);
+
             ShortUrl newShortUrl = request.toEntity();
             newShortUrl.setDomain(WebUtils.getDomain());
             newShortUrl.setShortCode(code);
 
             shortUrlRepository.save(newShortUrl);
             bloomFilterService.put(code);
-            String shortUrl = WebUtils.getDomain() + "/" + code;
+
             //Post short link creation event
             eventPublisher.publishEvent(new ShortUrlCreatedEvent(this));
             return new CreateSingleShortUrlResponse(shortUrl, request.originalUrl(), qrCodeUrl);

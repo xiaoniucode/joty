@@ -10,9 +10,10 @@ spring:
         max-size: 500
         queue-capacity: 0
         keep-alive: 60s
-
-
-
+leopard:
+  file:
+    # 文件上传模式（支持 Local、MinIO）可扩展其他
+    uploadModel: Local
 sa-token:
   # token 名称（同时也是 cookie 名称）
   token-name: satoken
