@@ -4,8 +4,6 @@ import cn.xilio.leopard.infrastructure.repository.jpa.Auditable;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
@@ -15,8 +13,6 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "short_url")
-@SQLDelete(sql = "UPDATE short_url SET deleted = true WHERE id = ?")
-@Where(clause = "deleted = false")
 public class ShortUrl extends Auditable {
     /**
      * 短链接ID
@@ -35,7 +31,7 @@ public class ShortUrl extends Auditable {
     /**
      * 分组ID
      */
-    @Column(name = "group_id", length = 64, nullable = false, unique = true)
+    @Column(name = "group_id", length = 64, nullable = false)
     private String groupId;
 
     /**
@@ -54,14 +50,8 @@ public class ShortUrl extends Auditable {
     /**
      * 短链接码
      */
-    @Column(name = "short_code", nullable = false, unique = true, length = 7)
+    @Column(name = "short_code", nullable = false, length = 7)
     private String shortCode;
-
-    /**
-     * 逻辑删除标志
-     */
-    @Column(name = "deleted", nullable = false)
-    private Boolean deleted = false;
 
     /**
      * 状态
