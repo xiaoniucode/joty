@@ -1,4 +1,9 @@
 spring:
+  cache:
+    type: caffeine
+    cache-names: shortUrlCache
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=600s
   application:
     name: leopard
   profiles:

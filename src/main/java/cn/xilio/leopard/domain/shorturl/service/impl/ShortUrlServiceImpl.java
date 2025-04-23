@@ -76,8 +76,9 @@ public class ShortUrlServiceImpl implements ShortUrlService {
             ShortUrl newShortUrl = request.toEntity();
             newShortUrl.setDomain(WebUtils.getDomain());
             newShortUrl.setShortCode(code);
+            newShortUrl.setQrUrl(qrCodeUrl);
 
-            shortUrlRepository.save(newShortUrl);
+            ShortUrl saveResult = shortUrlRepository.save(newShortUrl);
             bloomFilterService.put(code);
 
             //Post short link creation event

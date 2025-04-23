@@ -9,13 +9,15 @@ public record CreateSingleShortUrlRequest(
         @NotEmpty(message = "原网址链接不能为空")
         String originalUrl,
         @NotEmpty(message = "分组ID不能为空")
-        String groupId
+        String groupId,
+        String remark
 ) {
     public ShortUrl toEntity() {
         ShortUrl shortUrl = new ShortUrl();
         shortUrl.setTitle(title);
         shortUrl.setOriginalUrl(originalUrl);
         shortUrl.setGroupId(groupId);
+        shortUrl.setRemark(remark);
         return shortUrl;
     }
 }
