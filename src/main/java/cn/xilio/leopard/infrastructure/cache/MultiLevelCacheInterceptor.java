@@ -7,10 +7,10 @@ import org.springframework.cache.interceptor.CacheInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCache;
 
-@Configuration
+//@Configuration
 public class MultiLevelCacheInterceptor extends CacheInterceptor {
 
-    @Autowired
+    //@Autowired
     private CacheManager caffeineCacheManager;
 
     @Override

@@ -9,10 +9,10 @@ import java.util.List;
 @Getter
 public class PageResponse<T> {
     private List<T> records;
-    private Integer total;
-    private Integer page;
-    private Integer size;
-    private Boolean hasMore;
+    private Integer total=0;
+    private Integer page=1;
+    private Integer size=0;
+    private Boolean hasMore=false;
 
     public static <T> PageResponse<T> empty() {
         return new PageResponse<>(List.of(), 0, 0, 0,false);

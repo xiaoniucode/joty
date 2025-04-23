@@ -77,6 +77,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
             newShortUrl.setDomain(WebUtils.getDomain());
             newShortUrl.setShortCode(code);
             newShortUrl.setQrUrl(qrCodeUrl);
+            newShortUrl.setShortUrl(shortUrl);
 
             ShortUrl saveResult = shortUrlRepository.save(newShortUrl);
             bloomFilterService.put(code);
@@ -118,6 +119,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      */
     @Override
     public PageResponse<ShortUrl> getShortUrls(PageRequest request) {
-        return null;
+        return PageResponse.of(List.of());
     }
 }

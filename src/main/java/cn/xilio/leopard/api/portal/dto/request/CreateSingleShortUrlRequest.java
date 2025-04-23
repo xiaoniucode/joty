@@ -3,6 +3,8 @@ package cn.xilio.leopard.api.portal.dto.request;
 import cn.xilio.leopard.domain.shorturl.model.ShortUrl;
 import jakarta.validation.constraints.NotEmpty;
 
+import java.time.LocalDateTime;
+
 public record CreateSingleShortUrlRequest(
         @NotEmpty(message = "短链接标题不能为空")
         String title,
@@ -10,6 +12,7 @@ public record CreateSingleShortUrlRequest(
         String originalUrl,
         @NotEmpty(message = "分组ID不能为空")
         String groupId,
+        LocalDateTime expiredAt,
         String remark
 ) {
     public ShortUrl toEntity() {
@@ -18,6 +21,7 @@ public record CreateSingleShortUrlRequest(
         shortUrl.setOriginalUrl(originalUrl);
         shortUrl.setGroupId(groupId);
         shortUrl.setRemark(remark);
+        shortUrl.setExpiredAt(expiredAt);
         return shortUrl;
     }
 }
