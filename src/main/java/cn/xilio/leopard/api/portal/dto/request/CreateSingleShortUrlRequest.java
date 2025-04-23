@@ -1,5 +1,6 @@
 package cn.xilio.leopard.api.portal.dto.request;
 
+import cn.xilio.leopard.domain.shorturl.model.ShortUrl;
 import jakarta.validation.constraints.NotEmpty;
 
 public record CreateSingleShortUrlRequest(
@@ -10,4 +11,8 @@ public record CreateSingleShortUrlRequest(
         @NotEmpty(message = "分组ID不能为空")
         String groupId
 ) {
+        public ShortUrl toEntity() {
+                ShortUrl shortUrl = new ShortUrl();
+                return shortUrl;
+        }
 }

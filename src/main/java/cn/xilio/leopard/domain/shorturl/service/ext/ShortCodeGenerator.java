@@ -1,25 +1,26 @@
 package cn.xilio.leopard.domain.shorturl.service.ext;
 
 import cn.xilio.leopard.common.util.MD5;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 随机码生成
- *
- * @author BreezAm
  */
+@Component
 @SuppressWarnings("all")
 public class ShortCodeGenerator {
-    private static final String randomStr = "hnmnd0d";
+    private static final String randomStr = "leopard.xilio.cn";
 
-    public static String genShortCode(String url, String randomStr) {
+    public String genShortCode(String url, String randomStr) {
         return shortUrl(url, randomStr)[0];
     }
 
-    public static String genShortCode(String url) {
+    public String genShortCode(String url) {
         return shortUrl(url, randomStr)[0];
     }
 
-    private static String[] shortUrl(String url, String randomStr) {
+    private String[] shortUrl(String url, String randomStr) {
         String[] chars = new String[]{"a", "b", "c", "d", "e", "f", "g", "h",
                 "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t",
                 "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5",

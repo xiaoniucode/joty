@@ -13,8 +13,12 @@ public class JpaShortUrlRepository implements ShortUrlRepository {
     private final ShortUrlEntityRepository shortUrlEntityRepository;
 
 
-
+    @Override
+    public ShortUrl save(ShortUrl newShortUrl) {
+        return shortUrlEntityRepository.save(newShortUrl);
+    }
 }
+
 @Repository
 interface ShortUrlEntityRepository extends JpaRepository<ShortUrl, String> {
 }
