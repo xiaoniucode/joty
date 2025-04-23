@@ -11,22 +11,22 @@ public class PortalGroupController {
     @Autowired
     private GroupService groupService;
 
-    @PostMapping(value = "save", name = "保存分组")
+    @PostMapping(value = "save", name = "Save Group")
     public Result saveGroup() {
         return Result.success();
     }
 
-    @DeleteMapping(value = "del", name = "删除分组")
+    @DeleteMapping(value = "del", name = "Delete Group")
     public Result deleteGroup() {
         return Result.success();
     }
 
-    @PostMapping(value = "list", name = "获取分组列表")
+    @PostMapping(value = "list", name = "Get group list")
     public Result getGroups() {
         return Result.success();
     }
 
-    @GetMapping(value = "get", name = "获取分组详情")
+    @GetMapping(value = "get", name = "Get group details")
     public Result getGroup() {
         return Result.success();
     }

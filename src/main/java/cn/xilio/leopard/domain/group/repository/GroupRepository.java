@@ -5,47 +5,47 @@ import cn.xilio.leopard.domain.group.model.Group;
 import java.util.List;
 
 /**
- * 分组仓储
+ * Group storage
  */
 public interface GroupRepository {
 
     /**
-     * 根据分组ID删除分组
+     * Delete a group based on its ID
      *
-     * @param groupId 分组ID
-     * @return 删除是否成功
+     * @param groupId Group ID
+     * @return Was the deletion successful
      */
     boolean deleteById(String groupId);
 
     /**
-     * 根据分组ID更新分组信息
+     * Update group information based on group ID
      *
-     * @param group 分组实体
-     * @return 更新是否成功
+     * @param group Grouping entity
+     * @return Is the update successful
      */
     boolean updateById(Group group);
 
     /**
-     * 获取指定用户的所有分组
+     * Retrieve all groups of the specified user
      *
-     * @param userId 用户ID
-     * @return 分组列表
+     * @param userId USER ID
+     * @return Grouped List
      */
     List<Group> getGroupsByUser(String userId);
 
     /**
-     * 根据分组ID查询分组
+     * Query grouping based on grouping ID
      *
-     * @param groupId 分组ID
-     * @return 分组实体，若不存在返回 null
+     * @param groupId Group ID
+     * @return Grouping entity, return null if it does not exist
      */
     Group getById(String groupId);
 
     /**
-     * 获取指定用户的分组数量
+     * Get the number of groups for the specified user
      *
-     * @param userId 用户ID
-     * @return 分组数量
+     * @param userId USER ID
+     * @return Number of groups
      */
     long getCountByUser(String userId);
 }

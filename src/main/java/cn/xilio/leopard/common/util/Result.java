@@ -1,10 +1,12 @@
 package cn.xilio.leopard.common.util;
 
 
+import cn.xilio.leopard.common.page.PageResponse;
 import com.google.gson.Gson;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ObjectUtils;
 
+import java.io.Serial;
 import java.util.HashMap;
 
 /**
@@ -15,6 +17,7 @@ import java.util.HashMap;
  * @Copyright (c) 2025 xilio. All Rights Reserved.
  */
 public class Result extends HashMap<String, Object> {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -71,6 +74,17 @@ public class Result extends HashMap<String, Object> {
      */
     public static Result success() {
         return Result.success("ok");
+    }
+
+    /**
+     * 分页响应
+     *
+     * @param rsp 返回信息
+     * @param <T> 数据类型
+     * @return 结果组装
+     */
+    public static <T> Result success(PageResponse<T> rsp) {
+        return null;
     }
 
     /**
@@ -153,7 +167,7 @@ public class Result extends HashMap<String, Object> {
         return get("data");
     }
 
-    public String toJson(){
-      return new Gson().toJson(this);
+    public String toJson() {
+        return new Gson().toJson(this);
     }
 }

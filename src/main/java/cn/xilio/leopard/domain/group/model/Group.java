@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "group")
+@Table(name = "t_group")
 public class Group {
     /**
      * 分组ID
