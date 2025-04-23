@@ -11,5 +11,4 @@ public class LeopardApplication {
     public static void main(String[] args) {
         SpringApplication.run(LeopardApplication.class, args);
     }
-
 }

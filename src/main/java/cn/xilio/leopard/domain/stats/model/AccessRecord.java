@@ -43,7 +43,6 @@ public class AccessRecord {
     @Column(name = "device_type", length = 20)
     private String deviceType;
 
-
     /**
      * 浏览器
      */
