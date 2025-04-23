@@ -4,7 +4,7 @@ import cn.xilio.leopard.api.portal.dto.request.CreateBatchShortUrlRequest;
 import cn.xilio.leopard.api.portal.dto.request.CreateSingleShortUrlRequest;
 import cn.xilio.leopard.api.portal.dto.response.CreateBatchShortUrlResponse;
 import cn.xilio.leopard.api.portal.dto.response.CreateSingleShortUrlResponse;
-import cn.xilio.leopard.common.page.PageRequest;
+import cn.xilio.leopard.common.page.PageQuery;
 import cn.xilio.leopard.common.page.PageResponse;
 import cn.xilio.leopard.domain.shorturl.model.ShortUrl;
 
@@ -41,7 +41,7 @@ public interface ShortUrlService {
      * @param request Page request information
      * @return Short chain list
      */
-    PageResponse<ShortUrl> getShortUrls(PageRequest request);
+    PageResponse<ShortUrl> getShortUrls(PageQuery request);
 
 
 

@@ -2,7 +2,7 @@ package cn.xilio.leopard.domain.shorturl.listener;
 
 
 import cn.xilio.leopard.common.exception.BizException;
-import cn.xilio.leopard.common.page.PageRequest;
+import cn.xilio.leopard.common.page.PageQuery;
 import cn.xilio.leopard.common.page.PageResponse;
 import cn.xilio.leopard.domain.shorturl.model.ShortUrl;
 import cn.xilio.leopard.domain.shorturl.service.ShortUrlService;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -39,14 +40,14 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
 
         try {
             do {
-                PageRequest pageRequest = PageRequest.of(page, pageSize);
+                PageQuery pageRequest = PageQuery.of(page, pageSize);
                 pageResponse = shortUrlService.getShortUrls(pageRequest);
                 logger.debug("Processing page {} with {} records.", page, pageResponse.getRecords().size());
 
                 for (ShortUrl shortUrl : pageResponse.getRecords()) {
                     LocalDateTime expiredAt = shortUrl.getExpiredAt();
                     String shortCode = shortUrl.getShortCode();
-                    if (!StringUtils.hasText(shortCode) || expiredAt.isBefore(LocalDateTime.now())) {
+                    if (!StringUtils.hasText(shortCode)||ObjectUtils.isEmpty(expiredAt) || expiredAt.isBefore(LocalDateTime.now())) {
                         continue;
                     }
                     bloomFilterService.put(shortCode);

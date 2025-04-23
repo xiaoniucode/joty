@@ -9,18 +9,18 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PageRequest implements Serializable {
+public class PageQuery implements Serializable {
     private static final long serialVersionUID = 1L;
     private int page = 1;
     private int size = 10;
 
-    public PageRequest(int page, int size) {
+    public PageQuery(int page, int size) {
         this.page = page;
         this.size = size;
     }
 
-    public static PageRequest of(int page, int size) {
-        return new PageRequest(page, size);
+    public static PageQuery of(int page, int size) {
+        return new PageQuery(page, size);
     }
 
 }

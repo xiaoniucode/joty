@@ -6,7 +6,7 @@ import cn.xilio.leopard.api.portal.dto.request.CreateSingleShortUrlRequest;
 import cn.xilio.leopard.api.portal.dto.response.CreateBatchShortUrlResponse;
 import cn.xilio.leopard.api.portal.dto.response.CreateSingleShortUrlResponse;
 import cn.xilio.leopard.common.exception.BizException;
-import cn.xilio.leopard.common.page.PageRequest;
+import cn.xilio.leopard.common.page.PageQuery;
 import cn.xilio.leopard.common.page.PageResponse;
 import cn.xilio.leopard.common.util.WebUtils;
 import cn.xilio.leopard.domain.file.service.UploadService;
@@ -118,7 +118,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      * @return Short chain list
      */
     @Override
-    public PageResponse<ShortUrl> getShortUrls(PageRequest request) {
-        return PageResponse.of(List.of());
+    public PageResponse<ShortUrl> getShortUrls(PageQuery request) {
+        return shortUrlRepository.page(request,"1");
     }
 }

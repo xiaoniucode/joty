@@ -76,16 +76,6 @@ public class Result extends HashMap<String, Object> {
         return Result.success("ok");
     }
 
-    /**
-     * 分页响应
-     *
-     * @param rsp 返回信息
-     * @param <T> 数据类型
-     * @return 结果组装
-     */
-    public static <T> Result success(PageResponse<T> rsp) {
-        return null;
-    }
 
     /**
      * 返回成功数据
