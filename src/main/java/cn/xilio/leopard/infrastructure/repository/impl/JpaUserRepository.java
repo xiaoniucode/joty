@@ -1,5 +1,6 @@
 package cn.xilio.leopard.infrastructure.repository.impl;
 
+
 import cn.xilio.leopard.domain.user.model.User;
 import cn.xilio.leopard.domain.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
