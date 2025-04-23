@@ -43,7 +43,8 @@ public class ShortUrl extends Auditable {
      */
     @Column(name = "original_url", nullable = false, length = 4096)
     private String originalUrl;
-
+    @Column(name = "short_url", nullable = false, length = 100)
+    private String shortUrl;
     /**
      * 二维码链接
      */

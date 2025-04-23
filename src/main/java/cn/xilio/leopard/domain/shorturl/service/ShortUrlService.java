@@ -42,4 +42,7 @@ public interface ShortUrlService {
      * @return Short chain list
      */
     PageResponse<ShortUrl> getShortUrls(PageRequest request);
+
+
+
 }
