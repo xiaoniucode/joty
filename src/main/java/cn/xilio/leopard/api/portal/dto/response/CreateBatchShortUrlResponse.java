@@ -1,4 +1,8 @@
 package cn.xilio.leopard.api.portal.dto.response;
 
-public record CreateBatchShortUrlResponse() {
+import java.util.List;
+
+public record CreateBatchShortUrlResponse(
+        List<CreateSingleShortUrlResponse>shortUrls
+) {
 }

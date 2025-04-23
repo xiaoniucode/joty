@@ -26,6 +26,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -97,8 +99,21 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      * @return Create Results
      */
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public CreateBatchShortUrlResponse createBatchShortUrl(CreateBatchShortUrlRequest request) {
-        return null;
+        List<CreateSingleShortUrlResponse> list = new ArrayList<>();
+        List<String> urls = request.urls();
+        for (String originalUrl : urls) {
+            CreateSingleShortUrlRequest single = new CreateSingleShortUrlRequest(
+                    "title",
+                    originalUrl,
+                    "1",
+                    LocalDateTime.now(),
+                    "Batch Create");
+            CreateSingleShortUrlResponse created = createSingle(single);
+            list.add(created);
+        }
+        return new CreateBatchShortUrlResponse(list);
     }
 
     /**
