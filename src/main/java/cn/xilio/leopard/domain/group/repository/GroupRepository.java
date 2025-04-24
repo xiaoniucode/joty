@@ -1,5 +1,7 @@
 package cn.xilio.leopard.domain.group.repository;
 
+import cn.xilio.leopard.common.page.PageQuery;
+import cn.xilio.leopard.common.page.PageResponse;
 import cn.xilio.leopard.domain.group.model.Group;
 
 import java.util.List;
@@ -15,7 +17,7 @@ public interface GroupRepository {
      * @param groupId Group ID
      * @return Was the deletion successful
      */
-    long deleteById(String groupId,String userId);
+    long deleteById(String groupId, String userId);
 
     /**
      * Update group information based on group ID
@@ -23,15 +25,16 @@ public interface GroupRepository {
      * @param group Grouping entity
      * @return Is the update successful
      */
-    boolean updateById(Group group,String userId);
+    boolean updateById(Group group, String userId);
 
     /**
      * Retrieve all groups of the specified user
      *
+     * @param query  Page param
      * @param userId USER ID
      * @return Grouped List
      */
-    List<Group> getGroupsByUser(String userId);
+    PageResponse<Group> getGroupsByUser(PageQuery query, String userId);
 
     /**
      * Query grouping based on grouping ID
@@ -39,7 +42,7 @@ public interface GroupRepository {
      * @param groupId Group ID
      * @return Grouping entity, return null if it does not exist
      */
-    Group getById(String groupId,String userId);
+    Group getById(String groupId, String userId);
 
     /**
      * Get the number of groups for the specified user
@@ -49,5 +52,5 @@ public interface GroupRepository {
      */
     long getCountByUser(String userId);
 
-    void deleteBatch(List<String> ids,String userId);
+    void deleteBatch(List<String> ids, String userId);
 }

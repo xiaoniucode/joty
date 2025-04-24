@@ -1,9 +1,14 @@
 package cn.xilio.leopard.infrastructure.repository.impl;
 
+import cn.xilio.leopard.common.page.PageQuery;
+import cn.xilio.leopard.common.page.PageResponse;
 import cn.xilio.leopard.domain.group.model.Group;
 import cn.xilio.leopard.domain.group.repository.GroupRepository;
 import jakarta.persistence.criteria.Predicate;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -66,21 +71,37 @@ public class JpaGroupRepository implements GroupRepository {
     /**
      * Retrieve all groups of the specified user
      *
+     * @param query  Page param
      * @param userId USER ID
      * @return Grouped List
      */
     @Override
-    public List<Group> getGroupsByUser(String userId) {
-        Specification<Group> spec = (root, query, cb) ->
+    public PageResponse<Group> getGroupsByUser(PageQuery query, String userId) {
+        int page = query.getPage();
+        int size = query.getSize();
+        Specification<Group> spec = (root, query1, cb) ->
                 cb.equal(root.get("userId"), userId);
-        return groupEntityRepository.findAll(spec);
+        PageRequest pageRequest = PageRequest.of(
+                page < 1 ? 0 : (page - 1),
+                size,
+                Sort.by(Sort.Direction.DESC, "createdAt")
+        );
+        Page<Group> entityPage = groupEntityRepository.findAll(spec, pageRequest);
+        return PageResponse.of(
+                entityPage.getContent(),
+                (int) entityPage.getTotalElements(),
+                entityPage.getNumber() + 1,
+                entityPage.getSize(),
+                entityPage.hasNext()
+        );
     }
+
 
     /**
      * Query grouping based on grouping ID
      *
      * @param groupId Group ID
-     * @param userId User Id
+     * @param userId  User Id
      * @return Grouping entity, return null if it does not exist
      */
     @Override
