@@ -19,8 +19,7 @@ public class QRGenerator {
             ImageIO.write(image, "png", imOut);
             return new ByteArrayInputStream(bs.toByteArray());
         } catch (Exception e) {
-            //todo test
-            throw new BizException("生成二维码失败");
+            throw new BizException("1006");
         }
     }
 }

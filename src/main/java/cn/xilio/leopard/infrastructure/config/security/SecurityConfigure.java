@@ -4,6 +4,7 @@ import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.xilio.leopard.common.util.LocaleUtils;
 import cn.xilio.leopard.common.util.Result;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +29,7 @@ public class SecurityConfigure {
                     // 登录认证 -- 拦截所有路由，并排除/user/doLogin 用于开放登录
                     SaRouter.match("/**", "/api/user/login", StpUtil::checkLogin);
                 })
-                .setError(e -> Result.error(e.getMessage()))
+                .setError(e -> Result.error("401", LocaleUtils.getLocaleMessage("401")))
 
                 // 前置函数：在每次认证函数之前执行（BeforeAuth 不受 includeList 与 excludeList 的限制，所有请求都会进入）
                 .setBeforeAuth(r -> {

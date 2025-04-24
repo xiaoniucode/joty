@@ -63,7 +63,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         try {
             Group group = groupService.getById(request.groupId());
             //检查分组是否存在
-            BizException.noNull(group, "groupId", messageSource);
+            BizException.checkNull("6005", group);
             //生成短码
             String code = shortCodeGenerator.genShortCode(request.originalUrl());
             //如果生成的短码存在则加随机数重新生成 保证唯一性

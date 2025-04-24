@@ -31,9 +31,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public SaTokenInfo login(LoginRequest request) {
         User user = userRepository.getByName(request.username());
-        if (ObjectUtils.isEmpty(user)) {
-            throw new BizException(400, "Incorrect username or password");
-        }
+        BizException.checkNull("6001", user);
         StpUtil.login(user.getId(), new SaLoginParameter()
                 .setIsLastingCookie(true)
                 .setIsWriteHeader(true));

@@ -2,7 +2,10 @@ package cn.xilio.leopard.common.util;
 
 
 import cn.xilio.leopard.common.page.PageResponse;
+import cn.xilio.leopard.common.spring.SpringHelper;
 import com.google.gson.Gson;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ObjectUtils;
 
@@ -47,7 +50,7 @@ public class Result extends HashMap<String, Object> {
      * @param code 状态码
      * @param msg  返回内容
      */
-    public Result(int code, String msg) {
+    public Result(String code, String msg) {
         super.put(CODE_TAG, code);
         super.put(MSG_TAG, msg);
     }
@@ -59,7 +62,7 @@ public class Result extends HashMap<String, Object> {
      * @param msg  返回内容
      * @param data 数据对象
      */
-    public Result(int code, String msg, Object data) {
+    public Result(String code, String msg, Object data) {
         super.put(CODE_TAG, code);
         super.put(MSG_TAG, msg);
         if (!ObjectUtils.isEmpty(data)) {
@@ -73,7 +76,7 @@ public class Result extends HashMap<String, Object> {
      * @return 成功消息
      */
     public static Result success() {
-        return Result.success("ok");
+        return Result.success(null);
     }
 
 
@@ -83,19 +86,7 @@ public class Result extends HashMap<String, Object> {
      * @return 成功消息
      */
     public static Result success(Object data) {
-        return Result.success("ok", data);
-    }
-
-
-    /**
-     * 返回成功消息
-     *
-     * @param msg  返回内容
-     * @param data 数据对象
-     * @return 成功消息
-     */
-    public static Result success(String msg, Object data) {
-        return new Result(HttpStatus.OK.value(), msg, data);
+        return new Result("0", LocaleUtils.getLocaleMessage("0", null), data);
     }
 
     /**
@@ -104,33 +95,9 @@ public class Result extends HashMap<String, Object> {
      * @return 错误消息
      */
     public static Result error() {
-        return Result.error("操作失败");
+        return Result.error("1", LocaleUtils.getLocaleMessage("1", null));
     }
 
-    /**
-     * 返回错误消息
-     *
-     * @param msg 返回内容
-     * @return 错误消息
-     */
-    public static Result error(String msg) {
-        return Result.error(msg, null);
-    }
-
-//    public static ResponseUtil error(BizException e) {
-//        return ResponseUtil.error(e.getCode(), e.getMsg());
-//    }
-
-    /**
-     * 返回错误消息
-     *
-     * @param msg  返回内容
-     * @param data 数据对象
-     * @return 错误消息
-     */
-    public static Result error(String msg, Object data) {
-        return new Result(HttpStatus.BAD_REQUEST.value(), msg, data);
-    }
 
     /**
      * 返回错误消息
@@ -139,7 +106,7 @@ public class Result extends HashMap<String, Object> {
      * @param msg  返回内容
      * @return 错误消息
      */
-    public static Result error(int code, String msg) {
+    public static Result error(String code, String msg) {
         return new Result(code, msg, null);
     }
 
@@ -160,4 +127,5 @@ public class Result extends HashMap<String, Object> {
     public String toJson() {
         return new Gson().toJson(this);
     }
+
 }

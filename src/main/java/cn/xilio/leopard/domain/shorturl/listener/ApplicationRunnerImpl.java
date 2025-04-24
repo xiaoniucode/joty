@@ -47,7 +47,7 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
                 for (ShortUrl shortUrl : pageResponse.getRecords()) {
                     LocalDateTime expiredAt = shortUrl.getExpiredAt();
                     String shortCode = shortUrl.getShortCode();
-                    if (!StringUtils.hasText(shortCode)||ObjectUtils.isEmpty(expiredAt) || expiredAt.isBefore(LocalDateTime.now())) {
+                    if (!StringUtils.hasText(shortCode) || ObjectUtils.isEmpty(expiredAt) || expiredAt.isBefore(LocalDateTime.now())) {
                         continue;
                     }
                     bloomFilterService.put(shortCode);
@@ -58,8 +58,7 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
             logger.info("Finished initializing {} short link codes to Bloom filter.", page * pageSize);
         } catch (Exception e) {
             logger.error("Failed to initialize short link codes to Bloom filter.", e);
-            //todo test
-            throw new BizException("Initialization of Bloom filter failed");
+            throw new BizException("1005");
         }
     }
 }
