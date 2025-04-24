@@ -86,6 +86,19 @@ public class JpaShortUrlRepository implements ShortUrlRepository {
         return shortUrlEntityRepository.findOne(spec)
                 .orElse(null);
     }
+
+    /**
+     * Get short link information by short code
+     *
+     * @param code Short code
+     * @return Short link information
+     */
+    @Override
+    public ShortUrl findByShortCode(String code) {
+        Specification<ShortUrl> spec = (root, query, cb) ->
+                cb.and(cb.equal(root.get("shortCode"), code));
+        return shortUrlEntityRepository.findOne(spec).orElse(null);
+    }
 }
 
 @Repository

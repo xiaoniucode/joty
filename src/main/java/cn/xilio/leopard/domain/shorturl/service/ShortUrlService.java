@@ -45,8 +45,17 @@ public interface ShortUrlService {
 
     /**
      * Get short link information
+     *
      * @param id ID
      * @return Short link information
      */
     ShortUrl getShortUrlInfo(String id);
+
+    /**
+     * Get short link information
+     *
+     * @param code Short Code
+     * @return Short link information
+     */
+    ShortUrl getByShortCode(String code);
 }

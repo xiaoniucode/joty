@@ -31,4 +31,10 @@ public interface ShortUrlRepository {
      */
     ShortUrl findById(String id, String userId);
 
+    /**
+     * Get short link information by short code
+     * @param code Short code
+     * @return Short link information
+     */
+    ShortUrl findByShortCode(String code);
 }

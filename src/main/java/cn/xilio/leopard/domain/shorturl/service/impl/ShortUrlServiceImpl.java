@@ -148,4 +148,15 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         String userId = "1";
         return shortUrlRepository.findById(id, userId);
     }
+
+    /**
+     * Get short link information
+     *
+     * @param code Short Code
+     * @return Short link information
+     */
+    @Override
+    public ShortUrl getByShortCode(String code) {
+        return shortUrlRepository.findByShortCode(code);
+    }
 }

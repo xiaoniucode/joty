@@ -15,7 +15,7 @@ public class DispatcherController {
 
     @GetMapping(value = "/{code:[a-zA-Z0-9]{6}}", name = "JUMP TO")
     public String trigger(@PathVariable String code) {
-       String longUrl= dispatcherService.getLongUrl(code);
-        return "redirect:" + "https://www.baidu.com";
+        String longUrl = dispatcherService.getLongUrl(code);
+        return "redirect:" + longUrl;
     }
 }

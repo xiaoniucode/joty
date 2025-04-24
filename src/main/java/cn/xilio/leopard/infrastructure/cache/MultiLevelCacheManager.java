@@ -63,4 +63,54 @@ public class MultiLevelCacheManager implements CacheManager {
         redisTemplate.delete(key);
         System.out.println("Evicted cache for key: " + key);
     }
+
+    @Override
+    public <T> T getHash(String key, String hKey, Function<String, T> loader) {
+        // 1. 构造 Caffeine 缓存的键（key:hKey）
+        String cacheKey = key + ":" + hKey;
+        T value = (T) caffeineCache.getIfPresent(cacheKey);
+        if (value != null) {
+            System.out.println("Hit Caffeine cache for key: " + cacheKey);
+            return value;
+        }
+
+        // 2. 查远程缓存 (Redis Hash)
+        value = (T) redisTemplate.opsForHash().get(key, hKey);
+        if (value != null) {
+            System.out.println("Hit Redis Hash cache for key: " + key + ", hKey: " + hKey);
+            // 回填本地缓存
+            caffeineCache.put(cacheKey, value);
+            return value;
+        }
+
+        // 3. 缓存未命中，调用 loader 加载数据
+        value = loader.apply(cacheKey);
+        if (value != null) {
+            System.out.println("Fetched from loader for key: " + cacheKey);
+            putHash(key, hKey, value);
+        }
+
+        return value;
+    }
+
+    @Override
+    public void putHash(String key, String hKey, Object value) {
+        // 存入本地缓存 (Caffeine)
+        String cacheKey = key + ":" + hKey;
+        caffeineCache.put(cacheKey, value);
+        // 存入远程缓存 (Redis Hash)
+        redisTemplate.opsForHash().put(key, hKey, value);
+        // 设置 Hash 键的过期时间
+        redisTemplate.expire(key, REDIS_TTL_MINUTES, TimeUnit.MINUTES);
+    }
+
+    @Override
+    public void evictHash(String key, String hKey) {
+        // 清理本地缓存
+        String cacheKey = key + ":" + hKey;
+        caffeineCache.invalidate(cacheKey);
+        // 清理远程缓存 (Redis Hash 的指定 hKey)
+        redisTemplate.opsForHash().delete(key, hKey);
+        System.out.println("Evicted Hash cache for key: " + key + ", hKey: " + hKey);
+    }
 }

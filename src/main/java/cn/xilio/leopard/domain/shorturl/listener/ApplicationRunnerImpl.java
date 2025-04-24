@@ -47,7 +47,7 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
                 for (ShortUrl shortUrl : pageResponse.getRecords()) {
                     LocalDateTime expiredAt = shortUrl.getExpiredAt();
                     String shortCode = shortUrl.getShortCode();
-                    if (!StringUtils.hasText(shortCode) || ObjectUtils.isEmpty(expiredAt) || expiredAt.isBefore(LocalDateTime.now())) {
+                    if (!StringUtils.hasText(shortCode) || (!ObjectUtils.isEmpty(expiredAt) &&expiredAt.isBefore(LocalDateTime.now()))) {
                         continue;
                     }
                     bloomFilterService.put(shortCode);

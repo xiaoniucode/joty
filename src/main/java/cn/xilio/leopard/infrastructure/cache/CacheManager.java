@@ -12,4 +12,12 @@ public interface CacheManager {
 
     // 清理缓存
     void evict(String key);
+
+    <T> T getHash(String key, String hKey, Function<String, T> loader);
+
+    // 存入 Hash 缓存
+    void putHash(String key, String hKey, Object value);
+
+    // 清理 Hash 缓存（指定 hKey 或整个 key）
+    void evictHash(String key, String hKey);
 }
