@@ -11,6 +11,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -57,4 +58,10 @@ public class GlobalExceptionHandler {
         String message = messageSource.getMessage("5000", null, LocaleContextHolder.getLocale());
         return Result.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), message);
     }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public Result handleGenericException(NoResourceFoundException e) {
+        return Result.error(404, "Not Found");
+    }
+
 }
