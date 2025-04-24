@@ -25,7 +25,7 @@ public class DispatcherServiceImpl implements DispatcherService {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
-    private final String cacheKey = "shorturl:url";
+    private final static String cacheKey = "shorturl:url";
 
     /**
      * Obtain long links

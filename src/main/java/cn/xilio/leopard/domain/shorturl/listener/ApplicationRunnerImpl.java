@@ -1,6 +1,7 @@
 package cn.xilio.leopard.domain.shorturl.listener;
 
 
+import cn.xilio.leopard.common.event.CacheRefreshEvent;
 import cn.xilio.leopard.common.exception.BizException;
 import cn.xilio.leopard.common.page.PageQuery;
 import cn.xilio.leopard.common.page.PageResponse;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -26,6 +28,8 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
     private ShortUrlService shortUrlService;
     @Autowired
     private BloomFilterService bloomFilterService;
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @Override
     public void run(ApplicationArguments args) {

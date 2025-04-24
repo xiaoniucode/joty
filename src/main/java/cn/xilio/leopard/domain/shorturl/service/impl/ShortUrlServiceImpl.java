@@ -80,6 +80,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
             newShortUrl.setShortCode(code);
             newShortUrl.setQrUrl(qrCodeUrl);
             newShortUrl.setShortUrl(shortUrl);
+            newShortUrl.setExpiredAt(null);
             ShortUrl saveResult = shortUrlRepository.save(newShortUrl);
             bloomFilterService.put(code);
 
