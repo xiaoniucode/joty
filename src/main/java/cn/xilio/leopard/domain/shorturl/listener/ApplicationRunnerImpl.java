@@ -1,7 +1,6 @@
 package cn.xilio.leopard.domain.shorturl.listener;
 
 
-import cn.xilio.leopard.common.event.CacheRefreshEvent;
 import cn.xilio.leopard.common.exception.BizException;
 import cn.xilio.leopard.common.page.PageQuery;
 import cn.xilio.leopard.common.page.PageResponse;
@@ -17,9 +16,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-
 import java.time.LocalDateTime;
-
 
 @Component
 public class ApplicationRunnerImpl implements ApplicationRunner {
@@ -41,7 +38,6 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
         int page = 1;
         int pageSize = 2000;
         PageResponse<ShortUrl> pageResponse;
-
         try {
             do {
                 PageQuery pageRequest = PageQuery.of(page, pageSize);
