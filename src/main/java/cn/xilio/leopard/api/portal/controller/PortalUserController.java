@@ -1,7 +1,7 @@
 package cn.xilio.leopard.api.portal.controller;
 
-import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.xilio.leopard.api.portal.dto.request.LoginRequest;
+import cn.xilio.leopard.api.portal.dto.request.RegisterRequest;
 import cn.xilio.leopard.common.util.Result;
 import cn.xilio.leopard.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class PortalUserController {
     @Autowired
     private UserService userService;
+
     @PostMapping("login")
     public Result login(@Validated @RequestBody LoginRequest request) {
         return Result.success(userService.login(request));
     }
+
+    @PostMapping("register")
+    public Result register(@Validated @RequestBody RegisterRequest request) {
+        return Result.success(userService.registerAndLogin(request));
+    }
+
     @PostMapping("logout")
     public Result logout() {
         userService.logout();

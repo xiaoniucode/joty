@@ -23,7 +23,7 @@ public enum UserStatus {
     /**
      * 状态码
      */
-    private final Byte code;
+    private final byte code;
 
     /**
      * 状态描述

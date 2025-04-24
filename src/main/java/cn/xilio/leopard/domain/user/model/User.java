@@ -2,6 +2,7 @@ package cn.xilio.leopard.domain.user.model;
 
 import cn.xilio.leopard.infrastructure.repository.jpa.Auditable;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
@@ -54,7 +55,7 @@ public class User extends Auditable {
      * 状态
      */
     @Column(name = "status", nullable = false)
-    private Byte status;
+    private Byte status=1;
 
     /**
      * 逻辑删除标志
