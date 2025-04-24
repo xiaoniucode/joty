@@ -15,6 +15,7 @@ import java.util.List;
 public class GroupServiceImpl implements GroupService {
     @Autowired
     private GroupRepository groupRepository;
+
     /**
      * Retrieve Group based on groupId
      *
@@ -23,7 +24,8 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public Group getById(String groupId) {
-        return groupRepository.getById(groupId);
+        String userId = "";
+        return groupRepository.getById(groupId, userId);
     }
 
     /**
@@ -43,7 +45,8 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public void deleteGroup(List<String> ids) {
-
+        String userId = "";
+        groupRepository.deleteBatch(ids, userId);
     }
 
     /**

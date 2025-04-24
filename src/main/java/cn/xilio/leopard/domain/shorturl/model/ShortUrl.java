@@ -35,10 +35,13 @@ public class ShortUrl extends Auditable {
     private String groupId;
 
     /**
-     * 原始长链接
+     * Original Long Link
      */
     @Column(name = "original_url", nullable = false, length = 4096)
     private String originalUrl;
+    /**
+     * Short Link
+     */
     @Column(name = "short_url", nullable = false, length = 100)
     private String shortUrl;
     /**

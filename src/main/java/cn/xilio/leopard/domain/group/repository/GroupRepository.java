@@ -15,7 +15,7 @@ public interface GroupRepository {
      * @param groupId Group ID
      * @return Was the deletion successful
      */
-    boolean deleteById(String groupId);
+    long deleteById(String groupId,String userId);
 
     /**
      * Update group information based on group ID
@@ -23,7 +23,7 @@ public interface GroupRepository {
      * @param group Grouping entity
      * @return Is the update successful
      */
-    boolean updateById(Group group);
+    boolean updateById(Group group,String userId);
 
     /**
      * Retrieve all groups of the specified user
@@ -39,7 +39,7 @@ public interface GroupRepository {
      * @param groupId Group ID
      * @return Grouping entity, return null if it does not exist
      */
-    Group getById(String groupId);
+    Group getById(String groupId,String userId);
 
     /**
      * Get the number of groups for the specified user
@@ -48,4 +48,6 @@ public interface GroupRepository {
      * @return Number of groups
      */
     long getCountByUser(String userId);
+
+    void deleteBatch(List<String> ids,String userId);
 }
