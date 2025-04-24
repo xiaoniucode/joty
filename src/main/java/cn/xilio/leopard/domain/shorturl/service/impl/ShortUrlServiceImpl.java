@@ -73,7 +73,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
             }
             String shortUrl = WebUtils.getDomain() + "/" + code;
             InputStream inputStream = QRGenerator.generateQRCode(shortUrl);
-            String qrCodeUrl = uploadService.upload(inputStream);
+            String qrCodeUrl = uploadService.upload(inputStream,"png");
 
             ShortUrl newShortUrl = request.toEntity();
             newShortUrl.setDomain(WebUtils.getDomain());
