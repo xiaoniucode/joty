@@ -5,10 +5,13 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import cn.xilio.leopard.api.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.common.exception.BizException;
+import cn.xilio.leopard.domain.user.event.LoginEvent;
+import cn.xilio.leopard.domain.user.event.LogoutEvent;
 import cn.xilio.leopard.domain.user.model.User;
 import cn.xilio.leopard.domain.user.repository.UserRepository;
 import cn.xilio.leopard.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -16,6 +19,8 @@ import org.springframework.util.ObjectUtils;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     /**
      * Login
@@ -32,6 +37,7 @@ public class UserServiceImpl implements UserService {
         StpUtil.login(user.getId(), new SaLoginParameter()
                 .setIsLastingCookie(true)
                 .setIsWriteHeader(true));
+        eventPublisher.publishEvent(new LoginEvent(this));
         return StpUtil.getTokenInfo();
     }
 
@@ -42,5 +48,6 @@ public class UserServiceImpl implements UserService {
     public void logout() {
         String uid = StpUtil.getLoginIdAsString();
         StpUtil.logout(uid);
+        eventPublisher.publishEvent(new LogoutEvent(this));
     }
 }

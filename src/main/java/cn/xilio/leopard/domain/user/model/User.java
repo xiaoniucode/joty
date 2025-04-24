@@ -7,10 +7,10 @@ import lombok.EqualsAndHashCode;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
 import org.springframework.data.annotation.CreatedBy;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "user")
+@EqualsAndHashCode(callSuper = true)
 public class User extends Auditable {
     /**
      * 用户ID
