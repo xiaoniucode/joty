@@ -2,9 +2,7 @@ package cn.xilio.leopard.api.portal.controller;
 
 import cn.xilio.leopard.api.portal.dto.request.CreateGroupRequest;
 import cn.xilio.leopard.common.page.PageQuery;
-import cn.xilio.leopard.common.page.PageResponse;
 import cn.xilio.leopard.common.util.Result;
-import cn.xilio.leopard.domain.group.model.Group;
 import cn.xilio.leopard.domain.group.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

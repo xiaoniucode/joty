@@ -1,6 +1,10 @@
 package cn.xilio.leopard.domain.user.repository;
 
+import cn.xilio.leopard.domain.user.model.User;
+
 public interface UserRepository {
 
-    public void saveUser();
+    public void saveUser(User user);
+
+    User getByName(String username);
 }

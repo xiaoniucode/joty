@@ -44,5 +44,4 @@ public class PortalShortUrlController {
     public Result getShortUrlInfo(@RequestParam String id) {
         return Result.success(shortUrlService.getShortUrlInfo(id));
     }
-
 }

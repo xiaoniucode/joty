@@ -36,7 +36,6 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void saveGroup(CreateGroupRequest request) {
         Group group = request.toGroup();
-        group.setCreatedBy("1");
         groupRepository.saveGroup(group);
     }
 

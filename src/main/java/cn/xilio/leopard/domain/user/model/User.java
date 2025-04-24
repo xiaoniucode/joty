@@ -1,14 +1,17 @@
 package cn.xilio.leopard.domain.user.model;
 
+import cn.xilio.leopard.infrastructure.repository.jpa.Auditable;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
+import org.springframework.data.annotation.CreatedBy;
 
-import java.time.LocalDateTime;
-
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "user")
-public class User {
+public class User extends Auditable {
     /**
      * 用户ID
      */
@@ -68,27 +71,16 @@ public class User {
     /**
      * 创建者ID
      */
+    @CreatedBy
     @Column(name = "created_by", length = 64, nullable = false)
     private String createdBy;
 
     /**
      * 更新者ID
      */
+    @LiquibaseDataSource
     @Column(name = "updated_by", length = 64)
     private String updatedBy;
-
-    /**
-     * 创建时间
-     */
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    /**
-     * 更新时间
-     */
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
     /**
      * 备注
      */

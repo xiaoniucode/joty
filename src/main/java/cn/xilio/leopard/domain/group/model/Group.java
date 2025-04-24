@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
 import java.time.LocalDateTime;
 
@@ -38,12 +40,14 @@ public class Group extends Auditable {
     /**
      * 创建者ID
      */
+    @CreatedBy
     @Column(name = "created_by", length = 64, nullable = false)
     private String createdBy;
 
     /**
      * 更新者ID
      */
+    @LastModifiedBy
     @Column(name = "updated_by", length = 64)
     private String updatedBy;
 }
