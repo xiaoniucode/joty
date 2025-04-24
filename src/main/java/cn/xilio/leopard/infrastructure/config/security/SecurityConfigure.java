@@ -6,10 +6,13 @@ import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.xilio.leopard.common.util.LocaleUtils;
 import cn.xilio.leopard.common.util.Result;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SecurityConfigure {
+    @Value("${leopard.file.publicPath}")
+    private String publicPath;
     @Bean
     public SaServletFilter getSaServletFilter() {
         return new SaServletFilter()
@@ -21,7 +24,8 @@ public class SecurityConfigure {
                         "/swagger-resources/**",
                         "/v2/api-docs/**",
                         "/v3/api-docs/**",
-                        "/swagger-ui/**"
+                        "/swagger-ui/**",
+                        publicPath+"/**"
 
                 )
                 .setAuth(obj -> {
