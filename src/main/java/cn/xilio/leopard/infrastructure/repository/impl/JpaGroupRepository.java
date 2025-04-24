@@ -16,7 +16,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Repository
@@ -45,27 +44,13 @@ public class JpaGroupRepository implements GroupRepository {
     /**
      * Update group information based on group ID
      *
-     * @param group  Grouping entity
-     * @param userId
+     * @param group Grouping entity
      * @return Is the update successful
      */
     @Override
-    public boolean updateById(Group group, String userId) {
-        Specification<Group> spec = (root, query, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            predicates.add(cb.equal(root.get("id"), group.getId()));
-            predicates.add(cb.equal(root.get("userId"), userId));
-            return cb.and(predicates.toArray(new Predicate[0]));
-        };
-        Optional<Group> existingGroup = groupEntityRepository.findOne(spec);
-        if (existingGroup.isPresent()) {
-            Group entity = existingGroup.get();
-            entity.setName(group.getName());
-            entity.setRemark(group.getRemark());
-            groupEntityRepository.save(entity);
-            return true;
-        }
-        return false;
+    public boolean saveGroup(Group group) {
+        groupEntityRepository.save(group);
+        return true;
     }
 
     /**
@@ -80,7 +65,7 @@ public class JpaGroupRepository implements GroupRepository {
         int page = query.getPage();
         int size = query.getSize();
         Specification<Group> spec = (root, query1, cb) ->
-                cb.equal(root.get("userId"), userId);
+                cb.equal(root.get("createdBy"), userId);
         PageRequest pageRequest = PageRequest.of(
                 page < 1 ? 0 : (page - 1),
                 size,
@@ -109,7 +94,7 @@ public class JpaGroupRepository implements GroupRepository {
         Specification<Group> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(cb.equal(root.get("id"), groupId));
-            predicates.add(cb.equal(root.get("userId"), userId));
+            predicates.add(cb.equal(root.get("createdBy"), userId));
             return cb.and(predicates.toArray(new Predicate[0]));
         };
         return groupEntityRepository.findOne(spec).orElse(null);
@@ -124,7 +109,7 @@ public class JpaGroupRepository implements GroupRepository {
     @Override
     public long getCountByUser(String userId) {
         Specification<Group> spec = (root, query, cb) ->
-                cb.equal(root.get("userId"), userId);
+                cb.equal(root.get("createdBy"), userId);
         return groupEntityRepository.count(spec);
     }
 
@@ -133,7 +118,7 @@ public class JpaGroupRepository implements GroupRepository {
         Specification<Group> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(root.get("id").in(ids));
-            predicates.add(cb.equal(root.get("userId"), userId));
+            predicates.add(cb.equal(root.get("createdBy"), userId));
             return cb.and(predicates.toArray(new Predicate[0]));
         };
         List<Group> groups = groupEntityRepository.findAll(spec);

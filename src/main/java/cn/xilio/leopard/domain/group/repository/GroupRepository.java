@@ -25,7 +25,7 @@ public interface GroupRepository {
      * @param group Grouping entity
      * @return Is the update successful
      */
-    boolean updateById(Group group, String userId);
+    boolean saveGroup(Group group);
 
     /**
      * Retrieve all groups of the specified user

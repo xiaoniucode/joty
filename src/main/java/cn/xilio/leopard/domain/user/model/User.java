@@ -1,9 +1,6 @@
 package cn.xilio.leopard.domain.user.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -17,6 +14,7 @@ public class User {
      */
     @Id
     @Column(name = "id", length = 64)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     /**

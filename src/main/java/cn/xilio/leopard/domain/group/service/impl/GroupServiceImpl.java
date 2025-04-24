@@ -24,7 +24,7 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public Group getById(String groupId) {
-        String userId = "";
+        String userId = "1";
         return groupRepository.getById(groupId, userId);
     }
 
@@ -35,7 +35,9 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public void saveGroup(CreateGroupRequest request) {
-
+        Group group = request.toGroup();
+        group.setCreatedBy("1");
+        groupRepository.saveGroup(group);
     }
 
     /**
@@ -45,7 +47,7 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public void deleteGroup(List<String> ids) {
-        String userId = "";
+        String userId = "1";
         groupRepository.deleteBatch(ids, userId);
     }
 
@@ -57,6 +59,6 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public PageResponse<Group> page(PageQuery request) {
-        return null;
+        return groupRepository.getGroupsByUser(request, "1");
     }
 }

@@ -4,7 +4,6 @@ import cn.xilio.leopard.api.portal.dto.request.CreateBatchShortUrlRequest;
 import cn.xilio.leopard.api.portal.dto.request.CreateSingleShortUrlRequest;
 import cn.xilio.leopard.common.page.PageQuery;
 import cn.xilio.leopard.common.util.Result;
-import cn.xilio.leopard.domain.shorturl.model.ShortUrl;
 import cn.xilio.leopard.domain.shorturl.service.ShortUrlService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;

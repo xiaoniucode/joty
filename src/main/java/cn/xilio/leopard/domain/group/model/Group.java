@@ -1,25 +1,26 @@
 package cn.xilio.leopard.domain.group.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import cn.xilio.leopard.infrastructure.repository.jpa.Auditable;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
 
 import java.time.LocalDateTime;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "t_group")
-public class Group {
+public class Group extends Auditable {
     /**
      * 分组ID
      */
     @Id
     @Column(name = "id", length = 64)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     /**
@@ -45,16 +46,4 @@ public class Group {
      */
     @Column(name = "updated_by", length = 64)
     private String updatedBy;
-
-    /**
-     * 创建时间
-     */
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    /**
-     * 更新时间
-     */
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 }

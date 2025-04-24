@@ -23,6 +23,7 @@ public class AccessRecord {
      */
     @Id
     @Column(name = "id", length = 64)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     /**
