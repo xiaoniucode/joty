@@ -28,7 +28,7 @@ public class JpaGroupRepository implements GroupRepository {
      * Delete a group based on its ID
      *
      * @param groupId Group ID
-     * @param userId
+     * @param userId  USER ID
      * @return Was the deletion successful
      */
     @Override
@@ -48,9 +48,8 @@ public class JpaGroupRepository implements GroupRepository {
      * @return Is the update successful
      */
     @Override
-    public boolean saveGroup(Group group) {
-        groupEntityRepository.save(group);
-        return true;
+    public Group saveGroup(Group group) {
+        return groupEntityRepository.save(group);
     }
 
     /**
