@@ -2,14 +2,13 @@
 import api from '@/utils/api.ts'
 import { user } from '@/api/system/user.ts'
 
-const a = await api.action(
-    user.login,
-    {},
-    {username:'admin',password:'123456'})
+const onLogin = async () => {
+  const res = await api.action(user.login, {}, { username: '1', password: '123456' })
+}
 </script>
 
 <template>
-  {{a}}
+  <a-button @click="onLogin">login</a-button>
 </template>
 
 <style scoped></style>
