@@ -1,57 +1,65 @@
 import axios from 'axios'
+import { message } from 'ant-design-vue'
 
 const baseApi = import.meta.env.VITE_APP_BASE_API
 const instance = axios.create({
-    baseURL: baseApi + '/',
-    timeout: 1000,
-    headers: { 'X-Custom-Header': 'foobar' },
+  baseURL: baseApi + '/',
+  timeout: 1000,
+  headers: {
+    'Accept-Language': 'zh-CN',//zh-CN or en-US
+  },
 })
 //请求拦截器
 instance.interceptors.request.use(
-    function (config) {
-        const token = localStorage.getItem('token')
-        if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`
-        }
-        return config
-    },
-    function (error) {
-        return Promise.reject(error)
-    },
+  function (config) {
+    const token = localStorage.getItem('token')
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`
+    }
+    return config
+  },
+  function (error) {
+    return Promise.reject(error)
+  },
 )
 
 //响应拦截器
 instance.interceptors.response.use(
-    function (response) {
-        const { code, msg, data } = response.data
-        alert("data")
-        return response
-    },
-    function (error) {
-        return Promise.reject(error)
-    },
+  function (response) {
+    const { code, msg, data } = response.data
+    if (code == '1') {
+      return data
+    } else {
+      message.error(msg)
+      return Promise.reject({ code: code, msg: msg })
+    }
+  },
+  function (error) {
+    return Promise.reject(error)
+  },
 )
- /*--------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------*/
 export interface ApiType {
-    url: string;
-    method: 'get' | 'post' | 'delete' | 'put' | 'patch';
+  url: string
+  method: 'get' | 'post' | 'delete' | 'put' | 'patch'
 }
 
 export interface ApiModule {
-    [key: string]: ApiType;
+  [key: string]: ApiType
 }
 
 class Api {
-    action(apiConfig: ApiType, param: any = {}, body: any = {}) {
-        const { url, method } = apiConfig;
-        return instance({
-            url,
-            method,
-            params: param,
-            data: body,
-        });
-    }
+  action(apiConfig: ApiType, param: any = {}, body: any = {}) {
+    const { url, method } = apiConfig
+    return instance({
+      url,
+      method,
+      params: param,
+      data: body,
+    })
+  }
 }
 
-const api = new Api();
-export default api;
+const api = new Api()
+export default api

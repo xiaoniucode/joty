@@ -2,8 +2,11 @@
 import api from '@/utils/api.ts'
 import { user } from '@/api/system/user.ts'
 
+
 const onLogin = async () => {
-  const res = await api.action(user.login, {}, { username: '1', password: '123456' })
+ api.action(user.login, {}, { username: '1', password: '123456' }).then(res=>{
+   alert(JSON.stringify(res))
+ })
 }
 </script>
 
