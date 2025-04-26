@@ -1,0 +1,21 @@
+@import "tailwindcss";
+* {
+    scrollbar-width: thin;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    box-sizing: border-box;
+    margin: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+#app {
+    height: 100%;
+}
+textarea {
+    font-family: inherit;
+}
