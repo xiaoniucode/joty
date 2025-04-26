@@ -5,13 +5,16 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'layout',
       component: Layout,
       children: [
         {
-          path: '/about',
-          name: 'about',
-          component: () => import('../views/AboutView.vue'),
+          path: '/dashboard',
+          name: 'dashboard',
+          meta:{
+
+          },
+          component: () => import('@/views/dashboard/index.vue'),
         },
       ]
     },
