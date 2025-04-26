@@ -8,7 +8,7 @@
     >
       <div class="flex items-center">
         <div class="logo">
-          <img src="@/assets/logo.svg" alt="蜂鸟短链" />
+          <img src="@/assets/logo.jpeg" alt="蜂鸟短链" />
         </div>
         <div v-show="!collapsed" style="color: white">蜂鸟短链</div>
       </div>
@@ -55,7 +55,7 @@
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { MenuUnfoldOutlined, MenuFoldOutlined, DownOutlined } from '@ant-design/icons-vue'
+import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
 import SideMenu from '@/layouts/components/side-menu.vue'
 
 const collapsed = ref<boolean>(false)

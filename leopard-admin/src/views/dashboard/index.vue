@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import {useCounterStore} from "@/stores/counter.ts";
+import api from '@/utils/api.ts'
+import { user } from '@/api/system/user.ts'
 
-const counter=useCounterStore()
+const a = await api.action(
+    user.login,
+    {},
+    {username:'admin',password:'123456'})
 </script>
 
 <template>
- {{counter.increment()}}
+  {{a}}
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
