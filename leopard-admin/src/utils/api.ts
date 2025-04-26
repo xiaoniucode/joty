@@ -6,7 +6,7 @@ const instance = axios.create({
   baseURL: baseApi + '/',
   timeout: 1000,
   headers: {
-    'Accept-Language': 'zh-CN',//zh-CN or en-US
+    'Accept-Language': 'zh-CN', //zh-CN or en-US
   },
 })
 //请求拦截器
@@ -29,6 +29,11 @@ instance.interceptors.response.use(
     const { code, msg, data } = response.data
     if (code == '1') {
       return data
+    } else if (code == '401') {
+        //清空本地cookie
+
+        //跳转到登陆
+        message.error(msg)
     } else {
       message.error(msg)
       return Promise.reject({ code: code, msg: msg })

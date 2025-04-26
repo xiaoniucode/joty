@@ -4,7 +4,7 @@ import { user } from '@/api/system/user.ts'
 
 
 const onLogin = async () => {
- api.action(user.login, {}, { username: '1', password: '123456' }).then(res=>{
+ api.action(user.login,   { username: '1', password: '123456' }).then(res=>{
    alert(JSON.stringify(res))
  })
 }
