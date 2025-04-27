@@ -34,11 +34,11 @@
             <template #overlay>
               <a-menu>
                 <a-menu-item>
-                  <a href="javascript:;">个人设置</a>
+                  <a href="/account">个人设置</a>
                 </a-menu-item>
                 <a-menu-divider />
                 <a-menu-item>
-                  <a href="javascript:;">退出登陆</a>
+                  <a href="/login">退出登陆</a>
                 </a-menu-item>
               </a-menu>
             </template>
@@ -57,7 +57,6 @@
 import { ref } from 'vue'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
 import SideMenu from '@/layouts/components/side-menu.vue'
-
 const collapsed = ref<boolean>(false)
 </script>
 <style scoped>
