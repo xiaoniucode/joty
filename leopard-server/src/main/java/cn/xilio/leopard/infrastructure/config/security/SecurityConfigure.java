@@ -33,7 +33,6 @@ public class SecurityConfigure {
                 )
                 .setAuth(obj -> {
                     System.out.println("---------- 进入Sa-Token全局认证 -----------");
-                    // 登录认证 -- 拦截所有路由，并排除/user/doLogin 用于开放登录
                     SaRouter.match("/**", "/api/user/login", StpUtil::checkLogin);
                 })
                 .setError(e -> {
@@ -44,8 +43,6 @@ public class SecurityConfigure {
 
                 // 前置函数：在每次认证函数之前执行（BeforeAuth 不受 includeList 与 excludeList 的限制，所有请求都会进入）
                 .setBeforeAuth(r -> {
-
-
                     // ---------- 设置一些安全响应头 ----------
                     SaHolder.getResponse()
                             // 允许指定域访问跨域资源

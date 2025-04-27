@@ -1,18 +1,22 @@
 <template>
   <page-header>
-    <a-button v-hasPerm="'add'" type="primary">新增</a-button>
+    <a-button color="red" @click="onOpenCreateModal" v-hasPerm="'del'" type="primary"
+      >批量删除</a-button
+    >
+    <a-button @click="onOpenCreateModal" v-hasPerm="'add'" type="primary">新增</a-button>
   </page-header>
-  <a-table :row-selection="rowSelection"  :columns="columns" :pagination="pagination" :data-source="tableData">
-    <template #headerCell="{ column }">
-      <template v-if="column.key === 'title'">
-        <span>
-          <smile-outlined />
-          {{ column.name }}
-        </span>
-      </template>
-    </template>
+  <a-table
+    :row-selection="rowSelection"
+    :columns="columns"
+    :pagination="pagination"
+    :data-source="tableData"
+  >
+
 
     <template #bodyCell="{ column, record }">
+      <template v-if="column.key === 'qrUrl'">
+        <a-image :src="record.qrUrl"/>
+      </template>
       <template v-if="column.key === 'name'">
         <a>
           {{ record.name }}
@@ -30,36 +34,44 @@
           <a-divider type="vertical" />
           <a>删除</a>
           <a-divider type="vertical" />
-          <a>编辑</a>
+          <a @click="onEdit(record)">编辑</a>
         </span>
       </template>
     </template>
   </a-table>
+  <url-form-modal ref="urlFormModalRef" />
 </template>
 <script lang="ts" setup>
-import { SmileOutlined } from '@ant-design/icons-vue'
-import {computed, onMounted, reactive, ref} from 'vue'
+
+import { computed, onMounted, reactive, ref } from 'vue'
 import api from '@/utils/api.ts'
 import { short_url } from '@/api/leopard/shorturl.ts'
-import type {TableProps} from "ant-design-vue";
-import PageHeader from "@/components/page-header.vue";
+import PageHeader from '@/components/page-header.vue'
+import UrlFormModal from './components/url-form-modal/index.vue'
 
-const pageQuery=reactive({
-  page:1,
-  size:2
+const pageQuery = reactive({
+  page: 1,
+  size: 2,
 })
-const total=ref(0)
+const urlFormModalRef = ref()
+
+const onOpenCreateModal = () => {
+  urlFormModalRef.value.showModal()
+}
+const onEdit=(data:object)=>{
+  urlFormModalRef.value.showModal(data)
+}
+const total = ref(0)
 const tableData = ref([])
 const onLoadTableData = async () => {
   api.action(short_url.list, {}, pageQuery).then((res: any) => {
     tableData.value = res.records
-    total.value=res.total
+    total.value = res.total
   })
 }
 onMounted(() => {
   onLoadTableData()
 })
-
 
 const pagination = computed(() => ({
   total: total.value,
@@ -68,16 +80,16 @@ const pagination = computed(() => ({
 }))
 const rowSelection = ref({
   checkStrictly: false,
-  onChange: (selectedRowKeys: (string | number)[], selectedRows:any) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  onChange: (selectedRowKeys: (string | number)[], selectedRows: any) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
   },
-  onSelect: (record: any, selected: boolean, selectedRows:any) => {
-    console.log(record, selected, selectedRows);
+  onSelect: (record: any, selected: boolean, selectedRows: any) => {
+    console.log(record, selected, selectedRows)
   },
-  onSelectAll: (selected: boolean, selectedRows:any, changeRows:any) => {
-    console.log(selected, selectedRows, changeRows);
+  onSelectAll: (selected: boolean, selectedRows: any, changeRows: any) => {
+    console.log(selected, selectedRows, changeRows)
   },
-});
+})
 const columns = [
   {
     name: '标题',
@@ -110,6 +122,4 @@ const columns = [
   },
 ]
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

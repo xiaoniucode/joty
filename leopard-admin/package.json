@@ -17,6 +17,7 @@
     "ant-design-vue": "~4.2.6",
     "axios": "^1.9.0",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
     "pinia": "^3.0.1",
     "pinia-plugin-persistedstate": "^4.2.0",
     "tailwind-merge": "^3.2.0",
