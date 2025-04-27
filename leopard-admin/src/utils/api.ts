@@ -19,6 +19,7 @@ instance.interceptors.request.use(
     return config
   },
   function (error) {
+      message.error("error")
     return Promise.reject(error)
   },
 )
@@ -27,7 +28,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   function (response) {
     const { code, msg, data } = response.data
-    if (code == '1') {
+    if (code == '0') {
       return data
     } else if (code == '401') {
         //清空本地cookie
@@ -40,6 +41,10 @@ instance.interceptors.response.use(
     }
   },
   function (error) {
+      const {code} =error
+      if (code=='ERR_NETWORK'){
+          message.error("服务暂不可用")
+      }
     return Promise.reject(error)
   },
 )
