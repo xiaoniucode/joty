@@ -35,10 +35,7 @@
 </template>
 <script lang="ts" setup>
 import { reactive } from 'vue'
-import api from '@/utils/api.ts'
-import { user } from '@/api/system/user.ts'
-import { message } from 'ant-design-vue'
-import router from "@/router";
+
 import {useUserStore} from "@/stores/modules/user.ts";
 const userStore=useUserStore()
 interface FormState {
@@ -61,5 +58,5 @@ const onFinishFailed = (errorInfo: any) => {}
 </script>
 
 <style scoped>
-@import '../../../../node_modules/.pnpm/tailwindcss@4.1.4/node_modules/tailwindcss/dist/lib.d.mts';
+ @import "tailwindcss";
 </style>

@@ -29,10 +29,9 @@ export const useUserStore = defineStore(
     }
 
     const logout = async () => {
-      api.action(user.logout).then(() => {
-        localStorage.removeItem('token')
-        router.push({ path: '/login' })
-      })
+      localStorage.removeItem('token')
+      await api.action(user.logout)
+      await router.push({ path: '/login' })
     }
     return { logout, login, userinfo, hasPerm }
   },

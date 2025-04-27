@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { message } from 'ant-design-vue'
+import { user } from '@/api/system/user.ts'
+import router from '@/router'
 
 const baseApi = import.meta.env.VITE_APP_BASE_API
 const instance = axios.create({
@@ -19,7 +21,7 @@ instance.interceptors.request.use(
     return config
   },
   function (error) {
-      message.error("error")
+    message.error('error')
     return Promise.reject(error)
   },
 )
@@ -31,20 +33,21 @@ instance.interceptors.response.use(
     if (code == '0') {
       return data
     } else if (code == '401') {
-        //清空本地cookie
-
-        //跳转到登陆
-        message.error(msg)
+      message.error(msg)
+      //清空本地cookie
+      localStorage.removeItem('token')
+      //跳转到登陆
+      router.push({ path: '/login' })
     } else {
       message.error(msg)
       return Promise.reject({ code: code, msg: msg })
     }
   },
   function (error) {
-      const {code} =error
-      if (code=='ERR_NETWORK'){
-          message.error("服务暂不可用")
-      }
+    const { code } = error
+    if (code == 'ERR_NETWORK') {
+      message.error('服务暂不可用')
+    }
     return Promise.reject(error)
   },
 )
