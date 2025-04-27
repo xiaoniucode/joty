@@ -61,5 +61,5 @@ const onFinishFailed = (errorInfo: any) => {}
 </script>
 
 <style scoped>
-@import 'tailwindcss';
+@import '../../../../node_modules/.pnpm/tailwindcss@4.1.4/node_modules/tailwindcss/dist/lib.d.mts';
 </style>

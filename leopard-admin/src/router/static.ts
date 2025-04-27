@@ -4,26 +4,45 @@ export const staticRoutes = [
     {
         path: '/login',
         name: 'login',
-        component: () => import('@/views/login/index.vue'),
+        component: () => import('@/views/system/login/index.vue'),
         hidden: true
     },
-
     {
         path: '/',
         name: 'layout',
         component: Layout,
+        redirect:'/dashboard',
         children: [
             {
-                path: 'account',
-                name: 'account',
-                component: () => import('@/views/account/index.vue'),
-                hidden: true
+                path: 'dashboard',
+                name: '控制面板',
+                meta: {},
+                component: () => import('@/views/system/dashboard/index.vue'),
+            },
+        ],
+    },
+    {
+        path: '/',
+        name: '短链',
+        component: Layout,
+        children: [
+            {
+                path: 'short-url',
+                name: '短链列表',
+                component: () => import('@/views/leopard/shorturl/index.vue'),
+                hidden: false
             },
             {
-                path: 'dashboard',
-                name: 'dashboard',
+                path: 'group',
+                name: '分组',
                 meta: {},
-                component: () => import('@/views/dashboard/index.vue'),
+                component: () => import('@/views/leopard/group/index.vue'),
+            },
+            {
+                path: 'stats',
+                name: '数据统计',
+                meta: {},
+                component: () => import('@/views/leopard/stats/index.vue'),
             },
         ],
     },

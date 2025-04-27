@@ -15,6 +15,7 @@ export const useUserStore = defineStore(
       avatar: '',
       token: '',
       menus: [],
+      initialize: false,
     })
     const login = async (loginForm: object) => {
       api.action(user.login, {}, loginForm).then((res: any) => {
@@ -23,10 +24,11 @@ export const useUserStore = defineStore(
         router.push({ path: '/dashboard' })
       })
     }
+
     const logout = async () => {
       api.action(user.logout).then(() => {
-          localStorage.removeItem('token')
-          router.push({ path: '/login' })
+        localStorage.removeItem('token')
+        router.push({ path: '/login' })
       })
     }
     return { logout, login, userinfo }
