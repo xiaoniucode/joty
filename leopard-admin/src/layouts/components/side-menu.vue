@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import MenuTree from "@/layouts/components/menu-tree.vue";
- import {staticRoutes} from "@/router";
+import {staticRoutes} from "@/router/static.ts";
+
 
 const selectedKeys = ref<string[]>(['0'])
 </script>

@@ -12,19 +12,21 @@ const onClickSubMenu = async (menu: object) => {}
 
 <template>
   <template v-for="menu in menus">
-    <template v-if="menu.children && menu.children.length > 0">
-      <a-sub-menu @click="onClickSubMenu(menu)" :key="menu.name">
-        <template #title>
-          <span>{{ menu.name }}</span>
-        </template>
-        <menu-tree :menus="menu.children" />
-      </a-sub-menu>
-    </template>
+    <template v-if="!menu.hidden">
+      <template v-if="menu.children && menu.children.length > 0">
+        <a-sub-menu @click="onClickSubMenu(menu)" :key="menu.name">
+          <template #title>
+            <span>{{ menu.name }}</span>
+          </template>
+          <menu-tree :menus="menu.children" />
+        </a-sub-menu>
+      </template>
 
-    <template v-else>
-      <a-menu-item @click="onClickMenu(menu)" :key="menu.name">
-        <span>{{ menu.name }}</span>
-      </a-menu-item>
+      <template v-else>
+        <a-menu-item @click="onClickMenu(menu)" :key="menu.name">
+          <span>{{ menu.name }}</span>
+        </a-menu-item>
+      </template>
     </template>
   </template>
 </template>
