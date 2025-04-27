@@ -1,10 +1,13 @@
 <template>
-  <a-table :columns="columns" :data-source="data">
+  <page-header>
+    <a-button v-hasPerm="'add'" type="primary">新增</a-button>
+  </page-header>
+  <a-table :row-selection="rowSelection"  :columns="columns" :pagination="pagination" :data-source="tableData">
     <template #headerCell="{ column }">
-      <template v-if="column.key === 'name'">
+      <template v-if="column.key === 'title'">
         <span>
           <smile-outlined />
-          Name
+          {{ column.name }}
         </span>
       </template>
     </template>
@@ -15,83 +18,98 @@
           {{ record.name }}
         </a>
       </template>
-      <template v-else-if="column.key === 'tags'">
+      <template v-else-if="column.key === 'status'">
         <span>
-          <a-tag
-              v-for="tag in record.tags"
-              :key="tag"
-              :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-          >
-            {{ tag.toUpperCase() }}
-          </a-tag>
+          <a-tag v-if="record.status == 0" color="volcano"> 禁用 </a-tag>
+          <a-tag v-if="record.status == 1" color="green">正常</a-tag>
         </span>
       </template>
       <template v-else-if="column.key === 'action'">
         <span>
-          <a>Invite 一 {{ record.name }}</a>
+          <a>预览</a>
           <a-divider type="vertical" />
-          <a>Delete</a>
+          <a>删除</a>
           <a-divider type="vertical" />
-          <a class="ant-dropdown-link">
-            More actions
-            <down-outlined />
-          </a>
+          <a>编辑</a>
         </span>
       </template>
     </template>
   </a-table>
 </template>
 <script lang="ts" setup>
-import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
+import { SmileOutlined } from '@ant-design/icons-vue'
+import {computed, onMounted, reactive, ref} from 'vue'
+import api from '@/utils/api.ts'
+import { short_url } from '@/api/leopard/shorturl.ts'
+import type {TableProps} from "ant-design-vue";
+import PageHeader from "@/components/page-header.vue";
+
+const pageQuery=reactive({
+  page:1,
+  size:2
+})
+const total=ref(0)
+const tableData = ref([])
+const onLoadTableData = async () => {
+  api.action(short_url.list, {}, pageQuery).then((res: any) => {
+    tableData.value = res.records
+    total.value=res.total
+  })
+}
+onMounted(() => {
+  onLoadTableData()
+})
+
+
+const pagination = computed(() => ({
+  total: total.value,
+  current: pageQuery.page,
+  pageSize: pageQuery.size,
+}))
+const rowSelection = ref({
+  checkStrictly: false,
+  onChange: (selectedRowKeys: (string | number)[], selectedRows:any) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  },
+  onSelect: (record: any, selected: boolean, selectedRows:any) => {
+    console.log(record, selected, selectedRows);
+  },
+  onSelectAll: (selected: boolean, selectedRows:any, changeRows:any) => {
+    console.log(selected, selectedRows, changeRows);
+  },
+});
 const columns = [
   {
     name: '标题',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'title',
+    key: 'title',
   },
   {
     title: '短链接',
-    dataIndex: 'age',
-    key: 'age',
+    dataIndex: 'shortUrl',
+    key: 'shortUrl',
   },
   {
     title: '长链接',
-    dataIndex: 'address',
-    key: 'address',
+    dataIndex: 'originalUrl',
+    key: 'originalUrl',
+  },
+  {
+    title: '二维码',
+    dataIndex: 'qrUrl',
+    key: 'qrUrl',
   },
   {
     title: '状态',
-    key: 'tags',
-    dataIndex: 'tags',
+    key: 'status',
+    dataIndex: 'status',
   },
   {
     title: '操作',
     key: 'action',
   },
-];
-
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
+]
 </script>
+<style scoped>
 
+</style>
