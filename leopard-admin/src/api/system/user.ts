@@ -5,4 +5,5 @@ export const user: ApiModule = {
   add: { url: '/user/add', method: 'post' },
   del: { url: '/user/del', method: 'delete' },
   login: { url: '/user/login', method: 'post' },
+  logout: { url: '/user/logout', method: 'post' },
 } as const

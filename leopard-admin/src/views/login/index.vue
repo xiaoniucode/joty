@@ -39,7 +39,8 @@ import api from '@/utils/api.ts'
 import { user } from '@/api/system/user.ts'
 import { message } from 'ant-design-vue'
 import router from "@/router";
-
+import {useUserStore} from "@/stores/modules/user.ts";
+const userStore=useUserStore()
 interface FormState {
   username: string
   password: string
@@ -52,11 +53,8 @@ const formState = reactive<FormState>({
   remember: true,
 })
 const onFinish = (values: any) => {
-  api.action(user.login, {}, formState).then((res) => {
-    localStorage.setItem('Authorization', res.tokenValue)
-    message.success("Login Success")
-    router.push({path:'/dashboard'})
-  })
+  userStore.login(formState)
+
 }
 
 const onFinishFailed = (errorInfo: any) => {}

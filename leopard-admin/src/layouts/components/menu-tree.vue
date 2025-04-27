@@ -12,17 +12,21 @@ const onClickSubMenu = async (menu: object) => {}
 
 <template>
   <template v-for="menu in menus">
+    <!--隐藏的菜单不展示-->
     <template v-if="!menu.hidden">
       <template v-if="menu.children && menu.children.length > 0">
+        <!--多级菜单-->
         <a-sub-menu @click="onClickSubMenu(menu)" :key="menu.name">
           <template #title>
             <span>{{ menu.name }}</span>
           </template>
+          <!--递归渲染子菜单-->
           <menu-tree :menus="menu.children" />
         </a-sub-menu>
       </template>
 
       <template v-else>
+        <!--一级菜单-->
         <a-menu-item @click="onClickMenu(menu)" :key="menu.name">
           <span>{{ menu.name }}</span>
         </a-menu-item>

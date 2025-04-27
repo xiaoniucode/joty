@@ -38,7 +38,7 @@
                 </a-menu-item>
                 <a-menu-divider />
                 <a-menu-item>
-                  <a href="/login">退出登陆</a>
+                  <a  @click="userStore.logout()">退出登陆</a>
                 </a-menu-item>
               </a-menu>
             </template>
@@ -57,7 +57,9 @@
 import { ref } from 'vue'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
 import SideMenu from '@/layouts/components/side-menu.vue'
+import {useUserStore} from "@/stores/modules/user.ts";
 const collapsed = ref<boolean>(false)
+const userStore=useUserStore()
 </script>
 <style scoped>
 @import 'tailwindcss';
