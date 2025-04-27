@@ -17,6 +17,9 @@ export const useUserStore = defineStore(
       menus: [],
       initialize: false,
     })
+    const hasPerm = (perm: string): boolean => {
+      return true
+    }
     const login = async (loginForm: object) => {
       api.action(user.login, {}, loginForm).then((res: any) => {
         localStorage.setItem('token', res.tokenValue)
@@ -31,7 +34,7 @@ export const useUserStore = defineStore(
         router.push({ path: '/login' })
       })
     }
-    return { logout, login, userinfo }
+    return { logout, login, userinfo, hasPerm }
   },
   { persist: true },
 )
