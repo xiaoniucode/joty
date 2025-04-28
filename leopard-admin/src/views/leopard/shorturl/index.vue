@@ -77,8 +77,9 @@ const onLoadTableData = async () => {
     total.value = res.total
   })
 }
+onLoadTableData()
 onMounted(() => {
-  onLoadTableData()
+  
 })
 
 const pagination = computed(() => ({
