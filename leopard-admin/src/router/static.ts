@@ -32,12 +32,7 @@ export const staticRoutes = [
                 component: () => import('@/views/leopard/shorturl/index.vue'),
                 hidden: false
             },
-            {
-                path: 'group',
-                name: '分组',
-                meta: {},
-                component: () => import('@/views/leopard/group/index.vue'),
-            },
+
             {
                 path: 'stats',
                 name: '数据统计',
