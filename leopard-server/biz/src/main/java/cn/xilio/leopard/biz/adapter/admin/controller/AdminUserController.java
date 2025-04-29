@@ -1,0 +1,34 @@
+package cn.xilio.leopard.biz.adapter.admin.controller;
+
+
+import cn.xilio.leopard.biz.domain.user.service.UserService;
+import cn.xilio.leopard.core.common.page.PageQuery;
+import cn.xilio.leopard.core.common.util.Result;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("user")
+public class AdminUserController {
+    @Autowired
+    private UserService userService;
+
+    @PostMapping(value = "list", name = "All user list")
+    public Result list(@Validated @RequestBody PageQuery request) {
+        return Result.success();
+    }
+
+    @GetMapping(value = "get", name = "Get user info")
+    public Result get(@RequestParam String userId) {
+        return Result.success();
+    }
+
+    @DeleteMapping(value = "del", name = "Batch delete user")
+    public Result del(@RequestBody List<String> ids) {
+        return Result.success();
+    }
+
+}
