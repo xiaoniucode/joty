@@ -12,16 +12,16 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi adminApi() {
         return GroupedOpenApi.builder()
-                .group("Leopard-biz-Admin")
-                .packagesToScan("cn.xilio.leopard.module.biz.adapter.admin.controller")
+                .group("Leopard-Admin")
+                .packagesToScan("cn.xilio.leopard.adapter.admin.controller")
                 .build();
     }
 
     @Bean
     public GroupedOpenApi portalApi() {
         return GroupedOpenApi.builder()
-                .group("Leopard-biz-Portal")
-                .packagesToScan("cn.xilio.leopard.module.biz.adapter.portal.controller")
+                .group("Leopard-Portal")
+                .packagesToScan("cn.xilio.leopard.adapter.portal.controller")
                 .build();
     }
     @Bean
