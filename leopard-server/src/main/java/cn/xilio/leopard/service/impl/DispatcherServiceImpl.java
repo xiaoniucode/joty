@@ -1,6 +1,7 @@
 package cn.xilio.leopard.service.impl;
 
 
+import cn.xilio.leopard.domain.CacheKey;
 import cn.xilio.leopard.service.DispatcherService;
 import cn.xilio.leopard.service.ShortUrlService;
 import cn.xilio.leopard.domain.dataobject.ShortUrl;
@@ -23,9 +24,6 @@ public class DispatcherServiceImpl implements DispatcherService {
     private ShortUrlService shortUrlService;
     @Autowired
     private ApplicationEventPublisher eventPublisher;
-
-    private final static String cacheKey = "shorturl:url";
-
     /**
      * Obtain long links
      *
@@ -35,7 +33,7 @@ public class DispatcherServiceImpl implements DispatcherService {
     @Override
     public String getLongUrl(String code) {
         BizException.checkExpr("1001", !bloomFilterService.contain(code));
-        String longUrl = cacheManager.getHash(cacheKey, code, key -> {
+        String longUrl = cacheManager.getHash(CacheKey.SHORTURL_URL, code, key -> {
             ShortUrl shortUrl = shortUrlService.getByShortCode(code);
             return shortUrl.getOriginalUrl();
         });

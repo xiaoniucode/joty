@@ -76,7 +76,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
             }
             String shortUrl = WebUtils.getDomain() + "/" + code;
             InputStream inputStream = QRGenerator.generateQRCode(shortUrl);
-            String qrCodeUrl = uploadService.upload(inputStream,"png");
+            String qrCodeUrl = uploadService.upload(inputStream, "png");
 
             ShortUrl newShortUrl = request.toEntity();
             newShortUrl.setDomain(WebUtils.getDomain());
@@ -88,7 +88,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
             bloomFilterService.put(code);
 
             //Post short link creation event
-            eventPublisher.publishEvent(new ShortUrlCreatedEvent(this));
+            eventPublisher.publishEvent(new ShortUrlCreatedEvent(this, code, request.originalUrl()));
             return new CreateSingleShortUrlResponse(shortUrl, request.originalUrl(), qrCodeUrl);
         } finally {
             lock.unlock();
@@ -171,6 +171,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public long deleteExpiredUrls() {
-       return shortUrlRepository.deleteExpiredUrls();
+        return shortUrlRepository.deleteExpiredUrls();
     }
 }
