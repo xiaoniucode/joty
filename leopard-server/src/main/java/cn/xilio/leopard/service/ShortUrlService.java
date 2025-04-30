@@ -43,8 +43,15 @@ public interface ShortUrlService {
      * @param request Page request information
      * @return Short chain list
      */
-    PageResponse<ShortUrl> getShortUrls(PageQuery request);
+    PageResponse<ShortUrl> getShortUrlsByUser(PageQuery request);
 
+    /**
+     * Get the pagination list of short links
+     *
+     * @param request Page request information
+     * @return Short chain list
+     */
+    PageResponse<ShortUrl> getShortUrls(PageQuery request);
     /**
      * Get short link information
      *

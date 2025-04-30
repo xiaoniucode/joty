@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class DispatcherController {
     @Autowired
     private DispatcherService dispatcherService;
-
     @GetMapping(value = "/{code:[a-zA-Z0-9]{6}}", name = "JUMP TO")
     public String trigger(@PathVariable String code) {
         String longUrl = dispatcherService.getLongUrl(code);

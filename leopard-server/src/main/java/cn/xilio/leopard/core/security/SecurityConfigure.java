@@ -22,6 +22,8 @@ public class SecurityConfigure {
         return new SaServletFilter()
                 .addInclude("/**")
                 .addExclude(
+                        "/api/user/login",
+                        "/{code:^[a-zA-Z0-9]{6}$}",
                         "/favicon.ico",
                         "/doc.html",
                         "/webjars/**",
@@ -34,7 +36,7 @@ public class SecurityConfigure {
                 )
                 .setAuth(obj -> {
                     System.out.println("---------- 进入Sa-Token全局认证 -----------");
-                    SaRouter.match("/**", "/api/user/login", StpUtil::checkLogin);
+                    SaRouter.match("/**", StpUtil::checkLogin);
                 })
                 .setError(e -> {
                     SaHolder.getResponse().setHeader("content-type", "application/json; charset=utf-8");

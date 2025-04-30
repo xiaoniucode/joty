@@ -36,7 +36,7 @@ public class PortalShortUrlController {
     @Operation(summary = "短链接列表")
     @PostMapping(value = "list", name = "Short link pagination list")
     public Result getShortUrls(@Validated @RequestBody PageQuery request) {
-        return Result.success(shortUrlService.getShortUrls(request));
+        return Result.success(shortUrlService.getShortUrlsByUser(request));
     }
 
     @Operation(summary = "批量删除短链接")

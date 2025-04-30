@@ -138,8 +138,20 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      * @return Short chain list
      */
     @Override
+    public PageResponse<ShortUrl> getShortUrlsByUser(PageQuery request) {
+        String userId = StpUtil.getLoginIdAsString();
+        return shortUrlRepository.page(request, userId);
+    }
+
+    /**
+     * Get the pagination list of short links
+     *
+     * @param request Page request information
+     * @return Short chain list
+     */
+    @Override
     public PageResponse<ShortUrl> getShortUrls(PageQuery request) {
-        return shortUrlRepository.page(request, "1");
+        return shortUrlRepository.page(request);
     }
 
     /**

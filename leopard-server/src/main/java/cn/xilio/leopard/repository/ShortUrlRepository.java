@@ -20,6 +20,13 @@ public interface ShortUrlRepository {
     PageResponse<ShortUrl> page(PageQuery request, String userId);
 
     /**
+     * Page wise query of short link list
+     * @param request queryRequest
+     * @return Paging query results
+     */
+    PageResponse<ShortUrl> page(PageQuery request);
+
+    /**
      * Batch delete short links
      * @param ids List of short link IDs
      */

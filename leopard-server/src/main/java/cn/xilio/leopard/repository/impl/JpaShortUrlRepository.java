@@ -1,7 +1,6 @@
 package cn.xilio.leopard.repository.impl;
 
 
-
 import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.page.PageResponse;
 import cn.xilio.leopard.domain.dataobject.ShortUrl;
@@ -45,6 +44,28 @@ public class JpaShortUrlRepository implements ShortUrlRepository {
                 cb.equal(root.get("createdBy"), userId);
         PageRequest pageRequest = PageRequest.of(page < 1 ? 0 : (page - 1), size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<ShortUrl> entityPage = shortUrlEntityRepository.findAll(spec, pageRequest);
+        return PageResponse.of(
+                entityPage.getContent(),
+                (int) entityPage.getTotalElements(),
+                entityPage.getNumber() + 1,
+                entityPage.getSize(),
+                entityPage.hasNext()
+        );
+    }
+
+    /**
+     * Page wise query of short link list
+     *
+     * @param request queryRequest
+     * @return Paging query results
+     */
+    @Override
+    public PageResponse<ShortUrl> page(PageQuery request) {
+        int page = request.getPage();
+        int size = request.getSize();
+
+        PageRequest pageRequest = PageRequest.of(page < 1 ? 0 : (page - 1), size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<ShortUrl> entityPage = shortUrlEntityRepository.findAll(pageRequest);
         return PageResponse.of(
                 entityPage.getContent(),
                 (int) entityPage.getTotalElements(),
@@ -108,7 +129,7 @@ public class JpaShortUrlRepository implements ShortUrlRepository {
     public long deleteExpiredUrls() {
         Specification<ShortUrl> spec = (root, query, cb) ->
                 cb.lessThan(root.get("expireAt"), new java.util.Date());
-      return shortUrlEntityRepository.delete(spec);
+        return shortUrlEntityRepository.delete(spec);
     }
 }
 
