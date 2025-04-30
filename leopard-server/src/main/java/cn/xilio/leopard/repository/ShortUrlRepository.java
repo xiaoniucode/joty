@@ -39,4 +39,9 @@ public interface ShortUrlRepository {
      * @return Short link information
      */
     ShortUrl findByShortCode(String code);
+
+    /**
+     * Delete expired short links
+     */
+    long deleteExpiredUrls();
 }

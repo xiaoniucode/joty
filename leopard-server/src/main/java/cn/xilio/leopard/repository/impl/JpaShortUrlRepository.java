@@ -100,6 +100,16 @@ public class JpaShortUrlRepository implements ShortUrlRepository {
                 cb.and(cb.equal(root.get("shortCode"), code));
         return shortUrlEntityRepository.findOne(spec).orElse(null);
     }
+
+    /**
+     * Delete expired short links
+     */
+    @Override
+    public long deleteExpiredUrls() {
+        Specification<ShortUrl> spec = (root, query, cb) ->
+                cb.lessThan(root.get("expireAt"), new java.util.Date());
+      return shortUrlEntityRepository.delete(spec);
+    }
 }
 
 

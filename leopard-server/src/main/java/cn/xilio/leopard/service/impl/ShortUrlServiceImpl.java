@@ -125,6 +125,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      * @param ids Link ID List
      */
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void deleteShortUrl(List<String> ids) {
         String userId = StpUtil.getLoginIdAsString();
         shortUrlRepository.deleteByIds(ids, userId);
@@ -162,5 +163,14 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     @Override
     public ShortUrl getByShortCode(String code) {
         return shortUrlRepository.findByShortCode(code);
+    }
+
+    /**
+     * Delete expired short links
+     */
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public long deleteExpiredUrls() {
+       return shortUrlRepository.deleteExpiredUrls();
     }
 }

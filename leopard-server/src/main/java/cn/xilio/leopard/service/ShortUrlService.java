@@ -60,4 +60,10 @@ public interface ShortUrlService {
      * @return Short link information
      */
     ShortUrl getByShortCode(String code);
+
+    /**
+     * Delete expired short links
+     */
+    long deleteExpiredUrls();
+
 }

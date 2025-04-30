@@ -35,6 +35,7 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
 
     private void initShortUrlCode() {
         logger.info("Starting to initialize short link codes from database to Bloom filter.");
+       int count=0;
         int page = 1;
         int pageSize = 2000;
         PageResponse<ShortUrl> pageResponse;
@@ -51,11 +52,12 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
                         continue;
                     }
                     bloomFilterService.put(shortCode);
+                    count++;
                 }
                 // Increasing page numbers
                 page++;
             } while (pageResponse.getHasMore());
-            logger.info("Finished initializing {} short link codes to Bloom filter.", page * pageSize);
+            logger.info("Finished initializing {} short link codes to Bloom filter.", count);
         } catch (Exception e) {
             logger.error("Failed to initialize short link codes to Bloom filter.", e);
             throw new BizException("1005");
