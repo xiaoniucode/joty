@@ -21,7 +21,6 @@ public class ShortUrlClickedListener {
     @EventListener
     public void handleClick(ShortUrlClickedEvent event) {
         //记录访问日志
-
         String shortCode = event.getShortCode();
         redisTemplate.opsForValue().increment("stats:click:" + shortCode);
         // 异步批量更新 MySQL

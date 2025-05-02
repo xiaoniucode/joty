@@ -32,6 +32,11 @@ public class Group extends Auditable {
      */
     @Column(name = "remark", length = 128)
     private String remark;
+    /**
+     * 排序
+     */
+    @Column(name = "sort")
+    private Integer sort;
 
     /**
      * 创建者ID

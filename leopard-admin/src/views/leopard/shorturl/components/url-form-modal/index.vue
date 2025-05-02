@@ -14,10 +14,11 @@
       <a-form-item label="长链接" name="originalUrl">
         <a-input v-model:value="formState.originalUrl" />
       </a-form-item>
-      <a-form-item label="分组" name="region">
+      <a-form-item label="分组" name="groupId">
         <a-select style="width: 40%" v-model:value="formState.groupId" placeholder="选择分组">
-          <a-select-option value="1">默认分组</a-select-option>
-          <a-select-option value="2">电商系统</a-select-option>
+          <a-select-option v-for="item in groupData" :value="item.id"
+            >{{ item.name }}
+          </a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="有效期" name="expireAt">
@@ -35,9 +36,18 @@
   </a-modal>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const open = ref<boolean>(false)
+const groupData = ref([])
+const loadGroupData = async () => {
+  const res = await (<any>api.action(group.list, {}, {}))
+  groupData.value = res.records
+  formState.groupId = groupData.value[0]?.id || '' // 数据加载后更新默认值
+}
+onMounted(() => {
+  loadGroupData()
+})
 
 const showModal = (data: object) => {
   open.value = true
@@ -54,6 +64,8 @@ import { Dayjs } from 'dayjs'
 import { reactive, toRaw } from 'vue'
 import type { UnwrapRef } from 'vue'
 import type { Rule } from 'ant-design-vue/es/form'
+import api from '@/utils/api.ts'
+import { group } from '@/api/leopard/group.ts'
 
 interface FormState {
   id?: undefined
@@ -61,7 +73,7 @@ interface FormState {
   originalUrl: string
   expireAt?: Dayjs | undefined
   shortUrl: string
-  status: number
+  status: boolean
   groupId: string
   remark: string
 }
@@ -74,27 +86,18 @@ const formState: UnwrapRef<FormState> = reactive({
   originalUrl: '',
   expireAt: undefined,
   shortUrl: '',
-  status: 1,
+  status: true,
   groupId: '',
   remark: '',
 })
 const rules: Record<string, Rule[]> = {
   title: [
-    { required: false, message: 'Please input Activity name', trigger: 'change' },
-    { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
+    { required: false, trigger: 'change' },
+    { min: 1, max: 30, message: '长度在1-30内', trigger: 'blur' },
   ],
-  originalUrl: [{ required: true, message: 'Please select Activity zone', trigger: 'change' }],
-  expireAt: [{ required: true, message: 'Please pick a date', trigger: 'change', type: 'object' }],
-  status: [
-    {
-      type: 'array',
-      required: true,
-      message: 'Please select at least one activity type',
-      trigger: 'change',
-    },
-  ],
-  groupId: [{ required: true, message: 'Please select activity resource', trigger: 'change' }],
-  remark: [{ required: true, message: 'Please input activity form', trigger: 'blur' }],
+  originalUrl: [{ required: true, message: '请输入长链接', trigger: 'change' }],
+  status: [{ required: true }],
+  remark: [{ max: 50, message: '长度在50内', trigger: 'blur' },],
 }
 const onSubmit = () => {
   formRef.value

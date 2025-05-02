@@ -68,7 +68,7 @@ public class JpaGroupRepository   implements GroupRepository {
         PageRequest pageRequest = PageRequest.of(
                 page < 1 ? 0 : (page - 1),
                 size,
-                Sort.by(Sort.Direction.DESC, "createdAt")
+                Sort.by(Sort.Direction.ASC, "sort")
         );
         Page<Group> entityPage = groupEntityRepository.findAll(spec, pageRequest);
         return PageResponse.of(
