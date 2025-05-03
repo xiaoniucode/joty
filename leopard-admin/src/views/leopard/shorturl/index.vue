@@ -20,7 +20,7 @@
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'qrUrl'">
-            <a-image :src="record.qrUrl" />
+            <a-image :width="64" :src="record.qrUrl" />
           </template>
           <template v-if="column.key === 'name'">
             <a>
@@ -59,7 +59,7 @@ import GroupList from './components/group-list/index.vue'
 
 const pageQuery = reactive({
   page: 1,
-  size: 2,
+  size: 10,
 })
 const urlFormModalRef = ref()
 
@@ -79,7 +79,7 @@ const onLoadTableData = async () => {
 }
 onLoadTableData()
 onMounted(() => {
-  
+
 })
 
 const pagination = computed(() => ({
@@ -104,16 +104,21 @@ const columns = [
     name: '标题',
     dataIndex: 'title',
     key: 'title',
+    width:100,
+    ellipsis:true
   },
   {
     title: '短链接',
     dataIndex: 'shortUrl',
     key: 'shortUrl',
+    width: 224,
+    ellipsis:true
   },
   {
     title: '长链接',
     dataIndex: 'originalUrl',
     key: 'originalUrl',
+    ellipsis:true
   },
   {
     title: '二维码',

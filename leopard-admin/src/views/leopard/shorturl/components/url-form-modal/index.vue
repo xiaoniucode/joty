@@ -37,8 +37,16 @@
 </template>
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
-
+import { Dayjs } from 'dayjs'
+import { reactive, toRaw } from 'vue'
+import type { UnwrapRef } from 'vue'
+import type { Rule } from 'ant-design-vue/es/form'
+import api from '@/utils/api.ts'
+import { group } from '@/api/leopard/group.ts'
+import {short_url} from "@/api/leopard/shorturl.ts";
+import {message} from "ant-design-vue";
 const open = ref<boolean>(false)
+
 const groupData = ref([])
 const loadGroupData = async () => {
   const res = await (<any>api.action(group.list, {}, {}))
@@ -56,16 +64,20 @@ const showModal = (data: object) => {
 defineExpose({
   showModal,
 })
+const formRef = ref()
 const handleOk = (e: MouseEvent) => {
-  console.log(e)
-  open.value = false
+  formRef.value
+      .validate()
+      .then(() => {
+        api.action(short_url.create,{}, toRaw(formState)).then((res: any) => {
+          open.value = false
+          message.success("已创建")
+        }).finally(()=>{
+          open.value = false
+        })
+      })
 }
-import { Dayjs } from 'dayjs'
-import { reactive, toRaw } from 'vue'
-import type { UnwrapRef } from 'vue'
-import type { Rule } from 'ant-design-vue/es/form'
-import api from '@/utils/api.ts'
-import { group } from '@/api/leopard/group.ts'
+
 
 interface FormState {
   id?: undefined
@@ -78,7 +90,7 @@ interface FormState {
   remark: string
 }
 
-const formRef = ref()
+
 
 const formState: UnwrapRef<FormState> = reactive({
   id: undefined,
@@ -100,14 +112,7 @@ const rules: Record<string, Rule[]> = {
   remark: [{ max: 50, message: '长度在50内', trigger: 'blur' },],
 }
 const onSubmit = () => {
-  formRef.value
-    .validate()
-    .then(() => {
-      console.log('values', formState, toRaw(formState))
-    })
-    .catch((error) => {
-      console.log('error', error)
-    })
+
 }
 const resetForm = () => {
   formRef.value.resetFields()
