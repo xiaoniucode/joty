@@ -128,7 +128,7 @@ public class JpaShortUrlRepository implements ShortUrlRepository {
     @Override
     public long deleteExpiredUrls() {
         Specification<ShortUrl> spec = (root, query, cb) ->
-                cb.lessThan(root.get("expireAt"), new java.util.Date());
+                cb.lessThan(root.get("expiredAt"), new java.util.Date());
         return shortUrlEntityRepository.delete(spec);
     }
 }

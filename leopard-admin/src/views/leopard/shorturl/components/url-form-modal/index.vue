@@ -17,6 +17,7 @@
       <a-form-item v-if="isEdit" label="短链接" name="shortUrl">
         <div>{{ formState.shortUrl }}</div>
       </a-form-item>
+
       <a-form-item label="分组" name="groupId">
         <a-select style="width: 40%" v-model:value="formState.groupId" placeholder="选择分组">
           <a-select-option v-for="item in groupData" :value="item.id"
@@ -24,13 +25,18 @@
           </a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item label="有效期" name="expireAt">
+      <a-form-item label="有效期" name="expiredAt">
         <a-date-picker
-          v-model:value="formState.expireAt"
+          :disabled="isEdit"
+          v-model:value="formState.expiredAt"
           type="date"
+          :valueFormat="'YYYY-MM-DD'"
           placeholder="默认永久"
           style="width: 30%"
         />
+      </a-form-item>
+      <a-form-item label="备注" name="remark">
+        <a-textarea v-model:value="formState.remark" />
       </a-form-item>
       <a-form-item label="状态" name="status">
         <a-radio-group v-model:value="formState.status" name="statusGroup">
@@ -43,7 +49,7 @@
 </template>
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
-import { Dayjs } from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import { reactive, toRaw } from 'vue'
 import type { UnwrapRef } from 'vue'
 import type { Rule } from 'ant-design-vue/es/form'
@@ -63,24 +69,36 @@ const loadGroupData = async () => {
 onMounted(() => {
   loadGroupData()
 })
-
+const isEdit =  ref(false)
 const showModal = (data: object) => {
   open.value = true
-  Object.assign(formState, data)
+ if (data==null){
+   isEdit.value=false
+   resetForm()
+ }else {
+   isEdit.value=true
+   Object.assign(formState, {...data,expiredAt:data.expiredAt?dayjs(data.expiredAt):null})
+ }
 }
-const isEdit = computed(() => !!formState.id)
-
 defineExpose({
   showModal,
 })
 const formRef = ref()
 const handleOk = (e: MouseEvent) => {
   formRef.value.validate().then(() => {
+    const payload = {
+      ...toRaw(formState),
+      expiredAt: dayjs(formState.expiredAt).format('YYYY-MM-DD'),
+    }
+    if (!isEdit.value) {
+      delete payload.shortUrl
+    }
     api
-      .action(short_url.create, {}, toRaw(formState))
+      .action(isEdit.value ? short_url.update : short_url.create, {}, payload)
       .then((res: any) => {
         open.value = false
-        message.success('已创建')
+
+        message.success(isEdit.value ? '更新成功' : '已创建')
       })
       .finally(() => {
         open.value = false
@@ -92,9 +110,9 @@ interface FormState {
   id?: undefined
   title?: string
   originalUrl: string
-  expireAt?: Dayjs | undefined
-  shortUrl: string
-  status: boolean
+  shortUrl?:string
+  expiredAt?: string | Dayjs
+  status: number
   groupId: string
   remark: string
 }
@@ -103,23 +121,25 @@ const formState: UnwrapRef<FormState> = reactive({
   id: undefined,
   title: '',
   originalUrl: '',
-  expireAt: undefined,
-  shortUrl: '',
-  status: true,
+  shortUrl:'',
+  expiredAt: undefined,
+  status: 1,
   groupId: '',
   remark: '',
 })
 const rules: Record<string, Rule[]> = {
   title: [
     { required: false, trigger: 'change' },
-    { min: 1, max: 30, message: '长度在1-30内', trigger: 'blur' },
+    { min: 1, max: 50, message: '长度在1-50内', trigger: 'blur' },
   ],
   originalUrl: [{ required: true, message: '请输入长链接', trigger: 'change' }],
   status: [{ required: true }],
+  domain: [{ required: true, message: '选择访问域名', trigger: 'change' }],
+  groupId: [{ required: true, message: '必须指定一个分组', trigger: 'change' }],
   remark: [{ max: 50, message: '长度在50内', trigger: 'blur' }],
 }
-const onSubmit = () => {}
 const resetForm = () => {
   formRef.value.resetFields()
+  delete formState.shortUrl
 }
 </script>

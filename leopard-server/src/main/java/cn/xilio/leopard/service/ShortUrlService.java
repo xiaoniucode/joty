@@ -4,6 +4,7 @@ package cn.xilio.leopard.service;
 
 import cn.xilio.leopard.adapter.portal.dto.request.CreateBatchShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.CreateSingleShortUrlRequest;
+import cn.xilio.leopard.adapter.portal.dto.request.UpdateShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateBatchShortUrlResponse;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateSingleShortUrlResponse;
 import cn.xilio.leopard.domain.dataobject.ShortUrl;
@@ -73,4 +74,9 @@ public interface ShortUrlService {
      */
     long deleteExpiredUrls();
 
+    /**
+     * Update short link
+     * @param request Update info
+     */
+    void update(UpdateShortUrlRequest request);
 }

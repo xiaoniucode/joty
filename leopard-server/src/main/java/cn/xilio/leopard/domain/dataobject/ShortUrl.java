@@ -2,12 +2,15 @@ package cn.xilio.leopard.domain.dataobject;
 
 
 import cn.xilio.leopard.core.config.jpa.Auditable;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
@@ -87,7 +90,8 @@ public class ShortUrl extends Auditable {
      * 过期时间，空表示永远不过期
      */
     @Column(name = "expire_at")
-    private LocalDateTime expiredAt;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private LocalDate expiredAt;
     /**
      * 备注
      */

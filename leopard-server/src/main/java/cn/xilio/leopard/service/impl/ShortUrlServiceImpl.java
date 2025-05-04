@@ -5,6 +5,7 @@ import cn.hutool.core.util.RandomUtil;
 
 import cn.xilio.leopard.adapter.portal.dto.request.CreateBatchShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.CreateSingleShortUrlRequest;
+import cn.xilio.leopard.adapter.portal.dto.request.UpdateShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateBatchShortUrlResponse;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateSingleShortUrlResponse;
 import cn.xilio.leopard.service.ShortUrlService;
@@ -23,12 +24,14 @@ import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.page.PageResponse;
 import cn.xilio.leopard.core.common.util.WebUtils;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,10 +51,9 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     @Autowired
     private GroupService groupService;
     @Autowired
-    private MessageSource messageSource;
-    @Autowired
     private UploadService uploadService;
     private final Lock lock = new ReentrantLock();
+    private final static String DEFAULT_GROUP_ID = "1";
 
     /**
      * Create a single short link
@@ -83,7 +85,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
             newShortUrl.setShortCode(code);
             newShortUrl.setQrUrl(qrCodeUrl);
             newShortUrl.setShortUrl(shortUrl);
-            newShortUrl.setExpiredAt(null);
             ShortUrl saveResult = shortUrlRepository.save(newShortUrl);
             bloomFilterService.put(code);
 
@@ -108,10 +109,10 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         List<String> urls = request.urls();
         for (String originalUrl : urls) {
             CreateSingleShortUrlRequest single = new CreateSingleShortUrlRequest(
-                    "title",
+                    "未命名",
                     originalUrl,
-                    "1",
-                    LocalDateTime.now(),
+                    DEFAULT_GROUP_ID,
+                    null,
                     "Batch Create");
             CreateSingleShortUrlResponse created = createSingle(single);
             list.add(created);
@@ -184,5 +185,18 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     @Transactional(rollbackOn = Exception.class)
     public long deleteExpiredUrls() {
         return shortUrlRepository.deleteExpiredUrls();
+    }
+
+    /**
+     * Update short link
+     *
+     * @param request Update info
+     */
+    @Override
+    public void update(UpdateShortUrlRequest request) {
+        ShortUrl old = shortUrlRepository.findById(request.id(), StpUtil.getLoginIdAsString());
+        BizException.checkNull("1007", old);
+        BeanUtils.copyProperties(request, old);
+        shortUrlRepository.save(old);
     }
 }

@@ -6,4 +6,5 @@ export const short_url: ApiModule = {
   del: { url: '/short-url/del', method: 'delete' },
   create: { url: '/short-url/create', method: 'post' },
   createBatch: { url: '/short-url/create-batch', method: 'post' },
+  update: { url: '/short-url/update', method: 'put' },
 } as const

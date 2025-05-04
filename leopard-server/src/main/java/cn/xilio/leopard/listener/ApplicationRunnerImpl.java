@@ -16,6 +16,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Component
@@ -46,9 +48,9 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
                 logger.debug("Processing page {} with {} records.", page, pageResponse.getRecords().size());
 
                 for (ShortUrl shortUrl : pageResponse.getRecords()) {
-                    LocalDateTime expiredAt = shortUrl.getExpiredAt();
+                    LocalDate expiredAt = shortUrl.getExpiredAt();
                     String shortCode = shortUrl.getShortCode();
-                    if (!StringUtils.hasText(shortCode) || (!ObjectUtils.isEmpty(expiredAt) &&expiredAt.isBefore(LocalDateTime.now()))) {
+                    if (!StringUtils.hasText(shortCode) || (!ObjectUtils.isEmpty(expiredAt) &&expiredAt.isBefore(LocalDate.now()))) {
                         continue;
                     }
                     bloomFilterService.put(shortCode);

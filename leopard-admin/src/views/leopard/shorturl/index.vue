@@ -59,12 +59,12 @@ import GroupList from './components/group-list/index.vue'
 
 const pageQuery = reactive({
   page: 1,
-  size: 10,
+  size: 5,
 })
 const urlFormModalRef = ref()
 
 const onOpenCreateModal = () => {
-  urlFormModalRef.value.showModal()
+  urlFormModalRef.value.showModal(null)
 }
 const onEdit = (data: object) => {
   urlFormModalRef.value.showModal(data)
@@ -104,7 +104,7 @@ const columns = [
     name: '标题',
     dataIndex: 'title',
     key: 'title',
-    width:100,
+    width:150,
     ellipsis:true
   },
   {
@@ -124,11 +124,13 @@ const columns = [
     title: '二维码',
     dataIndex: 'qrUrl',
     key: 'qrUrl',
+    width: 80
   },
   {
     title: '状态',
     key: 'status',
     dataIndex: 'status',
+    width: 80
   },
   {
     title: '操作',

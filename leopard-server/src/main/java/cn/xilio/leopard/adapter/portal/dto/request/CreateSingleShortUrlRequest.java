@@ -4,7 +4,9 @@ package cn.xilio.leopard.adapter.portal.dto.request;
 import cn.xilio.leopard.domain.dataobject.ShortUrl;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record CreateSingleShortUrlRequest(
@@ -18,7 +20,8 @@ public record CreateSingleShortUrlRequest(
         String originalUrl,
         @NotEmpty(message = "分组ID不能为空")
         String groupId,
-        LocalDateTime expiredAt,
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        LocalDate expiredAt,
         String remark
 ) {
     public ShortUrl toEntity() {

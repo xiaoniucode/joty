@@ -20,9 +20,9 @@
           <a-select-option value="2">电商系统</a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item label="有效期" name="expireAt">
+      <a-form-item label="有效期" name="expiredAt">
         <a-date-picker
-            v-model:value="formState.expireAt"
+            v-model:value="formState.expiredAt"
             type="date"
             placeholder="默认永久"
             style="width: 30%"
@@ -59,7 +59,7 @@ interface FormState {
   id?: undefined
   title?: string
   originalUrl: string
-  expireAt?: Dayjs | undefined
+  expiredAt?: Dayjs | undefined
   shortUrl: string
   status: number
   groupId: string
@@ -72,7 +72,7 @@ const formState: UnwrapRef<FormState> = reactive({
   id: undefined,
   title: '',
   originalUrl: '',
-  expireAt: undefined,
+  expiredAt: undefined,
   shortUrl: '',
   status: 1,
   groupId: '',
@@ -84,7 +84,7 @@ const rules: Record<string, Rule[]> = {
     { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
   ],
   originalUrl: [{ required: true, message: 'Please select Activity zone', trigger: 'change' }],
-  expireAt: [{ required: true, message: 'Please pick a date', trigger: 'change', type: 'object' }],
+  expiredAt: [{ required: true, message: 'Please pick a date', trigger: 'change', type: 'object' }],
   status: [
     {
       type: 'array',
