@@ -4,6 +4,7 @@ package cn.xilio.leopard.service;
 
 import cn.xilio.leopard.adapter.portal.dto.request.CreateBatchShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.CreateSingleShortUrlRequest;
+import cn.xilio.leopard.adapter.portal.dto.request.ShortUrlPageRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.UpdateShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateBatchShortUrlResponse;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateSingleShortUrlResponse;
@@ -44,7 +45,7 @@ public interface ShortUrlService {
      * @param request Page request information
      * @return Short chain list
      */
-    PageResponse<ShortUrl> getShortUrlsByUser(PageQuery request);
+    PageResponse<ShortUrl> getShortUrlsByUser(ShortUrlPageRequest request);
 
     /**
      * Get the pagination list of short links

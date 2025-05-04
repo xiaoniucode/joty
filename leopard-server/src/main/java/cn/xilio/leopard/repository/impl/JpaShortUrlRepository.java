@@ -1,6 +1,7 @@
 package cn.xilio.leopard.repository.impl;
 
 
+import cn.xilio.leopard.adapter.portal.dto.request.ShortUrlPageRequest;
 import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.page.PageResponse;
 import cn.xilio.leopard.domain.dataobject.ShortUrl;
@@ -8,11 +9,13 @@ import cn.xilio.leopard.repository.ShortUrlRepository;
 import cn.xilio.leopard.repository.dao.ShortUrlEntityRepository;
 import jakarta.annotation.Resource;
 
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -36,12 +39,18 @@ public class JpaShortUrlRepository implements ShortUrlRepository {
      * @return 分页查询结果
      */
     @Override
-    public PageResponse<ShortUrl> page(PageQuery request, String userId) {
+    public PageResponse<ShortUrl> page(ShortUrlPageRequest request, String userId) {
         int page = request.getPage();
         int size = request.getSize();
+        String groupId = request.getGroupId();
         // 3. 动态条件组装
-        Specification<ShortUrl> spec = (root, query, cb) ->
-                cb.equal(root.get("createdBy"), userId);
+        Specification<ShortUrl> spec = (root, query, cb) -> {
+            Predicate predicate = cb.equal(root.get("createdBy"), userId);
+            if (StringUtils.hasText(groupId)) {
+                predicate = cb.and(predicate, cb.equal(root.get("groupId"), groupId));
+            }
+            return predicate;
+        };
         PageRequest pageRequest = PageRequest.of(page < 1 ? 0 : (page - 1), size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<ShortUrl> entityPage = shortUrlEntityRepository.findAll(spec, pageRequest);
         return PageResponse.of(

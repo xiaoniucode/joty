@@ -1,7 +1,7 @@
 <template>
   <a-flex gap="small">
     <a-flex class="w-[180px]" justify="space-between">
-      <group-list />
+      <group-list @onSelectGroup="onSelectGroup" />
       <a-divider type="vertical" style="height: 100%" />
     </a-flex>
 
@@ -46,11 +46,11 @@
       </a-table>
       <div>
         <a-pagination
-            style="float: right;margin: 15px"
-            v-model:current="pageQuery.page"
-            v-model:pageSize="pageQuery.size"
-            show-size-changer
-            :total="total"
+          style="float: right; margin: 15px"
+          v-model:current="pageQuery.page"
+          v-model:pageSize="pageQuery.size"
+          show-size-changer
+          :total="total"
         />
       </div>
     </a-flex>
@@ -59,17 +59,17 @@
   <url-form-modal ref="urlFormModalRef" />
 </template>
 <script lang="ts" setup>
-import {computed, onMounted, reactive, ref, watch} from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import api from '@/utils/api.ts'
 import { short_url } from '@/api/leopard/shorturl.ts'
 import PageHeader from '@/components/page-header.vue'
 import UrlFormModal from './components/url-form-modal/index.vue'
 import GroupList from './components/group-list/index.vue'
 
-
 const pageQuery = reactive({
   page: 1,
   size: 5,
+  groupId: '1',
 })
 const urlFormModalRef = ref()
 
@@ -89,11 +89,18 @@ const onLoadTableData = async () => {
 }
 onLoadTableData()
 onMounted(() => {})
-watch(pageQuery,(newPage)=>{
+watch(
+  pageQuery,
+  (newPage) => {
+    onLoadTableData()
+  },
+  { deep: true },
+)
+
+const onSelectGroup = async (groupId: any) => {
+  pageQuery.groupId = groupId
   onLoadTableData()
-},{deep:true})
-
-
+}
 const rowSelection = ref({
   checkStrictly: false,
   onChange: (selectedRowKeys: (string | number)[], selectedRows: any) => {

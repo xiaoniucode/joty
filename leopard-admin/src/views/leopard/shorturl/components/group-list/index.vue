@@ -30,7 +30,7 @@ import { group } from '@/api/leopard/group.ts'
 
 import GroupFormModal from '@/views/leopard/shorturl/components/group-form-modal/index.vue'
 import { Modal } from 'ant-design-vue'
-
+const emit=defineEmits(['onSelectGroup'])
 const groupList = ref([])
 const loadGroups = async () => {
   const res = await (<any>api.action(group.list))
@@ -39,7 +39,7 @@ const loadGroups = async () => {
 loadGroups()
 //选中节点
 const onSelect = (selectedKeys: any) => {
-  console.log('selected', selectedKeys[0])
+  emit('onSelectGroup',selectedKeys[0])
 }
 
 const onContextMenuClick = (treeKey: string, menuKey: string) => {

@@ -3,6 +3,7 @@ package cn.xilio.leopard.adapter.portal.controller;
 
 import cn.xilio.leopard.adapter.portal.dto.request.CreateBatchShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.CreateSingleShortUrlRequest;
+import cn.xilio.leopard.adapter.portal.dto.request.ShortUrlPageRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.UpdateShortUrlRequest;
 import cn.xilio.leopard.service.ShortUrlService;
 import cn.xilio.leopard.core.common.page.PageQuery;
@@ -42,7 +43,7 @@ public class PortalShortUrlController {
 
     @Operation(summary = "短链接列表")
     @PostMapping(value = "list", name = "Short link pagination list")
-    public Result getShortUrls(@Validated @RequestBody PageQuery request) {
+    public Result getShortUrls(@Validated @RequestBody ShortUrlPageRequest request) {
         return Result.success(shortUrlService.getShortUrlsByUser(request));
     }
 

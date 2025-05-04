@@ -5,6 +5,7 @@ import cn.hutool.core.util.RandomUtil;
 
 import cn.xilio.leopard.adapter.portal.dto.request.CreateBatchShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.CreateSingleShortUrlRequest;
+import cn.xilio.leopard.adapter.portal.dto.request.ShortUrlPageRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.UpdateShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateBatchShortUrlResponse;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateSingleShortUrlResponse;
@@ -139,7 +140,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      * @return Short chain list
      */
     @Override
-    public PageResponse<ShortUrl> getShortUrlsByUser(PageQuery request) {
+    public PageResponse<ShortUrl> getShortUrlsByUser(ShortUrlPageRequest request) {
         String userId = StpUtil.getLoginIdAsString();
         return shortUrlRepository.page(request, userId);
     }

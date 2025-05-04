@@ -2,6 +2,7 @@ package cn.xilio.leopard.repository;
 
 
 
+import cn.xilio.leopard.adapter.portal.dto.request.ShortUrlPageRequest;
 import cn.xilio.leopard.domain.dataobject.ShortUrl;
 import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.page.PageResponse;
@@ -17,7 +18,7 @@ public interface ShortUrlRepository {
      * @param userId UserId
      * @return Paging query results
      */
-    PageResponse<ShortUrl> page(PageQuery request, String userId);
+    PageResponse<ShortUrl> page(ShortUrlPageRequest request, String userId);
 
     /**
      * Page wise query of short link list

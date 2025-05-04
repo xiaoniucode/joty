@@ -48,7 +48,7 @@
   </a-modal>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import dayjs, { Dayjs } from 'dayjs'
 import { reactive, toRaw } from 'vue'
 import type { UnwrapRef } from 'vue'
@@ -59,6 +59,7 @@ import { short_url } from '@/api/leopard/shorturl.ts'
 import { message } from 'ant-design-vue'
 
 const open = ref<boolean>(false)
+const formRef = ref()
 
 const groupData = ref([])
 const loadGroupData = async () => {
@@ -83,7 +84,7 @@ const showModal = (data: object) => {
 defineExpose({
   showModal,
 })
-const formRef = ref()
+
 const handleOk = (e: MouseEvent) => {
   formRef.value.validate().then(() => {
     const payload = {
@@ -105,7 +106,16 @@ const handleOk = (e: MouseEvent) => {
       })
   })
 }
-
+// 定义初始状态常量
+const INITIAL_STATE = {
+  id: undefined,
+  title: '',
+  originalUrl: '',
+  expiredAt: undefined,
+  status: 1,
+  groupId: '',
+  remark: ''
+}
 interface FormState {
   id?: undefined
   title?: string
@@ -118,14 +128,8 @@ interface FormState {
 }
 
 const formState: UnwrapRef<FormState> = reactive({
-  id: undefined,
-  title: '',
-  originalUrl: '',
+  ...INITIAL_STATE,
   shortUrl:'',
-  expiredAt: undefined,
-  status: 1,
-  groupId: '',
-  remark: '',
 })
 const rules: Record<string, Rule[]> = {
   title: [
@@ -139,7 +143,10 @@ const rules: Record<string, Rule[]> = {
   remark: [{ max: 50, message: '长度在50内', trigger: 'blur' }],
 }
 const resetForm = () => {
-  formRef.value.resetFields()
-  delete formState.shortUrl
+  formRef.value?.resetFields()
+  Object.assign(formState, {
+    ...INITIAL_STATE,
+    groupId: groupData.value[0]?.id || ''
+  })
 }
 </script>
