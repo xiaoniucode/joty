@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    :ok-text="isEdit ? '编辑' : '创建'"
+    ok-text="保存"
     cancel-text="取消"
     width="50%"
     v-model:open="open"

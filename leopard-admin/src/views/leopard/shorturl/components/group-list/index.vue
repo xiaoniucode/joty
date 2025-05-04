@@ -1,11 +1,12 @@
 <template>
-  <a-flex align="center" vertical gap="small">
+  <a-flex align="center" vertical gap="large">
     <a-button @click="onOpenGroupModal" type="primary" size="small">新建分组</a-button>
     <a-tree
       :fieldNames="{ title: 'name', key: 'id' }"
       :show-icon="true"
       block-node
       :tree-data="groupList"
+      v-model:selected-keys="selectedKeys"
       @select="onSelect"
     >
       <template #title="{ id, name }">
@@ -29,9 +30,10 @@ import api from '@/utils/api.ts'
 import { group } from '@/api/leopard/group.ts'
 
 import GroupFormModal from '@/views/leopard/shorturl/components/group-form-modal/index.vue'
-import { Modal } from 'ant-design-vue'
+import {message, Modal} from 'ant-design-vue'
 const emit=defineEmits(['onSelectGroup'])
 const groupList = ref([])
+const selectedKeys = ref<string[]>(['1' ]);
 const loadGroups = async () => {
   const res = await (<any>api.action(group.list))
   groupList.value = res.records || []
@@ -47,6 +49,10 @@ const onContextMenuClick = (treeKey: string, menuKey: string) => {
     onOpenGroupEdit({})
   }
   if (menuKey == 'delete') {
+    if (treeKey=='1'){
+      message.warn("默认分组不能删除")
+      return
+    }
     Modal.confirm({
       title: '你确定删除该分组?',
       content: '删除后短链接自动迁移到默认分组',
@@ -54,6 +60,7 @@ const onContextMenuClick = (treeKey: string, menuKey: string) => {
       okType: 'danger',
       cancelText: '取消',
       onOk() {
+
         alert(treeKey)
       },
     })

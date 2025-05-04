@@ -17,6 +17,7 @@
         :columns="columns"
         :pagination="false"
         :data-source="tableData"
+        :scroll="{ y: 500 }"
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'qrUrl'">
@@ -35,9 +36,9 @@
           </template>
           <template v-else-if="column.key === 'action'">
             <span>
-              <a>预览</a>
+              <a :href="record.shortUrl" target="_blank">预览</a>
               <a-divider type="vertical" />
-              <a>删除</a>
+              <a @click="onDelete(record.id)">删除</a>
               <a-divider type="vertical" />
               <a @click="onEdit(record)">编辑</a>
             </span>
@@ -65,6 +66,7 @@ import { short_url } from '@/api/leopard/shorturl.ts'
 import PageHeader from '@/components/page-header.vue'
 import UrlFormModal from './components/url-form-modal/index.vue'
 import GroupList from './components/group-list/index.vue'
+import {Modal} from "ant-design-vue";
 
 const pageQuery = reactive({
   page: 1,
@@ -96,7 +98,18 @@ watch(
   },
   { deep: true },
 )
-
+const onDelete=async (id:string)=>{
+  Modal.confirm({
+    title: '你确定删除该短链接?',
+    content: '删除后不可恢复',
+    okText: '确认',
+    okType: 'danger',
+    cancelText: '取消',
+    onOk() {
+      alert(id)
+    },
+  })
+}
 const onSelectGroup = async (groupId: any) => {
   pageQuery.groupId = groupId
   onLoadTableData()

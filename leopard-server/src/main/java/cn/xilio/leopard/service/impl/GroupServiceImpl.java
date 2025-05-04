@@ -50,6 +50,7 @@ public class GroupServiceImpl implements GroupService {
     public void deleteGroup(List<String> ids) {
         String userId = StpUtil.getLoginIdAsString();
         groupRepository.deleteBatch(ids, userId);
+        //todo Move the short links within the group to the default group
     }
 
     /**
