@@ -2,7 +2,7 @@
   <a-flex gap="small">
     <a-flex class="w-[180px]" justify="space-between">
       <group-list />
-      <a-divider type="vertical" style="height: 100%;" />
+      <a-divider type="vertical" style="height: 100%" />
     </a-flex>
 
     <a-flex style="flex: 1" vertical>
@@ -15,12 +15,12 @@
       <a-table
         :row-selection="rowSelection"
         :columns="columns"
-        :pagination="pagination"
+        :pagination="false"
         :data-source="tableData"
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'qrUrl'">
-            <a-image :width="64" :src="record.qrUrl" />
+            <a-image :width="64" :src="record.qrUrl" fallback="/error_image.png" />
           </template>
           <template v-if="column.key === 'name'">
             <a>
@@ -44,18 +44,28 @@
           </template>
         </template>
       </a-table>
+      <div>
+        <a-pagination
+            style="float: right;margin: 15px"
+            v-model:current="pageQuery.page"
+            v-model:pageSize="pageQuery.size"
+            show-size-changer
+            :total="total"
+        />
+      </div>
     </a-flex>
   </a-flex>
 
   <url-form-modal ref="urlFormModalRef" />
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, reactive, ref } from 'vue'
+import {computed, onMounted, reactive, ref, watch} from 'vue'
 import api from '@/utils/api.ts'
 import { short_url } from '@/api/leopard/shorturl.ts'
 import PageHeader from '@/components/page-header.vue'
 import UrlFormModal from './components/url-form-modal/index.vue'
 import GroupList from './components/group-list/index.vue'
+
 
 const pageQuery = reactive({
   page: 1,
@@ -78,15 +88,12 @@ const onLoadTableData = async () => {
   })
 }
 onLoadTableData()
-onMounted(() => {
+onMounted(() => {})
+watch(pageQuery,(newPage)=>{
+  onLoadTableData()
+},{deep:true})
 
-})
 
-const pagination = computed(() => ({
-  total: total.value,
-  current: pageQuery.page,
-  pageSize: pageQuery.size,
-}))
 const rowSelection = ref({
   checkStrictly: false,
   onChange: (selectedRowKeys: (string | number)[], selectedRows: any) => {
@@ -104,33 +111,33 @@ const columns = [
     name: '标题',
     dataIndex: 'title',
     key: 'title',
-    width:150,
-    ellipsis:true
+    width: 150,
+    ellipsis: true,
   },
   {
     title: '短链接',
     dataIndex: 'shortUrl',
     key: 'shortUrl',
     width: 224,
-    ellipsis:true
+    ellipsis: true,
   },
   {
     title: '长链接',
     dataIndex: 'originalUrl',
     key: 'originalUrl',
-    ellipsis:true
+    ellipsis: true,
   },
   {
     title: '二维码',
     dataIndex: 'qrUrl',
     key: 'qrUrl',
-    width: 80
+    width: 80,
   },
   {
     title: '状态',
     key: 'status',
     dataIndex: 'status',
-    width: 80
+    width: 80,
   },
   {
     title: '操作',
