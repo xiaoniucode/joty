@@ -1,10 +1,10 @@
 <template>
   <a-modal
-    ok-text="创建"
+    :ok-text="isEdit ? '编辑' : '创建'"
     cancel-text="取消"
-    width="40%"
+    width="50%"
     v-model:open="open"
-    title="新增短链接"
+    :title="isEdit ? '编辑' : '新增'"
     @ok="handleOk"
   >
     <a-form ref="formRef" :model="formState" :rules="rules" :label-col="{ span: 3 }">
@@ -12,7 +12,10 @@
         <a-input v-model:value="formState.title" />
       </a-form-item>
       <a-form-item label="长链接" name="originalUrl">
-        <a-input v-model:value="formState.originalUrl" />
+        <a-input :disabled="isEdit" v-model:value="formState.originalUrl" />
+      </a-form-item>
+      <a-form-item v-if="isEdit" label="短链接" name="shortUrl">
+        <div>{{ formState.shortUrl }}</div>
       </a-form-item>
       <a-form-item label="分组" name="groupId">
         <a-select style="width: 40%" v-model:value="formState.groupId" placeholder="选择分组">
@@ -30,21 +33,25 @@
         />
       </a-form-item>
       <a-form-item label="状态" name="status">
-        <a-switch v-model:checked="formState.status" />
+        <a-radio-group v-model:value="formState.status" name="statusGroup">
+          <a-radio :value="1">正常</a-radio>
+          <a-radio :value="0">禁用</a-radio>
+        </a-radio-group>
       </a-form-item>
     </a-form>
   </a-modal>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { Dayjs } from 'dayjs'
 import { reactive, toRaw } from 'vue'
 import type { UnwrapRef } from 'vue'
 import type { Rule } from 'ant-design-vue/es/form'
 import api from '@/utils/api.ts'
 import { group } from '@/api/leopard/group.ts'
-import {short_url} from "@/api/leopard/shorturl.ts";
-import {message} from "ant-design-vue";
+import { short_url } from '@/api/leopard/shorturl.ts'
+import { message } from 'ant-design-vue'
+
 const open = ref<boolean>(false)
 
 const groupData = ref([])
@@ -61,23 +68,25 @@ const showModal = (data: object) => {
   open.value = true
   Object.assign(formState, data)
 }
+const isEdit = computed(() => !!formState.id)
+
 defineExpose({
   showModal,
 })
 const formRef = ref()
 const handleOk = (e: MouseEvent) => {
-  formRef.value
-      .validate()
-      .then(() => {
-        api.action(short_url.create,{}, toRaw(formState)).then((res: any) => {
-          open.value = false
-          message.success("已创建")
-        }).finally(()=>{
-          open.value = false
-        })
+  formRef.value.validate().then(() => {
+    api
+      .action(short_url.create, {}, toRaw(formState))
+      .then((res: any) => {
+        open.value = false
+        message.success('已创建')
       })
+      .finally(() => {
+        open.value = false
+      })
+  })
 }
-
 
 interface FormState {
   id?: undefined
@@ -89,8 +98,6 @@ interface FormState {
   groupId: string
   remark: string
 }
-
-
 
 const formState: UnwrapRef<FormState> = reactive({
   id: undefined,
@@ -109,11 +116,9 @@ const rules: Record<string, Rule[]> = {
   ],
   originalUrl: [{ required: true, message: '请输入长链接', trigger: 'change' }],
   status: [{ required: true }],
-  remark: [{ max: 50, message: '长度在50内', trigger: 'blur' },],
+  remark: [{ max: 50, message: '长度在50内', trigger: 'blur' }],
 }
-const onSubmit = () => {
-
-}
+const onSubmit = () => {}
 const resetForm = () => {
   formRef.value.resetFields()
 }
