@@ -55,13 +55,13 @@ public class User extends Auditable {
      * 状态
      */
     @Column(name = "status", nullable = false)
-    private Byte status=1;
+    private Integer status;
 
     /**
      * 逻辑删除标志
      */
     @Column(name = "deleted", nullable = false)
-    private Boolean deleted = false;
+    private Integer deleted;
 
     /**
      * 是否管理员

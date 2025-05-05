@@ -4,8 +4,10 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 
+import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;
+import cn.xilio.leopard.core.common.page.PageResponse;
 import cn.xilio.leopard.service.UserService;
 import cn.xilio.leopard.domain.event.LoginEvent;
 import cn.xilio.leopard.domain.event.LogoutEvent;
@@ -73,5 +75,17 @@ public class UserServiceImpl implements UserService {
                 .setIsWriteHeader(true));
         eventPublisher.publishEvent(new LoginEvent(this));
         return StpUtil.getTokenInfo();
+    }
+
+    /**
+     * query user
+     *
+     * @param request page query request
+     * @return user list
+     */
+    @Override
+    public PageResponse<User> list(UserPageQueryRequest request) {
+       return userRepository.selectUsers(request);
+
     }
 }

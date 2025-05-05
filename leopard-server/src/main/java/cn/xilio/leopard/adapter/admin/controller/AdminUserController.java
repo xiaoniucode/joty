@@ -1,6 +1,10 @@
 package cn.xilio.leopard.adapter.admin.controller;
 
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
+import cn.xilio.leopard.core.common.page.PageResponse;
+import cn.xilio.leopard.domain.dataobject.User;
 import cn.xilio.leopard.service.UserService;
 import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.util.Result;
@@ -17,8 +21,9 @@ public class AdminUserController {
     private UserService userService;
 
     @PostMapping(value = "list", name = "All user list")
-    public Result list(@Validated @RequestBody PageQuery request) {
-        return Result.success();
+    @SaCheckPermission("user:list")
+    public Result list(@Validated @RequestBody UserPageQueryRequest request) {
+        return Result.success(userService.list(request));
     }
 
     @GetMapping(value = "get", name = "Get user info")
