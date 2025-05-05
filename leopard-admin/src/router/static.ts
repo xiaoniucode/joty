@@ -41,17 +41,17 @@ export const staticRoutes = [
   },
   {
     path: '/',
-    name: 'system',
+    name: 'member',
     component: Layout,
-    meta: { title: '系统管理', icon: 'SlackCircleFilled' },
+    meta: { title: '会员管理', icon: 'SlackCircleFilled' },
     alwaysShow: true,
     children: [
       {
-        path: 'user',
-        name: 'UserList',
-        component: () => import('@/views/leopard/shorturl/index.vue'),
+        path: 'member-list',
+        name: 'MemberList',
+        component: () => import('@/views/system/member/member-list/index.vue'),
         hidden: false,
-        meta: { title: '用户管理', icon: 'IeCircleFilled' },
+        meta: { title: '会员用户', icon: 'IeCircleFilled' },
       },
     ],
   },
