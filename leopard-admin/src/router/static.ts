@@ -59,13 +59,13 @@ export const staticRoutes = [
     path: '/',
     name: 'ShortUrl',
     component: Layout,
+    alwaysShow: true,
     meta: { title: '短链管理', icon: 'SlackCircleFilled' },
     children: [
       {
         path: 'short-url',
         name: 'LinkList',
         component: () => import('@/views/leopard/shorturl/index.vue'),
-        hidden: false,
         meta: { title: '短链列表', icon: 'IeCircleFilled' },
       },
       {
