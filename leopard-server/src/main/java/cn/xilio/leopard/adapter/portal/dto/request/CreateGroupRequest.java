@@ -8,13 +8,15 @@ public record CreateGroupRequest(
         String id,
         @NotEmpty
         String name,
-        String remark
+        String remark,
+        Integer sort
 ) {
     public Group toGroup() {
         Group group = new Group();
         group.setId(id);
         group.setName(name);
         group.setRemark(remark);
+        group.setSort(sort);
         return group;
     }
 }

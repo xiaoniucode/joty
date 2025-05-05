@@ -3,13 +3,17 @@ package cn.xilio.leopard.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.xilio.leopard.adapter.portal.dto.request.CreateGroupRequest;
+import cn.xilio.leopard.core.common.exception.BizException;
 import cn.xilio.leopard.service.GroupService;
 import cn.xilio.leopard.domain.dataobject.Group;
 import cn.xilio.leopard.repository.GroupRepository;
 import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.page.PageResponse;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -36,8 +40,15 @@ public class GroupServiceImpl implements GroupService {
      * @param request Create request
      */
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void saveGroup(CreateGroupRequest request) {
+        String userId = StpUtil.getLoginIdAsString();
         Group group = request.toGroup();
+        if (StringUtils.hasText(request.id())){
+            Group oldGroup = groupRepository.getById(request.id(), userId);
+            BizException.checkNull("1008",oldGroup);
+            BeanUtils.copyProperties(oldGroup,group);
+        }
         groupRepository.saveGroup(group);
     }
 

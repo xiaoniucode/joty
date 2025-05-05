@@ -1,111 +1,86 @@
 <template>
   <a-modal
-      ok-text="创建"
-      cancel-text="取消"
-      width="40%"
-      v-model:open="open"
-      title="新增短链接"
-      @ok="handleOk"
+    ok-text="保存"
+    cancel-text="取消"
+    width="40%"
+    v-model:open="open"
+    :title="isEdit ? '编辑' : '新增'"
+    @ok="handleOk"
   >
     <a-form ref="formRef" :model="formState" :rules="rules" :label-col="{ span: 3 }">
-      <a-form-item label="标题" name="title">
-        <a-input v-model:value="formState.title" />
+      <a-form-item label="名字" name="name">
+        <a-input v-model:value="formState.name" />
       </a-form-item>
-      <a-form-item label="长链接" name="originalUrl">
-        <a-input v-model:value="formState.originalUrl" />
+      <a-form-item label="备注" name="remark">
+        <a-textarea v-model:value="formState.remark" />
       </a-form-item>
-      <a-form-item label="分组" name="region">
-        <a-select style="width: 40%" v-model:value="formState.groupId" placeholder="选择分组">
-          <a-select-option value="1">默认分组</a-select-option>
-          <a-select-option value="2">电商系统</a-select-option>
-        </a-select>
-      </a-form-item>
-      <a-form-item label="有效期" name="expiredAt">
-        <a-date-picker
-            v-model:value="formState.expiredAt"
-            type="date"
-            placeholder="默认永久"
-            style="width: 30%"
-        />
-      </a-form-item>
-      <a-form-item label="状态" name="status">
-        <a-switch v-model:checked="formState.status" />
+      <a-form-item label="排序" name="sort">
+        <a-input-number id="inputNumber" v-model:value="formState.sort" :min="0" />
       </a-form-item>
     </a-form>
   </a-modal>
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { reactive, toRaw } from 'vue'
+import type { UnwrapRef } from 'vue'
+import type { Rule } from 'ant-design-vue/es/form'
+import { message } from 'ant-design-vue'
+import api from '@/utils/api.ts'
+import { group } from '@/api/leopard/group.ts'
 
 const open = ref<boolean>(false)
-
-const showModal = (data: object) => {
+const formRef = ref()
+const showModal = (data = null) => {
   open.value = true
-  Object.assign(formState, data)
+  if (data == null) {
+    isEdit.value = false
+    resetForm()
+  } else {
+    isEdit.value = true
+    api.action(group.get, { id: data.id }).then((res: any) => {
+      Object.assign(formState, res)
+    })
+  }
 }
 defineExpose({
   showModal,
 })
+const isEdit = ref(false)
 const handleOk = (e: MouseEvent) => {
-  console.log(e)
-  open.value = false
+  formRef.value.validate().then(() => {
+    api
+      .action(group.save, {}, toRaw(formState))
+      .then((res: any) => {
+        open.value = false
+        message.success(isEdit.value ? '更新成功' : '已创建')
+      })
+      .finally(() => {
+        open.value = false
+      })
+  })
 }
-import { Dayjs } from 'dayjs'
-import { reactive, toRaw } from 'vue'
-import type { UnwrapRef } from 'vue'
-import type { Rule } from 'ant-design-vue/es/form'
 
 interface FormState {
-  id?: undefined
-  title?: string
-  originalUrl: string
-  expiredAt?: Dayjs | undefined
-  shortUrl: string
-  status: number
-  groupId: string
-  remark: string
+  id: undefined
+  name: string
+  remark?: string
+  sort: number
 }
-
-const formRef = ref()
 
 const formState: UnwrapRef<FormState> = reactive({
   id: undefined,
-  title: '',
-  originalUrl: '',
-  expiredAt: undefined,
-  shortUrl: '',
-  status: 1,
-  groupId: '',
+  name: '',
   remark: '',
+  sort: 0,
 })
 const rules: Record<string, Rule[]> = {
-  title: [
-    { required: false, message: 'Please input Activity name', trigger: 'change' },
-    { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
+  name: [
+    { required: true, message: '不能为空', trigger: 'change' },
+    { min: 1, max: 10, message: '长度在1-10个字范围', trigger: 'blur' },
   ],
-  originalUrl: [{ required: true, message: 'Please select Activity zone', trigger: 'change' }],
-  expiredAt: [{ required: true, message: 'Please pick a date', trigger: 'change', type: 'object' }],
-  status: [
-    {
-      type: 'array',
-      required: true,
-      message: 'Please select at least one activity type',
-      trigger: 'change',
-    },
-  ],
-  groupId: [{ required: true, message: 'Please select activity resource', trigger: 'change' }],
-  remark: [{ required: true, message: 'Please input activity form', trigger: 'blur' }],
 }
-const onSubmit = () => {
-  formRef.value
-      .validate()
-      .then(() => {
-        console.log('values', formState, toRaw(formState))
-      })
-      .catch((error) => {
-        console.log('error', error)
-      })
-}
+
 const resetForm = () => {
   formRef.value.resetFields()
 }

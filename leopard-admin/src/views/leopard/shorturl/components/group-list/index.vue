@@ -46,7 +46,7 @@ const onSelect = (selectedKeys: any) => {
 
 const onContextMenuClick = (treeKey: string, menuKey: string) => {
   if (menuKey == 'edit') {
-    onOpenGroupEdit({})
+    onOpenGroupEdit({id:treeKey})
   }
   if (menuKey == 'delete') {
     if (treeKey=='1'){
