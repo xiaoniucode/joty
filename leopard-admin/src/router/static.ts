@@ -59,7 +59,7 @@ export const staticRoutes = [
     path: '/',
     name: 'ShortUrl',
     component: Layout,
-    alwaysShow: true,
+    alwaysShow: false,
     meta: { title: '短链管理', icon: 'SlackCircleFilled' },
     children: [
       {
@@ -71,25 +71,25 @@ export const staticRoutes = [
       {
         path: 'single-create',
         name: 'SingleCreate',
-        meta: { title: '快速创建', icon: 'PieChartFilled' },
+        meta: { title: '快速创建', icon: 'PlusSquareOutlined' },
         component: () => import('@/views/leopard/stats/index.vue'),
       },
       {
         path: 'batch-create',
         name: 'BatchCreate',
-        meta: { title: '批量创建', icon: 'PieChartFilled' },
+        meta: { title: '批量创建', icon: 'AppstoreAddOutlined' },
         component: () => import('@/views/leopard/stats/index.vue'),
       },
       {
         path: 'open-api',
         name: 'OpenApi',
-        meta: { title: '开放接口', icon: 'PieChartFilled' },
+        meta: { title: '开放接口', icon: 'UngroupOutlined' },
         component: () => import('@/views/leopard/stats/index.vue'),
       },
       {
         path: 'stats',
         name: 'Stats',
-        meta: { title: '数据统计', icon: 'PieChartFilled' },
+        meta: { title: '数据统计', icon: 'DotChartOutlined' },
         component: () => import('@/views/leopard/stats/index.vue'),
       },
     ],
