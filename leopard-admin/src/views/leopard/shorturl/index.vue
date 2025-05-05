@@ -23,11 +23,6 @@
           <template v-if="column.key === 'qrUrl'">
             <a-image :width="64" :src="record.qrUrl" fallback="/error_image.png" />
           </template>
-          <template v-if="column.key === 'name'">
-            <a>
-              {{ record.name }}
-            </a>
-          </template>
           <template v-else-if="column.key === 'status'">
             <span>
               <a-tag v-if="record.status == 0" color="volcano"> 禁用 </a-tag>
@@ -130,7 +125,7 @@ const rowSelection = ref({
 })
 const columns = [
   {
-    name: '标题',
+    title: '标题',
     dataIndex: 'title',
     key: 'title',
     width: 150,
