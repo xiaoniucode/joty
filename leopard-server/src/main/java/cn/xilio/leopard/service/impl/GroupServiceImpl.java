@@ -4,6 +4,7 @@ package cn.xilio.leopard.service.impl;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.xilio.leopard.adapter.portal.dto.request.CreateGroupRequest;
 import cn.xilio.leopard.core.common.exception.BizException;
+import cn.xilio.leopard.domain.event.GroupDeleteEvent;
 import cn.xilio.leopard.service.GroupService;
 import cn.xilio.leopard.domain.dataobject.Group;
 import cn.xilio.leopard.repository.GroupRepository;
@@ -12,6 +13,7 @@ import cn.xilio.leopard.core.common.page.PageResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -21,7 +23,8 @@ import java.util.List;
 public class GroupServiceImpl implements GroupService {
     @Autowired
     private GroupRepository groupRepository;
-
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
     /**
      * Retrieve Group based on groupId
      *
@@ -64,6 +67,7 @@ public class GroupServiceImpl implements GroupService {
         String userId = StpUtil.getLoginIdAsString();
         groupRepository.deleteBatch(ids, userId);
         //todo Move the short links within the group to the default group
+        eventPublisher.publishEvent(new GroupDeleteEvent(this));
     }
 
     /**

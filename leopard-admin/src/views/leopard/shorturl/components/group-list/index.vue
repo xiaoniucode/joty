@@ -45,14 +45,14 @@ const onSelect = (selectedKeys: any) => {
 }
 
 const onContextMenuClick = (treeKey: string, menuKey: string) => {
+  if (treeKey=='1'){
+    message.warn("默认分组不能编辑和删除")
+    return
+  }
   if (menuKey == 'edit') {
     onOpenGroupEdit({id:treeKey})
   }
   if (menuKey == 'delete') {
-    if (treeKey=='1'){
-      message.warn("默认分组不能删除")
-      return
-    }
     Modal.confirm({
       title: '你确定删除该分组?',
       content: '删除后短链接自动迁移到默认分组',
@@ -60,8 +60,10 @@ const onContextMenuClick = (treeKey: string, menuKey: string) => {
       okType: 'danger',
       cancelText: '取消',
       onOk() {
-
-        alert(treeKey)
+       api.action(group.del,{},[treeKey]).then(res=>{
+         message.success("删除成功")
+         loadGroups()
+       })
       },
     })
   }
