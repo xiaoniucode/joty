@@ -63,6 +63,7 @@ public class GroupServiceImpl implements GroupService {
      * @param ids Group ID List
      */
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void deleteGroup(List<String> ids) {
         String userId = StpUtil.getLoginIdAsString();
         groupRepository.deleteBatch(ids, userId);

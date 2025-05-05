@@ -22,7 +22,7 @@
       </template>
     </a-tree>
   </a-flex>
-  <group-form-modal ref="groupFormModalRef" />
+  <group-form-modal ref="groupFormModalRef" @onSaveSuccess="onSaveSuccess"/>
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
@@ -43,7 +43,9 @@ loadGroups()
 const onSelect = (selectedKeys: any) => {
   emit('onSelectGroup',selectedKeys[0])
 }
-
+const onSaveSuccess=async ()=>{
+  await loadGroups()
+}
 const onContextMenuClick = (treeKey: string, menuKey: string) => {
   if (treeKey=='1'){
     message.warn("默认分组不能编辑和删除")

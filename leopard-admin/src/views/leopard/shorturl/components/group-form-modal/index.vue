@@ -28,7 +28,7 @@ import type { Rule } from 'ant-design-vue/es/form'
 import { message } from 'ant-design-vue'
 import api from '@/utils/api.ts'
 import { group } from '@/api/leopard/group.ts'
-
+const emit=defineEmits(['onSaveSuccess'])
 const open = ref<boolean>(false)
 const formRef = ref()
 const showModal = (data = null) => {
@@ -54,6 +54,7 @@ const handleOk = (e: MouseEvent) => {
       .then((res: any) => {
         open.value = false
         message.success(isEdit.value ? '更新成功' : '已创建')
+        emit('onSaveSuccess')
       })
       .finally(() => {
         open.value = false
