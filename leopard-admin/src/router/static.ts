@@ -13,7 +13,7 @@ export const staticRoutes = [
     name: 'layout',
     component: Layout,
     redirect: '/dashboard',
-    meta: {title:'root'},
+    meta: { title: 'root' },
     children: [
       {
         path: 'dashboard',
@@ -28,7 +28,7 @@ export const staticRoutes = [
     name: 'accountLayout',
     component: Layout,
     redirect: '/account',
-    meta: {title:'account'},
+    meta: { title: 'account' },
     hidden: true,
     children: [
       {
@@ -36,6 +36,22 @@ export const staticRoutes = [
         name: 'account',
         meta: { title: '控制面板', icon: 'DashboardFilled' },
         component: () => import('@/views/system/account/index.vue'),
+      },
+    ],
+  },
+  {
+    path: '/',
+    name: 'system',
+    component: Layout,
+    meta: { title: '系统管理', icon: 'SlackCircleFilled' },
+    alwaysShow: true,
+    children: [
+      {
+        path: 'user',
+        name: 'UserList',
+        component: () => import('@/views/leopard/shorturl/index.vue'),
+        hidden: false,
+        meta: { title: '用户管理', icon: 'IeCircleFilled' },
       },
     ],
   },
@@ -52,7 +68,24 @@ export const staticRoutes = [
         hidden: false,
         meta: { title: '短链列表', icon: 'IeCircleFilled' },
       },
-
+      {
+        path: 'single-create',
+        name: 'SingleCreate',
+        meta: { title: '快速创建', icon: 'PieChartFilled' },
+        component: () => import('@/views/leopard/stats/index.vue'),
+      },
+      {
+        path: 'batch-create',
+        name: 'BatchCreate',
+        meta: { title: '批量创建', icon: 'PieChartFilled' },
+        component: () => import('@/views/leopard/stats/index.vue'),
+      },
+      {
+        path: 'open-api',
+        name: 'OpenApi',
+        meta: { title: '开放接口', icon: 'PieChartFilled' },
+        component: () => import('@/views/leopard/stats/index.vue'),
+      },
       {
         path: 'stats',
         name: 'Stats',

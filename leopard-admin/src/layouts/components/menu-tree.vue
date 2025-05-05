@@ -13,13 +13,13 @@ const onClickSubMenu = async (menu: object) => {}
     <!--隐藏的菜单不展示-->
     <template v-if="!menu.hidden">
       <!--有子菜单且子菜单数量为1-->
-      <template v-if="menu.children && menu.children.length === 1">
+      <template v-if="menu.children && menu.children.length === 1&&!menu.alwaysShow">
         <!--只渲染唯一的子菜单-->
         <menu-tree :menus="menu.children" />
       </template>
 
       <!--有多个子菜单-->
-      <template v-else-if="menu.children && menu.children.length > 1">
+      <template v-else-if="menu.children && menu.children.length > 0">
         <a-sub-menu @click="onClickSubMenu(menu)" :key="menu.name">
           <template #title>
             <component v-if="menu.meta && menu.meta.icon" :is="menu.meta.icon" />
