@@ -112,7 +112,9 @@ const onDelete=async (id:string)=>{
 }
 const onSelectGroup = async (groupId: any) => {
   pageQuery.groupId = groupId
-  onLoadTableData()
+  pageQuery.page=1
+  pageQuery.size=5
+  await onLoadTableData()
 }
 const rowSelection = ref({
   checkStrictly: false,
