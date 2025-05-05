@@ -1,6 +1,6 @@
 <template>
   <a-flex gap="small">
-    <a-flex class="w-[180px]" justify="space-between">
+    <a-flex  style="min-width: 180px" justify="space-between">
       <group-list @onSelectGroup="onSelectGroup" />
       <a-divider type="vertical" style="height: 100%" />
     </a-flex>

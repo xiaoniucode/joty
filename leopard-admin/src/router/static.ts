@@ -15,28 +15,30 @@ export const staticRoutes = [
         children: [
             {
                 path: 'dashboard',
-                name: '控制面板',
-                meta: {},
+                name: 'dashboard',
+                meta: {title:'控制面板',icon:'DashboardFilled'},
                 component: () => import('@/views/system/dashboard/index.vue'),
             },
         ],
     },
     {
         path: '/',
-        name: '短链',
+        name: 'ShortUrl',
         component: Layout,
+        meta:{title:'短链管理',icon:'SlackCircleFilled'},
         children: [
             {
                 path: 'short-url',
-                name: '短链列表',
+                name: 'LinkList',
                 component: () => import('@/views/leopard/shorturl/index.vue'),
-                hidden: false
+                hidden: false,
+                meta: {title:'短链列表',icon:'IeCircleFilled'}
             },
 
             {
                 path: 'stats',
-                name: '数据统计',
-                meta: {},
+                name: 'Stats',
+                meta: {title: '数据统计',icon:'PieChartFilled'},
                 component: () => import('@/views/leopard/stats/index.vue'),
             },
         ],

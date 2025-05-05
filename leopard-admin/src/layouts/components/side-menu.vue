@@ -3,11 +3,11 @@ import { ref } from 'vue'
 import MenuTree from '@/layouts/components/menu-tree.vue'
 import { staticRoutes } from '@/router/static.ts'
 
-const selectedKeys = ref<string[]>(['1'])
+const selectedKeys = ref<string[]>(['dashboard'])
 </script>
 
 <template>
-  <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
+  <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline" >
     <menu-tree :menus="staticRoutes" />
   </a-menu>
 </template>

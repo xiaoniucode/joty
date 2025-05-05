@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import MenuTree from '@/layouts/components/menu-tree.vue'
 import router from '@/router'
-
 defineProps(['menus'])
 const onClickMenu = async (menu: object) => {
   router.push({ path: menu.path })
@@ -23,7 +22,8 @@ const onClickSubMenu = async (menu: object) => {}
       <template v-else-if="menu.children && menu.children.length > 1">
         <a-sub-menu @click="onClickSubMenu(menu)" :key="menu.name">
           <template #title>
-            <span>{{ menu.name }}</span>
+            <component v-if="menu.meta && menu.meta.icon" :is="menu.meta.icon" />
+            <span>{{ menu.meta.title }}</span>
           </template>
           <!--递归渲染子菜单-->
           <menu-tree :menus="menu.children" />
@@ -33,7 +33,8 @@ const onClickSubMenu = async (menu: object) => {}
       <!--没有子菜单-->
       <template v-else>
         <a-menu-item @click="onClickMenu(menu)" :key="menu.name">
-          <span>{{ menu.name }}</span>
+          <component v-if="menu.meta && menu.meta.icon" :is="menu.meta.icon" />
+          <span>{{ menu.meta.title }}</span>
         </a-menu-item>
       </template>
     </template>
