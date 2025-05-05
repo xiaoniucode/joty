@@ -1,6 +1,6 @@
 <template>
   <a-flex gap="small">
-    <a-flex  style="min-width: 180px" justify="space-between">
+    <a-flex style="min-width: 180px" justify="space-between">
       <group-list @onSelectGroup="onSelectGroup" />
       <a-divider type="vertical" style="height: 100%" />
     </a-flex>
@@ -61,7 +61,7 @@ import { short_url } from '@/api/leopard/shorturl.ts'
 import PageHeader from '@/components/page-header.vue'
 import UrlFormModal from './components/url-form-modal/index.vue'
 import GroupList from './components/group-list/index.vue'
-import {message, Modal} from "ant-design-vue";
+import { message, Modal } from 'ant-design-vue'
 
 const pageQuery = reactive({
   page: 1,
@@ -93,7 +93,7 @@ watch(
   },
   { deep: true },
 )
-const onDelete=async (id:string)=>{
+const onDelete = async (id: string) => {
   Modal.confirm({
     title: '你确定删除该短链接?',
     content: '删除后不可恢复',
@@ -103,15 +103,15 @@ const onDelete=async (id:string)=>{
     onOk() {
       api.action(short_url.del, {}, [id]).then((res: any) => {
         message.success('删除成功')
-          onLoadTableData()
+        onLoadTableData()
       })
     },
   })
 }
 const onSelectGroup = async (groupId: any) => {
   pageQuery.groupId = groupId
-  pageQuery.page=1
-  pageQuery.size=5
+  pageQuery.page = 1
+  pageQuery.size = 5
   await onLoadTableData()
 }
 const rowSelection = ref({
