@@ -34,6 +34,9 @@ onMounted(()=>{
 
 <template>
   <div id="main" style="width: 600px;height:400px;"></div>
+  <div v-for="i in 200">
+    hello world
+  </div>
 </template>
 
 <style scoped>
