@@ -4,7 +4,7 @@
       v-model:collapsed="collapsed"
       :trigger="null"
       collapsible
-      :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }"
+      :style="{zIndex:1000, overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }"
     >
       <div class="flex items-center">
         <div class="logo">
@@ -14,7 +14,7 @@
       </div>
       <side-menu />
     </a-layout-sider>
-    <a-layout :style="{ marginLeft:collapsed?'75px': '200px' }">
+    <a-layout :style="{ marginLeft: collapsed ? '75px' : '200px',zIndex:1000 }">
       <a-layout-header
         class="flex justify-between items-center p-6"
         :style="{ background: '#fff', padding: 0, height: '56px' }"
@@ -29,7 +29,12 @@
         </div>
         <div style="padding-right: 15px">
           <a-dropdown>
-            <img style="height: 32px" src="@/assets/logo.jpeg" class="ant-dropdown-link" alt="" />
+            <img
+              style="height: 32px; border-radius: 50%"
+              src="@/assets/logo.jpeg"
+              class="ant-dropdown-link"
+              alt=""
+            />
 
             <template #overlay>
               <a-menu>
