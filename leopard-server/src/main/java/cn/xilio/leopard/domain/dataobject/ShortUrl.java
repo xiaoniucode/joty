@@ -64,7 +64,7 @@ public class ShortUrl extends Auditable {
      * 状态
      */
     @Column(name = "status", nullable = false)
-    private Byte status = 1;
+    private Integer status = 1;
 
     /**
      * 域名

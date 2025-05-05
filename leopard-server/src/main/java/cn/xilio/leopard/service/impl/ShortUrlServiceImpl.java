@@ -9,6 +9,7 @@ import cn.xilio.leopard.adapter.portal.dto.request.ShortUrlPageRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.UpdateShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateBatchShortUrlResponse;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateSingleShortUrlResponse;
+import cn.xilio.leopard.domain.event.ShortUrlUpdateEvent;
 import cn.xilio.leopard.service.ShortUrlService;
 import cn.xilio.leopard.service.UploadService;
 import cn.xilio.leopard.domain.dataobject.Group;
@@ -194,10 +195,12 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      * @param request Update info
      */
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void update(UpdateShortUrlRequest request) {
         ShortUrl old = shortUrlRepository.findById(request.id(), StpUtil.getLoginIdAsString());
         BizException.checkNull("1007", old);
         BeanUtils.copyProperties(request, old);
         shortUrlRepository.save(old);
+        eventPublisher.publishEvent(new ShortUrlUpdateEvent(this,old.getId(),old.getShortCode(), request.status()));
     }
 }
