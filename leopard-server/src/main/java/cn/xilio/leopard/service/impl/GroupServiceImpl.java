@@ -42,14 +42,16 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public void saveGroup(CreateGroupRequest request) {
-        String userId = StpUtil.getLoginIdAsString();
-        Group group = request.toGroup();
-        if (StringUtils.hasText(request.id())){
+        if (StringUtils.hasText(request.id())) {
+            String userId = StpUtil.getLoginIdAsString();
             Group oldGroup = groupRepository.getById(request.id(), userId);
-            BizException.checkNull("1008",oldGroup);
-            BeanUtils.copyProperties(oldGroup,group);
+            BizException.checkNull("1008", oldGroup);
+            BeanUtils.copyProperties(request, oldGroup);
+            groupRepository.saveGroup(oldGroup);
+        } else {
+            Group group = request.toGroup();
+            groupRepository.saveGroup(group);
         }
-        groupRepository.saveGroup(group);
     }
 
     /**
