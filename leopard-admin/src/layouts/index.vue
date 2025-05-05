@@ -14,7 +14,7 @@
       </div>
       <side-menu />
     </a-layout-sider>
-    <a-layout :style="{ marginLeft: collapsed ? '75px' : '200px',zIndex:1000 }">
+    <a-layout :style="{ marginLeft: collapsed ? '80px' : '200px',zIndex:1000 }">
       <a-layout-header
         class="flex justify-between items-center p-6"
         :style="{ background: '#fff', padding: 0, height: '56px' }"
@@ -39,7 +39,9 @@
             <template #overlay>
               <a-menu>
                 <a-menu-item>
-                  <a href="/account">个人设置</a>
+                  <router-link to="/account">
+                    个人设置
+                  </router-link>
                 </a-menu-item>
                 <a-menu-divider />
                 <a-menu-item>
@@ -53,7 +55,6 @@
       <a-layout-content
         :style="{ margin: '15px 0', overflow: 'initial', padding: '15px', background: '#fff' }"
       >
-
         <router-view v-slot="{ Component }">
           <transition>
             <component :is="Component" />
