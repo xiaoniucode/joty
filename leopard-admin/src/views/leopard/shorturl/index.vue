@@ -55,13 +55,13 @@
   <url-form-modal ref="urlFormModalRef" />
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import api from '@/utils/api.ts'
 import { short_url } from '@/api/leopard/shorturl.ts'
 import PageHeader from '@/components/page-header.vue'
 import UrlFormModal from './components/url-form-modal/index.vue'
 import GroupList from './components/group-list/index.vue'
-import {Modal} from "ant-design-vue";
+import {message, Modal} from "ant-design-vue";
 
 const pageQuery = reactive({
   page: 1,
@@ -101,7 +101,10 @@ const onDelete=async (id:string)=>{
     okType: 'danger',
     cancelText: '取消',
     onOk() {
-      alert(id)
+      api.action(short_url.del, {}, [id]).then((res: any) => {
+        message.success('删除成功')
+          onLoadTableData()
+      })
     },
   })
 }

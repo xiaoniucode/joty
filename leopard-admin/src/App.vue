@@ -7,12 +7,10 @@ import { RouterView } from 'vue-router'
     <transition name="fade-transform" mode="out-in">
       <RouterView />
     </transition>
-
   </a-config-provider>
   </a-app>
 </template>
 
 <style scoped>
-
 
 </style>

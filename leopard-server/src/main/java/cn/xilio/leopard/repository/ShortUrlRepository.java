@@ -52,4 +52,12 @@ public interface ShortUrlRepository {
      * Delete expired short links
      */
     long deleteExpiredUrls();
+
+    /**
+     * Get short link information by short code
+     * @param ids List of short link IDs
+     * @param userId UserId
+     * @return Short link information
+     */
+    List<ShortUrl> findByIds(List<String> ids, String userId);
 }

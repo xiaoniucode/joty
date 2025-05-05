@@ -9,6 +9,7 @@ import cn.xilio.leopard.adapter.portal.dto.request.ShortUrlPageRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.UpdateShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateBatchShortUrlResponse;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateSingleShortUrlResponse;
+import cn.xilio.leopard.domain.event.ShortUrlDeleteEvent;
 import cn.xilio.leopard.domain.event.ShortUrlUpdateEvent;
 import cn.xilio.leopard.service.ShortUrlService;
 import cn.xilio.leopard.service.UploadService;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 @Service
 public class ShortUrlServiceImpl implements ShortUrlService {
@@ -131,7 +133,14 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     @Transactional(rollbackOn = Exception.class)
     public void deleteShortUrl(List<String> ids) {
         String userId = StpUtil.getLoginIdAsString();
-        shortUrlRepository.deleteByIds(ids, userId);
+        //find exist short url by ids
+        List<ShortUrl> olds = shortUrlRepository.findByIds(ids, userId);
+        List<String> existIds = olds.stream().map(ShortUrl::getId).toList();
+        //delete database
+        shortUrlRepository.deleteByIds(existIds, userId);
+        List<String> shortCodes = olds.stream().map(ShortUrl::getShortCode).toList();
+        //publish delete event
+        eventPublisher.publishEvent(new ShortUrlDeleteEvent(this, shortCodes));
     }
 
     /**
@@ -201,6 +210,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         BizException.checkNull("1007", old);
         BeanUtils.copyProperties(request, old);
         shortUrlRepository.save(old);
-        eventPublisher.publishEvent(new ShortUrlUpdateEvent(this,old.getId(),old.getShortCode(), request.status()));
+        eventPublisher.publishEvent(new ShortUrlUpdateEvent(this, old.getId(), old.getShortCode(), request.status()));
     }
 }

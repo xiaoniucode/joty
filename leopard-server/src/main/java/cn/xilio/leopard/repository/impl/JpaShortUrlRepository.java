@@ -140,6 +140,23 @@ public class JpaShortUrlRepository implements ShortUrlRepository {
                 cb.lessThan(root.get("expiredAt"), new java.util.Date());
         return shortUrlEntityRepository.delete(spec);
     }
+
+    /**
+     * Get short link information by short code
+     *
+     * @param ids    List of short link IDs
+     * @param userId UserId
+     * @return Short link information
+     */
+    @Override
+    public List<ShortUrl> findByIds(List<String> ids, String userId) {
+        Specification<ShortUrl> spec = (root, query, cb) ->
+                cb.and(
+                        cb.equal(root.get("createdBy"), userId),
+                        root.get("id").in(ids)
+                );
+        return shortUrlEntityRepository.findAll(spec);
+    }
 }
 
 
