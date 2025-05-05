@@ -53,7 +53,12 @@
       <a-layout-content
         :style="{ margin: '15px 0', overflow: 'initial', padding: '15px', background: '#fff' }"
       >
-        <router-view />
+
+        <router-view v-slot="{ Component }">
+          <transition>
+            <component :is="Component" />
+          </transition>
+        </router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
