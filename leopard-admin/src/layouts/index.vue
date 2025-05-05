@@ -14,34 +14,35 @@
       </div>
       <side-menu />
     </a-layout-sider>
-    <a-layout :style="{ marginLeft: '200px' }">
-      <a-layout-header :style="{ background: '#fff', padding: 0, height: '56px' }">
-        <div class="flex justify-between items-center p-6">
-          <div>
-            <menu-unfold-outlined
-              v-if="collapsed"
-              class="trigger"
-              @click="() => (collapsed = !collapsed)"
-            />
-            <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
-          </div>
-          <div style="padding-right: 15px">
-            <a-dropdown>
-              <img style="height: 32px" src="@/assets/logo.jpeg" class="ant-dropdown-link" alt="" />
+    <a-layout :style="{ marginLeft:collapsed?'75px': '200px' }">
+      <a-layout-header
+        class="flex justify-between items-center p-6"
+        :style="{ background: '#fff', padding: 0, height: '56px' }"
+      >
+        <div>
+          <menu-unfold-outlined
+            v-if="collapsed"
+            class="trigger"
+            @click="() => (collapsed = !collapsed)"
+          />
+          <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
+        </div>
+        <div style="padding-right: 15px">
+          <a-dropdown>
+            <img style="height: 32px" src="@/assets/logo.jpeg" class="ant-dropdown-link" alt="" />
 
-              <template #overlay>
-                <a-menu>
-                  <a-menu-item>
-                    <a href="/account">个人设置</a>
-                  </a-menu-item>
-                  <a-menu-divider />
-                  <a-menu-item>
-                    <a @click="userStore.logout()">退出登陆</a>
-                  </a-menu-item>
-                </a-menu>
-              </template>
-            </a-dropdown>
-          </div>
+            <template #overlay>
+              <a-menu>
+                <a-menu-item>
+                  <a href="/account">个人设置</a>
+                </a-menu-item>
+                <a-menu-divider />
+                <a-menu-item>
+                  <a @click="userStore.logout()">退出登陆</a>
+                </a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
         </div>
       </a-layout-header>
       <a-layout-content
@@ -49,7 +50,6 @@
       >
         <router-view />
       </a-layout-content>
-
     </a-layout>
   </a-layout>
 </template>
