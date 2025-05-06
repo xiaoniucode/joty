@@ -68,10 +68,10 @@ export const staticRoutes = [
         meta: { title: '短链列表', icon: 'IeCircleFilled' },
       },
       {
-        path: 'single-create',
-        name: 'SingleCreate',
+        path: 'fast-create',
+        name: 'FastCreate',
         meta: { title: '快速创建', icon: 'PlusSquareOutlined' },
-        component: () => import('@/views/leopard/single-create/index.vue'),
+        component: () => import('@/views/leopard/fast-create/index.vue'),
       },
       {
         path: 'batch-create',
