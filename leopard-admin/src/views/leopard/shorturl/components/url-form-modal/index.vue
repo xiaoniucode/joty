@@ -15,12 +15,11 @@
         <a-input :disabled="isEdit" v-model:value="formState.originalUrl" />
       </a-form-item>
       <a-form-item v-if="isEdit" label="短链接" name="shortUrl">
-        <div>{{ formState.shortUrl }}</div>
+        <a target="_blank" :href="formState.shortUrl">{{ formState.shortUrl }}</a>
       </a-form-item>
       <a-form-item v-if="isEdit" label="二维码" name="shortUrl">
         <a-image :width="80" :height="80" :src="formState.qrUrl" fallback="/error_image.png" />
       </a-form-item>
-
 
       <a-form-item label="分组" name="groupId">
         <a-select style="width: 40%" v-model:value="formState.groupId" placeholder="选择分组">
@@ -64,7 +63,7 @@ import { message } from 'ant-design-vue'
 
 const open = ref<boolean>(false)
 const formRef = ref()
-const emit =defineEmits(['onSaveSuccess'])
+const emit = defineEmits(['onSaveSuccess'])
 const groupData = ref([])
 const loadGroupData = async () => {
   const res = await (<any>api.action(group.list, {}, {}))
@@ -74,16 +73,16 @@ const loadGroupData = async () => {
 onMounted(() => {
   loadGroupData()
 })
-const isEdit =  ref(false)
+const isEdit = ref(false)
 const showModal = (data: object) => {
   open.value = true
- if (data==null){
-   isEdit.value=false
-   resetForm()
- }else {
-   isEdit.value=true
-   Object.assign(formState, {...data,expiredAt:data.expiredAt?dayjs(data.expiredAt):null})
- }
+  if (data == null) {
+    isEdit.value = false
+    resetForm()
+  } else {
+    isEdit.value = true
+    Object.assign(formState, { ...data, expiredAt: data.expiredAt ? dayjs(data.expiredAt) : null })
+  }
 }
 defineExpose({
   showModal,
@@ -118,14 +117,15 @@ const INITIAL_STATE = {
   expiredAt: undefined,
   status: 1,
   groupId: '',
-  remark: ''
+  remark: '',
 }
+
 interface FormState {
   id?: undefined
   title?: string
   originalUrl: string
-  shortUrl?:string
-  qrUrl?:string
+  shortUrl?: string
+  qrUrl?: string
   expiredAt?: string | Dayjs
   status: number
   groupId: string
@@ -134,9 +134,8 @@ interface FormState {
 
 const formState: UnwrapRef<FormState> = reactive({
   ...INITIAL_STATE,
-  shortUrl:'',
-  qrUrl:''
-
+  shortUrl: '',
+  qrUrl: '',
 })
 const rules: Record<string, Rule[]> = {
   title: [
@@ -153,7 +152,7 @@ const resetForm = () => {
   formRef.value?.resetFields()
   Object.assign(formState, {
     ...INITIAL_STATE,
-    groupId: groupData.value[0]?.id || ''
+    groupId: groupData.value[0]?.id || '',
   })
 }
 </script>

@@ -32,7 +32,8 @@ instance.interceptors.response.use(
     const { code, msg, data } = response.data
     if (code == '0') {
       return data
-    } else if (code == '401') {
+    }
+    else if (code == '401') {
       message.error(msg)
       //清空本地cookie
       localStorage.removeItem('token')

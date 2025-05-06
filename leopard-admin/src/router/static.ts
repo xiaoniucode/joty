@@ -7,7 +7,6 @@ export const staticRoutes = [
     component: () => import('@/views/system/login/index.vue'),
     hidden: true,
   },
-
   {
     path: '/',
     name: 'layout',
@@ -78,7 +77,7 @@ export const staticRoutes = [
         path: 'batch-create',
         name: 'BatchCreate',
         meta: { title: '批量创建', icon: 'AppstoreAddOutlined' },
-        component: () => import('@/views/leopard/stats/index.vue'),
+        component: () => import('@/views/leopard/batch-create/index.vue'),
       },
       {
         path: 'open-api',
