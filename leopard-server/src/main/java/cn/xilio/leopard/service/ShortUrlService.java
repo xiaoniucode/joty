@@ -6,7 +6,6 @@ import cn.xilio.leopard.adapter.portal.dto.request.CreateBatchShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.CreateSingleShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.ShortUrlPageRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.UpdateShortUrlRequest;
-import cn.xilio.leopard.adapter.portal.dto.response.CreateBatchShortUrlResponse;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateSingleShortUrlResponse;
 import cn.xilio.leopard.domain.dataobject.ShortUrl;
 import cn.xilio.leopard.core.common.page.PageQuery;
@@ -30,7 +29,7 @@ public interface ShortUrlService {
      * @param request Create request
      * @return Create Results
      */
-    CreateBatchShortUrlResponse createBatchShortUrl(CreateBatchShortUrlRequest request);
+    List<CreateSingleShortUrlResponse> createBatchShortUrl(CreateBatchShortUrlRequest request);
 
     /**
      * Batch delete short links

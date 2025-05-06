@@ -7,7 +7,6 @@ import cn.xilio.leopard.adapter.portal.dto.request.CreateBatchShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.CreateSingleShortUrlRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.ShortUrlPageRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.UpdateShortUrlRequest;
-import cn.xilio.leopard.adapter.portal.dto.response.CreateBatchShortUrlResponse;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateSingleShortUrlResponse;
 import cn.xilio.leopard.domain.event.ShortUrlDeleteEvent;
 import cn.xilio.leopard.domain.event.ShortUrlUpdateEvent;
@@ -30,17 +29,13 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Collectors;
 
 @Service
 public class ShortUrlServiceImpl implements ShortUrlService {
@@ -57,7 +52,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     @Autowired
     private UploadService uploadService;
     private final Lock lock = new ReentrantLock();
-    private final static String DEFAULT_GROUP_ID = "1";
 
     /**
      * Create a single short link
@@ -94,7 +88,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
             //Post short link creation event
             eventPublisher.publishEvent(new ShortUrlCreatedEvent(this, code, request.originalUrl()));
-            return new CreateSingleShortUrlResponse(shortUrl, request.originalUrl(), qrCodeUrl);
+            return new CreateSingleShortUrlResponse(saveResult.getTitle(), shortUrl, request.originalUrl(), qrCodeUrl, saveResult.getExpiredAt());
         } finally {
             lock.unlock();
         }
@@ -108,20 +102,20 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      */
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public CreateBatchShortUrlResponse createBatchShortUrl(CreateBatchShortUrlRequest request) {
+    public List<CreateSingleShortUrlResponse> createBatchShortUrl(CreateBatchShortUrlRequest request) {
         List<CreateSingleShortUrlResponse> list = new ArrayList<>();
         List<String> urls = request.urls();
         for (String originalUrl : urls) {
             CreateSingleShortUrlRequest single = new CreateSingleShortUrlRequest(
                     "未命名",
                     originalUrl,
-                    DEFAULT_GROUP_ID,
-                    null,
-                    "Batch Create");
+                    request.groupId(),
+                    request.expiredAt(),
+                    null);
             CreateSingleShortUrlResponse created = createSingle(single);
             list.add(created);
         }
-        return new CreateBatchShortUrlResponse(list);
+        return list;
     }
 
     /**
