@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { message } from 'ant-design-vue'
 import api from '@/utils/api.ts'
 import { short_url } from '@/api/leopard/shorturl.ts'
+import common from '@/utils/common.ts'
 
 const url = ref('')
 const result = ref({})
@@ -18,14 +19,6 @@ const onCreate = async () => {
   })
 }
 const showResult = ref(false)
-const onCopy = async () => {
-  try {
-    await navigator.clipboard.writeText(result.value.shortUrl)
-    message.success('复制成功')
-  } catch (err) {
-    message.error('复制失败')
-  }
-}
 </script>
 
 <template>
@@ -43,13 +36,15 @@ const onCopy = async () => {
     <a-card v-if="showResult">
       <a-flex gap="12">
         <a-image :width="128" :src="result.qrUrl" fallback="/error_image.png" />
-        <a-flex vertical justify="space-around" class="url-container">
+        <a-flex vertical justify="space-between" class="url-container">
           <a-tooltip placement="top" :title="result.originalUrl">
             <div class="original-url text-size">{{ result.originalUrl }}</div>
           </a-tooltip>
           <a-flex align="center" gap="12">
             <span class="text-size">{{ result.shortUrl }}</span>
-            <a-button @click="onCopy" size="small" type="primary">复制短链</a-button>
+            <a-button @click="common.copy(result.shortUrl, true)" size="small" type="primary"
+              >复制短链</a-button
+            >
           </a-flex>
         </a-flex>
       </a-flex>

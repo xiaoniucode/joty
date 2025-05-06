@@ -21,9 +21,9 @@
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'shortUrl'">
-            <a :href="record.shortUrl" target="_blank">
-              {{ record.shortUrl }}
-            </a>
+             <a :href="record.shortUrl" target="_blank">
+               {{ record.shortUrl }}
+             </a>
           </template>
           <template v-if="column.key === 'qrUrl'">
             <a-image :width="64" :src="record.qrUrl" fallback="/error_image.png" />
@@ -36,6 +36,8 @@
           </template>
           <template v-else-if="column.key === 'action'">
             <span>
+              <a @click="common.copy(record.shortUrl,true)">复制</a>
+              <a-divider type="vertical" />
               <a @click="onShowAnalysis(record)">数据</a>
               <a-divider type="vertical" />
               <a @click="onDelete(record.id)">删除</a>
@@ -69,6 +71,7 @@ import UrlFormModal from './components/url-form-modal/index.vue'
 import GroupList from './components/group-list/index.vue'
 import Analysis from './components/analysis/index.vue'
 import { message, Modal } from 'ant-design-vue'
+import common from "@/utils/common.ts";
 
 const pageQuery = reactive({
   page: 1,
@@ -179,6 +182,7 @@ const columns = [
     key: 'action',
   },
 ]
+
 </script>
 <style scoped>
 @import 'tailwindcss';
