@@ -1,9 +1,7 @@
 <template>
- <div class="pb-4 flex gap-2">
-   <slot/>
- </div>
+  <a-flex style="margin-bottom: 10px" gap="8" align="center">
+    <slot />
+  </a-flex>
 </template>
 
-<style  >
-@import "tailwindcss";
-</style>
+<style scoped></style>
