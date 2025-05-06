@@ -53,7 +53,7 @@ const columns = [
 ]
 const page = reactive({
   current: 1,
-  pageSize: 5,
+  pageSize: 3,
   total: 0,
 })
 const handleTableChange = (pag: { pageSize: number; current: number }) => {
@@ -87,7 +87,7 @@ const onBatchCreate = () => {
       <a-flex vertical :gap="12">
         <a-textarea
           placeholder="每行一个链接，回车换行"
-          :rows="10"
+          :rows="8"
           v-model:value="formState.urls"
         />
         <a-flex justify="space-between" align="center">
