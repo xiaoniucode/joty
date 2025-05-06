@@ -13,12 +13,12 @@ const onCreate = async () => {
   }
   api.action(short_url.fastCreate, {}, { url: url.value.trim() }).then((res: any) => {
     result.value = res
-    showResult.value=true
+    showResult.value = true
     message.success('创建成功')
   })
 }
-const showResult=ref(false)
-const onCopy=async ()=>{
+const showResult = ref(false)
+const onCopy = async () => {
   try {
     await navigator.clipboard.writeText(result.value.shortUrl)
     message.success('复制成功')
@@ -43,8 +43,10 @@ const onCopy=async ()=>{
     <a-card v-if="showResult">
       <a-flex gap="12">
         <a-image :width="128" :src="result.qrUrl" fallback="/error_image.png" />
-        <a-flex vertical justify="space-around">
-          <div class="original-url text-size">{{ result.originalUrl }}</div>
+        <a-flex vertical justify="space-around" class="url-container">
+          <a-tooltip placement="top" :title="result.originalUrl">
+            <div class="original-url text-size">{{ result.originalUrl }}</div>
+          </a-tooltip>
           <a-flex align="center" gap="12">
             <span class="text-size">{{ result.shortUrl }}</span>
             <a-button @click="onCopy" size="small" type="primary">复制短链</a-button>
@@ -61,14 +63,19 @@ const onCopy=async ()=>{
   transition: all 0.3s;
 }
 
-.original-url {
+.url-container {
+  max-width: calc(100% - 140px); /* 留出图片和间隙的宽度 */
   flex: 1;
+}
+
+.original-url {
   color: rgba(0, 0, 0, 0.65);
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
   word-break: break-all;
-  max-width: 500px;
+  text-overflow: ellipsis;
+  max-width: 100%; /* 限制在父容器内 */
+  box-sizing: border-box;
 }
 
 .text-size {
