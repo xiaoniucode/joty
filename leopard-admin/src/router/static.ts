@@ -83,7 +83,7 @@ export const staticRoutes = [
         path: 'restore-url',
         name: 'RestoreUrl',
         meta: { title: '短链还原', icon: 'AppstoreAddOutlined' },
-        component: () => import('@/views/leopard/batch-create/index.vue'),
+        component: () => import('@/views/leopard/restore-url/index.vue'),
       },
       {
         path: 'open-api',

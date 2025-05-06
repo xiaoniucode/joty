@@ -32,7 +32,7 @@ public class PortalShortUrlController {
     }
 
     @Operation(summary = "还原短链接")
-    @PostMapping(value = "restore-shorturl", name = "Restore short links")
+    @PostMapping(value = "restore-url", name = "Restore short links")
     public Result restoreShortUrl(@Validated @RequestBody RestoreShortUrlRequest request) {
         return Result.success(shortUrlService.restoreShortUrl(request));
     }

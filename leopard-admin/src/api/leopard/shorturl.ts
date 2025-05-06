@@ -8,4 +8,5 @@ export const short_url: ApiModule = {
   createBatch: { url: '/api/short-url/create-batch', method: 'post' },
   update: { url: '/api/short-url/update', method: 'put' },
   fastCreate: { url: '/api/short-url/fast-create', method: 'post' },
+  restoreUrl: { url: '/api/short-url/restore-url', method: 'post' },
 } as const

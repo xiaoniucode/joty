@@ -231,8 +231,11 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     @Override
     public SingleShortUrlResponse restoreShortUrl(RestoreShortUrlRequest request) {
         String shortUrl = request.shortUrl();
-        int start = shortUrl.lastIndexOf("/");
+        int start = shortUrl.lastIndexOf("/") + 1;
         String shortCode = shortUrl.substring(start);
+        if (!bloomFilterService.contain(shortCode)) {
+            throw new BizException("1001");
+        }
         ShortUrl info = shortUrlRepository.findByShortCode(shortCode);
         return new SingleShortUrlResponse(
                 info.getTitle(),
