@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
 
-public record CreateSingleShortUrlResponse(
+public record SingleShortUrlResponse(
         String title,
         String shortUrl,
         String originalUrl,

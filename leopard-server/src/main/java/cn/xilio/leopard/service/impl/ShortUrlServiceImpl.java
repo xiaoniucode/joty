@@ -4,7 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.RandomUtil;
 
 import cn.xilio.leopard.adapter.portal.dto.request.*;
-import cn.xilio.leopard.adapter.portal.dto.response.CreateSingleShortUrlResponse;
+import cn.xilio.leopard.adapter.portal.dto.response.SingleShortUrlResponse;
 import cn.xilio.leopard.domain.event.ShortUrlDeleteEvent;
 import cn.xilio.leopard.domain.event.ShortUrlUpdateEvent;
 import cn.xilio.leopard.service.ShortUrlService;
@@ -58,7 +58,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      */
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public CreateSingleShortUrlResponse createSingle(CreateSingleShortUrlRequest request) {
+    public SingleShortUrlResponse createSingle(CreateSingleShortUrlRequest request) {
         lock.lock();
         try {
             Group group = groupService.getById(request.groupId());
@@ -85,7 +85,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
             //Post short link creation event
             eventPublisher.publishEvent(new ShortUrlCreatedEvent(this, code, request.originalUrl()));
-            return new CreateSingleShortUrlResponse(saveResult.getTitle(), shortUrl, request.originalUrl(), qrCodeUrl, saveResult.getExpiredAt());
+            return new SingleShortUrlResponse(saveResult.getTitle(), shortUrl, request.originalUrl(), qrCodeUrl, saveResult.getExpiredAt());
         } finally {
             lock.unlock();
         }
@@ -99,8 +99,8 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      */
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public List<CreateSingleShortUrlResponse> createBatchShortUrl(CreateBatchShortUrlRequest request) {
-        List<CreateSingleShortUrlResponse> list = new ArrayList<>();
+    public List<SingleShortUrlResponse> createBatchShortUrl(CreateBatchShortUrlRequest request) {
+        List<SingleShortUrlResponse> list = new ArrayList<>();
         List<String> urls = request.urls();
         for (String originalUrl : urls) {
             CreateSingleShortUrlRequest single = new CreateSingleShortUrlRequest(
@@ -109,7 +109,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                     request.groupId(),
                     request.expiredAt(),
                     null);
-            CreateSingleShortUrlResponse created = createSingle(single);
+            SingleShortUrlResponse created = createSingle(single);
             list.add(created);
         }
         return list;
@@ -212,7 +212,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      */
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public CreateSingleShortUrlResponse fastCreateSingle(FastCreateShortUrlRequest request) {
+    public SingleShortUrlResponse fastCreateSingle(FastCreateShortUrlRequest request) {
         CreateSingleShortUrlRequest single = new CreateSingleShortUrlRequest(
                 "快速创建",
                 request.url(),
@@ -229,7 +229,17 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      * @return result
      */
     @Override
-    public Object restoreShortUrl(RestoreShortUrlRequest request) {
-        return null;
+    public SingleShortUrlResponse restoreShortUrl(RestoreShortUrlRequest request) {
+        String shortUrl = request.shortUrl();
+        int start = shortUrl.lastIndexOf("/");
+        String shortCode = shortUrl.substring(start);
+        ShortUrl info = shortUrlRepository.findByShortCode(shortCode);
+        return new SingleShortUrlResponse(
+                info.getTitle(),
+                info.getShortUrl(),
+                info.getOriginalUrl(),
+                info.getQrUrl(),
+                info.getExpiredAt());
+
     }
 }
