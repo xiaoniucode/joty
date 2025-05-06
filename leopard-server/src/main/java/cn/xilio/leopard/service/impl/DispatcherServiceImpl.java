@@ -1,6 +1,8 @@
 package cn.xilio.leopard.service.impl;
 
 
+import cn.xilio.leopard.core.common.service.RegionService;
+import cn.xilio.leopard.core.common.util.IpUtils;
 import cn.xilio.leopard.domain.CacheKey;
 import cn.xilio.leopard.service.DispatcherService;
 import cn.xilio.leopard.service.ShortUrlService;
@@ -24,6 +26,8 @@ public class DispatcherServiceImpl implements DispatcherService {
     private ShortUrlService shortUrlService;
     @Autowired
     private ApplicationEventPublisher eventPublisher;
+    @Autowired
+    private RegionService regionService;
     /**
      * Obtain long links
      *
@@ -38,6 +42,9 @@ public class DispatcherServiceImpl implements DispatcherService {
             return shortUrl.getOriginalUrl();
         });
         BizException.checkExpr("1001", !StringUtils.hasText(longUrl));
+        String clientIpAddress = IpUtils.getClientIp();
+        String region = regionService.getRegion(clientIpAddress);
+        regionService.close();
         //eventPublisher.publishEvent( );
         return longUrl;
     }
