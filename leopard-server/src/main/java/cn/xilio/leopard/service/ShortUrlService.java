@@ -83,4 +83,11 @@ public interface ShortUrlService {
      * @return A short url info
      */
     CreateSingleShortUrlResponse fastCreateSingle(FastCreateShortUrlRequest request);
+
+    /**
+     * Restore short link
+     * @param request Link info
+     * @return result
+     */
+    Object restoreShortUrl(RestoreShortUrlRequest request);
 }

@@ -4,7 +4,7 @@ export const staticRoutes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/views/system/login/index.vue'),
+    component: () => import('@/views/login/index.vue'),
     hidden: true,
   },
   {
@@ -77,6 +77,12 @@ export const staticRoutes = [
         path: 'batch-create',
         name: 'BatchCreate',
         meta: { title: '批量创建', icon: 'AppstoreAddOutlined' },
+        component: () => import('@/views/leopard/batch-create/index.vue'),
+      },
+      {
+        path: 'restore-url',
+        name: 'RestoreUrl',
+        meta: { title: '短链还原', icon: 'AppstoreAddOutlined' },
         component: () => import('@/views/leopard/batch-create/index.vue'),
       },
       {

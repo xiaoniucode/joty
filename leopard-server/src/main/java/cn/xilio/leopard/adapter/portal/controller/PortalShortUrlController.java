@@ -31,6 +31,12 @@ public class PortalShortUrlController {
         return Result.success(shortUrlService.fastCreateSingle(request));
     }
 
+    @Operation(summary = "还原短链接")
+    @PostMapping(value = "restore-shorturl", name = "Restore short links")
+    public Result restoreShortUrl(@Validated @RequestBody RestoreShortUrlRequest request) {
+        return Result.success(shortUrlService.restoreShortUrl(request));
+    }
+
     @Operation(summary = "批量创建短链接")
     @PostMapping(value = "create-batch", name = "Batch creation")
     public Result createBatchShortUrl(@Validated @RequestBody CreateBatchShortUrlRequest request) {

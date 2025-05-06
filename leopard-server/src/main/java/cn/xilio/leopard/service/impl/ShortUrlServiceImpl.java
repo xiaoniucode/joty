@@ -221,4 +221,15 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                 null);
         return createSingle(single);
     }
+
+    /**
+     * Restore short link
+     *
+     * @param request Link info
+     * @return result
+     */
+    @Override
+    public Object restoreShortUrl(RestoreShortUrlRequest request) {
+        return null;
+    }
 }
