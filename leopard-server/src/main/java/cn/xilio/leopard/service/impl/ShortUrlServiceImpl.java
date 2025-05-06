@@ -3,10 +3,7 @@ package cn.xilio.leopard.service.impl;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.RandomUtil;
 
-import cn.xilio.leopard.adapter.portal.dto.request.CreateBatchShortUrlRequest;
-import cn.xilio.leopard.adapter.portal.dto.request.CreateSingleShortUrlRequest;
-import cn.xilio.leopard.adapter.portal.dto.request.ShortUrlPageRequest;
-import cn.xilio.leopard.adapter.portal.dto.request.UpdateShortUrlRequest;
+import cn.xilio.leopard.adapter.portal.dto.request.*;
 import cn.xilio.leopard.adapter.portal.dto.response.CreateSingleShortUrlResponse;
 import cn.xilio.leopard.domain.event.ShortUrlDeleteEvent;
 import cn.xilio.leopard.domain.event.ShortUrlUpdateEvent;
@@ -205,5 +202,23 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         BeanUtils.copyProperties(request, old);
         shortUrlRepository.save(old);
         eventPublisher.publishEvent(new ShortUrlUpdateEvent(this, old.getId(), old.getShortCode(), request.status()));
+    }
+
+    /**
+     * Fast create
+     *
+     * @param request Create info
+     * @return A short url info
+     */
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public CreateSingleShortUrlResponse fastCreateSingle(FastCreateShortUrlRequest request) {
+        CreateSingleShortUrlRequest single = new CreateSingleShortUrlRequest(
+                "快速创建",
+                request.url(),
+                "1",
+                null,
+                null);
+        return createSingle(single);
     }
 }

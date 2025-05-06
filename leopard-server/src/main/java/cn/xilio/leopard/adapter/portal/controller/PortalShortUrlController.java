@@ -1,10 +1,7 @@
 package cn.xilio.leopard.adapter.portal.controller;
 
 
-import cn.xilio.leopard.adapter.portal.dto.request.CreateBatchShortUrlRequest;
-import cn.xilio.leopard.adapter.portal.dto.request.CreateSingleShortUrlRequest;
-import cn.xilio.leopard.adapter.portal.dto.request.ShortUrlPageRequest;
-import cn.xilio.leopard.adapter.portal.dto.request.UpdateShortUrlRequest;
+import cn.xilio.leopard.adapter.portal.dto.request.*;
 import cn.xilio.leopard.service.ShortUrlService;
 import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.util.Result;
@@ -27,6 +24,11 @@ public class PortalShortUrlController {
     @PostMapping(value = "create", name = "Create a single")
     public Result createSingleShortUrl(@Validated @RequestBody CreateSingleShortUrlRequest request) {
         return Result.success(shortUrlService.createSingle(request));
+    }
+    @Operation(summary = "快速创建短链接")
+    @PostMapping(value = "fast-create", name = "Fast create a short url")
+    public Result fastCreate(@Validated @RequestBody FastCreateShortUrlRequest request) {
+        return Result.success(shortUrlService.fastCreateSingle(request));
     }
 
     @Operation(summary = "批量创建短链接")

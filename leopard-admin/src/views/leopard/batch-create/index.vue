@@ -55,6 +55,7 @@ const page = reactive({
   current: 1,
   pageSize: 3,
   total: 0,
+  showSizeChanger:true
 })
 const handleTableChange = (pag: { pageSize: number; current: number }) => {
   page.pageSize = pag.pageSize
@@ -120,6 +121,7 @@ const onBatchCreate = () => {
       <a-flex :gap="4" vertical v-if="showCreateResult">
         <div style="color: green">创建结果：</div>
         <a-table
+
           @change="handleTableChange"
           :pagination="page"
           :columns="columns"

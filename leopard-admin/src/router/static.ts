@@ -71,7 +71,7 @@ export const staticRoutes = [
         path: 'single-create',
         name: 'SingleCreate',
         meta: { title: '快速创建', icon: 'PlusSquareOutlined' },
-        component: () => import('@/views/leopard/stats/index.vue'),
+        component: () => import('@/views/leopard/single-create/index.vue'),
       },
       {
         path: 'batch-create',
