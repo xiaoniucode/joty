@@ -20,6 +20,11 @@
         :scroll="{ y: 500 }"
       >
         <template #bodyCell="{ column, record }">
+          <template v-if="column.key === 'shortUrl'">
+            <a :href="record.shortUrl" target="_blank">
+              {{ record.shortUrl }}
+            </a>
+          </template>
           <template v-if="column.key === 'qrUrl'">
             <a-image :width="64" :src="record.qrUrl" fallback="/error_image.png" />
           </template>
@@ -31,7 +36,7 @@
           </template>
           <template v-else-if="column.key === 'action'">
             <span>
-              <a :href="record.shortUrl" target="_blank">预览</a>
+              <a @click="onShowAnalysis(record)">数据</a>
               <a-divider type="vertical" />
               <a @click="onDelete(record.id)">删除</a>
               <a-divider type="vertical" />
@@ -52,7 +57,8 @@
     </a-flex>
   </a-flex>
 
-  <url-form-modal ref="urlFormModalRef" />
+  <url-form-modal ref="urlFormModalRef" @onSaveSuccess="onSaveSuccess" />
+  <Analysis ref="analysisRef" />
 </template>
 <script lang="ts" setup>
 import { onMounted, reactive, ref, watch } from 'vue'
@@ -61,6 +67,7 @@ import { short_url } from '@/api/leopard/shorturl.ts'
 import PageHeader from '@/components/page-header.vue'
 import UrlFormModal from './components/url-form-modal/index.vue'
 import GroupList from './components/group-list/index.vue'
+import Analysis from './components/analysis/index.vue'
 import { message, Modal } from 'ant-design-vue'
 
 const pageQuery = reactive({
@@ -69,6 +76,7 @@ const pageQuery = reactive({
   groupId: '1',
 })
 const urlFormModalRef = ref()
+const analysisRef = ref()
 
 const onOpenCreateModal = () => {
   urlFormModalRef.value.showModal(null)
@@ -76,6 +84,10 @@ const onOpenCreateModal = () => {
 const onEdit = (data: object) => {
   urlFormModalRef.value.showModal(data)
 }
+const onShowAnalysis = (item: object) => {
+  analysisRef.value.showModal(item)
+}
+
 const total = ref(0)
 const tableData = ref([])
 const onLoadTableData = async () => {
@@ -85,6 +97,9 @@ const onLoadTableData = async () => {
   })
 }
 onLoadTableData()
+const onSaveSuccess = async () => {
+  await onLoadTableData()
+}
 onMounted(() => {})
 watch(
   pageQuery,

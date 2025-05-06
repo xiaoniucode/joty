@@ -17,6 +17,10 @@
       <a-form-item v-if="isEdit" label="短链接" name="shortUrl">
         <div>{{ formState.shortUrl }}</div>
       </a-form-item>
+      <a-form-item v-if="isEdit" label="二维码" name="shortUrl">
+        <a-image :width="80" :height="80" :src="formState.qrUrl" fallback="/error_image.png" />
+      </a-form-item>
+
 
       <a-form-item label="分组" name="groupId">
         <a-select style="width: 40%" v-model:value="formState.groupId" placeholder="选择分组">
@@ -60,7 +64,7 @@ import { message } from 'ant-design-vue'
 
 const open = ref<boolean>(false)
 const formRef = ref()
-
+const emit =defineEmits(['onSaveSuccess'])
 const groupData = ref([])
 const loadGroupData = async () => {
   const res = await (<any>api.action(group.list, {}, {}))
@@ -98,8 +102,8 @@ const handleOk = (e: MouseEvent) => {
       .action(isEdit.value ? short_url.update : short_url.create, {}, payload)
       .then((res: any) => {
         open.value = false
-
         message.success(isEdit.value ? '更新成功' : '已创建')
+        emit('onSaveSuccess')
       })
       .finally(() => {
         open.value = false
@@ -121,6 +125,7 @@ interface FormState {
   title?: string
   originalUrl: string
   shortUrl?:string
+  qrUrl?:string
   expiredAt?: string | Dayjs
   status: number
   groupId: string
@@ -130,6 +135,8 @@ interface FormState {
 const formState: UnwrapRef<FormState> = reactive({
   ...INITIAL_STATE,
   shortUrl:'',
+  qrUrl:''
+
 })
 const rules: Record<string, Rule[]> = {
   title: [
