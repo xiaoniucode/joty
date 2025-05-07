@@ -20,6 +20,11 @@
       <a-form-item v-if="isEdit" label="二维码" name="shortUrl">
         <a-image :width="80" :height="80" :src="formState.qrUrl" fallback="/error_image.png" />
       </a-form-item>
+      <a-form-item v-if="isEdit" label="域名" name="domain">
+        <a-radio-group v-model:value="formState.domain" name="radioGroup">
+          <a-radio :value="formState.domain">{{formState.domain}}</a-radio>
+        </a-radio-group>
+      </a-form-item>
 
       <a-form-item label="分组" name="groupId">
         <a-select style="width: 40%" v-model:value="formState.groupId" placeholder="选择分组">
@@ -148,8 +153,8 @@ const rules: Record<string, Rule[]> = {
   ],
   originalUrl: [{ required: true, message: '请输入长链接', trigger: 'change' }],
   status: [{ required: true }],
-  domain: [{ required: true, message: '选择访问域名', trigger: 'change' }],
   groupId: [{ required: true, message: '必须指定一个分组', trigger: 'change' }],
+  domain: [{ required: true, message: '必须选择一个域名', trigger: 'change' }],
   remark: [{ max: 50, message: '长度在50内', trigger: 'blur' }],
 }
 const resetForm = () => {
