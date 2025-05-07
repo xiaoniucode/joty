@@ -4,23 +4,22 @@ import MenuTree from '@/layouts/components/menu-tree.vue'
 import { useRoute } from 'vue-router'
 import { usePermissionStore } from '@/stores/modules/permission.ts'
 import { useUserStore } from '@/stores/modules/user.ts'
-import { message } from 'ant-design-vue'
 
+const permissionStore = usePermissionStore()
+const userStore = useUserStore()
 const openKeys = ref<string[]>([])
 const selectedKeys = ref<string[]>([])
 let currentRoute = useRoute()
 watch(
   currentRoute,
   () => {
-    //@ts-ignore
+    //@ts-ignore 设置当前路由的菜单为高亮状态【选中】
     selectedKeys.value = [currentRoute.name]
   },
   {
     immediate: true,
   },
 )
-const permissionStore = usePermissionStore()
-const userStore = useUserStore()
 const menus = ref<any>([])
 onMounted(async () => {
   menus.value = await permissionStore.getMenus(userStore.getRoles())

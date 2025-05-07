@@ -69,7 +69,7 @@ declare module 'vue' {
     PieChart: typeof import('./src/components/echart/pie-chart/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Screenfull: typeof import('./src/components/Screenfull/index.vue')['default']
+    Screenfull: typeof import('./src/components/screen-full/index.vue')['default']
     ScreenFull: typeof import('./src/components/screen-full/index.vue')['default']
     ShareLink: typeof import('./src/components/share-link/index.vue')['default']
     TheWelcome: typeof import('./src/components/TheWelcome.vue')['default']

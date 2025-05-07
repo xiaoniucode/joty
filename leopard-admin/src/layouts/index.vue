@@ -44,7 +44,8 @@
           />
           <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
         </div>
-        <div style="padding-right: 15px">
+        <a-flex align="center" style="padding-right: 15px" gap="8">
+          <screen-full id="screenfull"/>
           <a-dropdown>
             <a-avatar :src="userStore.userinfo.avatar" />
             <template #overlay>
@@ -59,7 +60,7 @@
               </a-menu>
             </template>
           </a-dropdown>
-        </div>
+        </a-flex>
       </a-layout-header>
       <a-layout-content
         :style="{ margin: '15px 0', overflow: 'auto', padding: '15px', background: '#fff' }"
@@ -79,7 +80,7 @@ import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
 import SideMenu from '@/layouts/components/side-menu.vue'
 import { useUserStore } from '@/stores/modules/user.ts'
 import { useAppStore } from '@/stores/modules/app.ts'
-
+import ScreenFull from '@/components/screen-full/index.vue'
 const collapsed = ref<boolean>(false)
 const userStore = useUserStore()
 const appStore = useAppStore()
