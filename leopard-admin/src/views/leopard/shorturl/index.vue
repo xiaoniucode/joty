@@ -34,6 +34,10 @@
               <a-tag v-if="record.status == 1" color="green">正常</a-tag>
             </span>
           </template>
+          <template v-else-if="column.key === 'expiredAt'">
+            <a-tag v-if="!record.expiredAt" > 永不过期</a-tag>
+            <span v-else> {{ record.expiredAt }}</span>
+          </template>
           <template v-else-if="column.key === 'action'">
             <span>
               <a @click="common.copy(record.shortUrl, true)">复制</a>
@@ -155,6 +159,12 @@ const columns = [
     title: '长链接',
     dataIndex: 'originalUrl',
     key: 'originalUrl',
+    ellipsis: true,
+  },
+  {
+    title: '有效期',
+    dataIndex: 'expiredAt',
+    key: 'expiredAt',
     ellipsis: true,
   },
   {
