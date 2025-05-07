@@ -2,6 +2,7 @@ import axios from 'axios'
 import { message } from 'ant-design-vue'
 import { router } from '@/router'
 import { useAppStore } from '@/stores/modules/app.ts'
+import { useUserStore } from '@/stores/modules/user.ts'
 
 const baseApi = import.meta.env.VITE_APP_BASE_API
 
@@ -13,7 +14,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   function (config) {
     config.headers['Accept-Language'] = useAppStore().config.language || 'zh-CN'
-    const token = localStorage.getItem('token')
+    const token = useUserStore().getToken()
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`
     }

@@ -37,9 +37,12 @@ export const useUserStore = defineStore(
     const getRoles = () => {
       return userinfo.value.roles
     }
+    const getToken = () => {
+      return userinfo.value.token
+    }
     const login = async (loginForm: object) => {
       api.action(user.login, {}, loginForm).then((res: any) => {
-        localStorage.setItem('token', res.tokenValue)
+        userinfo.value = { ...INIT_USERINFO, token: res.tokenValue }
         message.success('登陆成功')
         //登陆成功以后获取用户信息
         api.action(user.get).then((loginUser: any) => {
@@ -55,7 +58,6 @@ export const useUserStore = defineStore(
     }
     const resetUserState = () => {
       userinfo.value = { ...INIT_USERINFO }
-      localStorage.removeItem('token')
     }
     const logout = async () => {
       try {
@@ -69,7 +71,7 @@ export const useUserStore = defineStore(
         usePermissionStore().resetPermissionState()
       }
     }
-    return { logout, login, userinfo, hasPerm, getRoles }
+    return { logout, login, userinfo, hasPerm, getRoles, getToken }
   },
   { persist: true },
 )
