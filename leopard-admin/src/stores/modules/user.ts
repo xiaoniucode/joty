@@ -31,17 +31,17 @@ export const useUserStore = defineStore(
     const userinfo = ref<UserInfo>({
       ...INIT_USERINFO,
     })
-    const hasPerm = (perm: string): boolean => {
-      return true
-    }
     const getRoles = () => {
       return userinfo.value.roles
     }
     const getToken = () => {
       return userinfo.value.token
     }
-    const isAdmin=()=>{
-        return userinfo.value.roles.includes('admin')
+    const isAdmin = () => {
+      return userinfo.value.roles.includes('admin')
+    }
+    const hasRole = (role: string) => {
+      return userinfo.value.roles.includes(role)
     }
     const login = async (loginForm: object) => {
       api.action(user.login, {}, loginForm).then((res: any) => {
@@ -74,7 +74,7 @@ export const useUserStore = defineStore(
         usePermissionStore().resetPermissionState()
       }
     }
-    return { logout, login, userinfo, hasPerm, getRoles, getToken ,isAdmin}
+    return { logout, login, userinfo, getRoles, getToken, isAdmin, hasRole }
   },
   { persist: true },
 )
