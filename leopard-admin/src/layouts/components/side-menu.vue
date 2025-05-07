@@ -1,25 +1,36 @@
 <script setup lang="ts">
-import {ref, watch} from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import MenuTree from '@/layouts/components/menu-tree.vue'
-import { staticRoutes } from '@/router/static.ts'
-import {useRoute} from "vue-router";
-const openKeys = ref<string[]>([]);
+import { useRoute } from 'vue-router'
+import { usePermissionStore } from '@/stores/modules/permission.ts'
+
+const openKeys = ref<string[]>([])
 const selectedKeys = ref<string[]>([])
-let currentRoute = useRoute();
+let currentRoute = useRoute()
 watch(
-    currentRoute,
-    () => {
-      selectedKeys.value = [currentRoute.name];
-    },
-    {
-      immediate: true,
-    }
-);
+  currentRoute,
+  () => {
+    //@ts-ignore
+    selectedKeys.value = [currentRoute.name]
+  },
+  {
+    immediate: true,
+  },
+)
+const usePermission = usePermissionStore()
+const menus = ref<any>([])
+onMounted(async () => {
+  menus.value = await usePermission.getMenus()
+})
 </script>
 
 <template>
-  <a-menu v-model:open-keys="openKeys" v-model:selectedKeys="selectedKeys" theme="dark" mode="inline" >
-    <menu-tree :menus="staticRoutes" />
+  <a-menu
+    v-model:open-keys="openKeys"
+    v-model:selectedKeys="selectedKeys"
+    theme="dark"
+    mode="inline">
+    <menu-tree :menus="menus" />
   </a-menu>
 </template>
 
