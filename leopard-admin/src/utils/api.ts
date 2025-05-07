@@ -1,18 +1,18 @@
 import axios from 'axios'
 import { message } from 'ant-design-vue'
-import {router }from '@/router'
+import { router } from '@/router'
+import { useAppStore } from '@/stores/modules/app.ts'
 
 const baseApi = import.meta.env.VITE_APP_BASE_API
+
 const instance = axios.create({
   baseURL: baseApi + '/',
   timeout: 1000,
-  headers: {
-    'Accept-Language': 'zh-CN', //zh-CN or en-US
-  },
 })
 //请求拦截器
 instance.interceptors.request.use(
   function (config) {
+    config.headers['Accept-Language'] = useAppStore().config.language || 'zh-CN'
     const token = localStorage.getItem('token')
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`
@@ -31,8 +31,7 @@ instance.interceptors.response.use(
     const { code, msg, data } = response.data
     if (code == '0') {
       return data
-    }
-    else if (code == '401') {
+    } else if (code == '401') {
       message.error(msg)
       //清空本地cookie
       localStorage.removeItem('token')

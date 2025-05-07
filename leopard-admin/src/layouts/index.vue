@@ -16,10 +16,10 @@
     >
       <div class="flex items-center">
         <div class="logo">
-          <img src="@/assets/logo.jpeg" alt="蜂鸟短链" />
+          <img v-if="appStore.config.sidebarLogo" :src="appStore.config.logo" :alt="appStore.config.siteName" />
         </div>
         <div v-show="!collapsed" style="color: #fff; font-weight: 700; font-size: 20px">
-          蜂鸟短链
+          {{appStore.config.siteName}}
         </div>
       </div>
       <side-menu />
@@ -71,9 +71,11 @@ import { ref } from 'vue'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
 import SideMenu from '@/layouts/components/side-menu.vue'
 import { useUserStore } from '@/stores/modules/user.ts'
+import {useAppStore} from "@/stores/modules/app.ts";
 
 const collapsed = ref<boolean>(false)
 const userStore = useUserStore()
+const appStore=useAppStore()
 </script>
 <style scoped>
 @import 'tailwindcss';
