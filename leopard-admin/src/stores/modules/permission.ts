@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { staticRoutes } from '@/router/static.ts'
+import { constantRoutes } from '@/router'
 
 //菜单类型接口定义
 interface Menu {}
@@ -19,13 +19,40 @@ export const usePermissionStore = defineStore(
         // 仅在未初始化时加载菜单路由
         if (!initializedMenu.value) {
           console.log('初始化权限菜单...')
-          menu.value = staticRoutes
+          menu.value = filterAsyncRoutes(constantRoutes, ['admin'])
           initializedMenu.value = true
         }
         return menu.value
       } catch (error) {
         console.error('初始化菜单失败:', error)
         return []
+      }
+    }
+    /**
+     * 根据角色过滤权限菜单
+     * @param routes 路由列表
+     * @param roles 用户角色列表
+     */
+    const filterAsyncRoutes = (routes: any[] = [], roles: string[] = []) => {
+      const res: any = []
+      routes.forEach((route) => {
+        const tmp = { ...route }
+        if (hasPermission(roles, tmp)) {
+          if (tmp.children) {
+            tmp.children = filterAsyncRoutes(tmp.children, roles)
+          }
+          res.push(tmp)
+        }
+      })
+
+      return res
+    }
+
+    const hasPermission = (roles: any[], route: any) => {
+      if (route.meta && route.meta.roles) {
+        return roles.some((role) => route.meta.roles.includes(role))
+      } else {
+        return true
       }
     }
 

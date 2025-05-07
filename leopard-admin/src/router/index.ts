@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { staticRoutes } from '@/router/static.ts'
+import { asyncRoutes } from '@/router/async-routes.ts'
 
-
+export const constantRoutes = [...staticRoutes, ...asyncRoutes]
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: staticRoutes,
+  routes: constantRoutes,
 })
-
 
 // todo 测试动态构建路由
 import Layout from '@/layouts/index.vue'
@@ -32,4 +32,3 @@ export const buildRoute = () => {
     children: dynamicRoutes,
   })
 }
-
