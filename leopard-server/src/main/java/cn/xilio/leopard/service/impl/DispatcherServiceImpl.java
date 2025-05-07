@@ -4,6 +4,7 @@ package cn.xilio.leopard.service.impl;
 import cn.xilio.leopard.core.common.service.RegionService;
 import cn.xilio.leopard.core.common.util.IpUtils;
 import cn.xilio.leopard.domain.CacheKey;
+import cn.xilio.leopard.domain.enums.ShortUrlStatus;
 import cn.xilio.leopard.service.DispatcherService;
 import cn.xilio.leopard.service.ShortUrlService;
 import cn.xilio.leopard.domain.dataobject.ShortUrl;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.Objects;
 
 @Service
 public class DispatcherServiceImpl implements DispatcherService {
@@ -28,6 +31,7 @@ public class DispatcherServiceImpl implements DispatcherService {
     private ApplicationEventPublisher eventPublisher;
     @Autowired
     private RegionService regionService;
+
     /**
      * Obtain long links
      *
@@ -39,6 +43,9 @@ public class DispatcherServiceImpl implements DispatcherService {
         BizException.checkExpr("1001", !bloomFilterService.contain(code));
         String longUrl = cacheManager.getHash(CacheKey.SHORTURL_URL, code, key -> {
             ShortUrl shortUrl = shortUrlService.getByShortCode(code);
+            if (Objects.equals(shortUrl.getStatus(), ShortUrlStatus.DISABLED.getCode())) {
+                throw new BizException("1009");
+            }
             return shortUrl.getOriginalUrl();
         });
         BizException.checkExpr("1001", !StringUtils.hasText(longUrl));

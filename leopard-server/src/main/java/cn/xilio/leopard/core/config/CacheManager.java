@@ -20,4 +20,7 @@ public interface CacheManager {
 
     // 清理 Hash 缓存（指定 hKey 或整个 key）
     void evictHash(String key, String hKey);
+
+    // 删除 Hash 中指定的 hKey
+    void deleteHash(String key, String... hKeys);
 }

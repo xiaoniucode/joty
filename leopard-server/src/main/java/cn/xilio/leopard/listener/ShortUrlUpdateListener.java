@@ -3,6 +3,7 @@ package cn.xilio.leopard.listener;
 
 import cn.xilio.leopard.core.config.CacheManager;
 import cn.xilio.leopard.domain.CacheKey;
+import cn.xilio.leopard.domain.enums.ShortUrlStatus;
 import cn.xilio.leopard.domain.event.ShortUrlCreatedEvent;
 import cn.xilio.leopard.domain.event.ShortUrlUpdateEvent;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.util.StringUtils;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class ShortUrlUpdateListener {
@@ -23,16 +26,24 @@ public class ShortUrlUpdateListener {
 
     @Async("shortUrlEventExecutor")
     @EventListener
-    //Execute after transaction submission
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCreation(ShortUrlUpdateEvent event) {
+        //Clear the short chain cache that is not in a normal state
+        clearAbnormalStateShortLinkCache(event);
+    }
+
+    private void clearAbnormalStateShortLinkCache(ShortUrlUpdateEvent event) {
         try {
-            if (event.getStatus()==0){
+            if (!StringUtils.hasText(event.getShortCode()) || Objects.equals(event.getStatus(), ShortUrlStatus.ENABLED.getCode())) {
+                return;
+            }
+            log.info("ShortUrlUpdateEvent:[{}]", event.getShortCode());
+            if (event.getStatus() == 0) {
                 //clear hash cache of shortcode
+                cacheManager.deleteHash(CacheKey.SHORTURL_URL, event.getShortCode());
             }
         } catch (Exception e) {
 
-            throw new RuntimeException("Cache update failed", e);
+            log.error("ShortUrlUpdateEvent", e);
         }
     }
 }

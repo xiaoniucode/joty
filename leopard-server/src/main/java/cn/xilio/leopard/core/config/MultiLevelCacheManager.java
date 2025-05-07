@@ -112,4 +112,18 @@ public class MultiLevelCacheManager implements CacheManager {
         redisTemplate.opsForHash().delete(key, hKey);
         System.out.println("Evicted Hash cache for key: " + key + ", hKey: " + hKey);
     }
+    @Override
+    public void deleteHash(String key, String... hKeys) {
+        if (hKeys == null || hKeys.length == 0) {
+            return;
+        }
+        // 删除本地缓存 (Caffeine)
+        for (String hKey : hKeys) {
+            String cacheKey = key + ":" + hKey;
+            caffeineCache.invalidate(cacheKey);
+        }
+        // 删除远程缓存 (Redis Hash 的多个 hKey)
+        redisTemplate.opsForHash().delete(key, (Object[]) hKeys);
+        System.out.println("Deleted Hash cache for key: " + key + ", hKeys: " + String.join(",", hKeys));
+    }
 }
