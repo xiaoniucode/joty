@@ -4,6 +4,7 @@ import MenuTree from '@/layouts/components/menu-tree.vue'
 import { useRoute } from 'vue-router'
 import { usePermissionStore } from '@/stores/modules/permission.ts'
 import {useUserStore} from "@/stores/modules/user.ts";
+import {message} from "ant-design-vue";
 
 const openKeys = ref<string[]>([])
 const selectedKeys = ref<string[]>([])
@@ -18,11 +19,16 @@ watch(
     immediate: true,
   },
 )
-const usePermission = usePermissionStore()
+const permissionStore=usePermissionStore()
 const userStore = useUserStore()
 const menus = ref<any>([])
 onMounted(async () => {
-  menus.value = await usePermission.getMenus(userStore.getRoles())
+  if (userStore.getRoles()&&userStore.getRoles().length>0){
+    menus.value = await permissionStore.getMenus(userStore.getRoles())
+  }else {
+    message.error("菜单初始化失败！")
+  }
+
 })
 </script>
 

@@ -37,8 +37,14 @@ export const asyncRoutes = [
     name: 'ShortUrl',
     component: Layout,
     alwaysShow: false,
-    meta: { title: '短链管理', icon: 'SlackCircleFilled' },
+    meta: { title: '短链管理', icon: 'SlackCircleFilled', roles: ['user']},
     children: [
+      {
+        path: 'stats',
+        name: 'Stats',
+        meta: { title: '数据统计', icon: 'DotChartOutlined'},
+        component: () => import('@/views/leopard/stats/index.vue'),
+      },
       {
         path: 'short-url',
         name: 'LinkList',
@@ -67,12 +73,6 @@ export const asyncRoutes = [
         path: 'open-api',
         name: 'OpenApi',
         meta: { title: '开放接口', icon: 'UngroupOutlined' },
-        component: () => import('@/views/leopard/stats/index.vue'),
-      },
-      {
-        path: 'stats',
-        name: 'Stats',
-        meta: { title: '数据统计', icon: 'DotChartOutlined' },
         component: () => import('@/views/leopard/stats/index.vue'),
       },
     ],
