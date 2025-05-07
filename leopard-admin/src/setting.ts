@@ -2,7 +2,7 @@ export const setting = {
   /**
    * 系统名字
    */
-  siteName: '蜂鸟短链',
+  siteName: '蜂鸟短链平台',
   /**
    * 是否展示侧边栏的logo
    */

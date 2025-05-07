@@ -40,6 +40,9 @@ export const useUserStore = defineStore(
     const getToken = () => {
       return userinfo.value.token
     }
+    const isAdmin=()=>{
+        return userinfo.value.roles.includes('admin')
+    }
     const login = async (loginForm: object) => {
       api.action(user.login, {}, loginForm).then((res: any) => {
         userinfo.value = { ...INIT_USERINFO, token: res.tokenValue }
@@ -71,7 +74,7 @@ export const useUserStore = defineStore(
         usePermissionStore().resetPermissionState()
       }
     }
-    return { logout, login, userinfo, hasPerm, getRoles, getToken }
+    return { logout, login, userinfo, hasPerm, getRoles, getToken ,isAdmin}
   },
   { persist: true },
 )

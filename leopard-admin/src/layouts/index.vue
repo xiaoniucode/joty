@@ -14,14 +14,21 @@
         bottom: 0,
       }"
     >
-      <div class="flex items-center">
-        <div class="logo">
-          <img v-if="appStore.config.sidebarLogo" :src="appStore.config.logo" :alt="appStore.config.siteName" />
-        </div>
-        <div v-show="!collapsed" style="color: #fff; font-weight: 700; font-size: 20px">
-          {{appStore.config.siteName}}
-        </div>
-      </div>
+      <router-link :to="userStore.isAdmin() ? '/dashboard' : '/stats'">
+        <a-flex align="center">
+          <div class="logo">
+            <a-image
+              :preview="false"
+              v-if="appStore.config.sidebarLogo"
+              :src="appStore.config.logo"
+              :alt="appStore.config.siteName"
+            />
+          </div>
+          <div v-show="!collapsed" style="color: #fff; font-weight: 700; font-size: 15px">
+            {{ appStore.config.siteName }}
+          </div>
+        </a-flex>
+      </router-link>
       <side-menu />
     </a-layout-sider>
     <a-layout :style="{ marginLeft: collapsed ? '80px' : '200px', zIndex: 1000 }">
@@ -71,11 +78,11 @@ import { ref } from 'vue'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
 import SideMenu from '@/layouts/components/side-menu.vue'
 import { useUserStore } from '@/stores/modules/user.ts'
-import {useAppStore} from "@/stores/modules/app.ts";
+import { useAppStore } from '@/stores/modules/app.ts'
 
 const collapsed = ref<boolean>(false)
 const userStore = useUserStore()
-const appStore=useAppStore()
+const appStore = useAppStore()
 </script>
 <style scoped>
 @import 'tailwindcss';
