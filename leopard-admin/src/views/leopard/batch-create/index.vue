@@ -99,7 +99,7 @@ const onBatchCreate = () => {
               type="date"
               size="small"
               :valueFormat="'YYYY-MM-DD'"
-              placeholder="默认永久"
+              placeholder="永久"
               style="width: 120px"
             />
             <span>分组:</span>

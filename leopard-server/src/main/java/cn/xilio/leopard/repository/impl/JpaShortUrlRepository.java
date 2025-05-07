@@ -157,6 +157,17 @@ public class JpaShortUrlRepository implements ShortUrlRepository {
                 );
         return shortUrlEntityRepository.findAll(spec);
     }
+
+    /**
+     * Update group to new group
+     *
+     * @param groupIds List of group IDs
+     * @param newGroup New group
+     */
+    @Override
+    public void updateGroupToNew(List<String> groupIds, String newGroup) {
+        shortUrlEntityRepository.updateGroupId(groupIds, newGroup);
+    }
 }
 
 

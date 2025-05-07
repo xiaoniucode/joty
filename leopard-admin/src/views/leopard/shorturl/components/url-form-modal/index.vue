@@ -34,7 +34,7 @@
           v-model:value="formState.expiredAt"
           type="date"
           :valueFormat="'YYYY-MM-DD'"
-          placeholder="默认永久"
+          placeholder="永久"
           style="width: 30%"
         />
       </a-form-item>

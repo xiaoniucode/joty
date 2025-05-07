@@ -90,4 +90,10 @@ public interface ShortUrlService {
      * @return result
      */
     SingleShortUrlResponse restoreShortUrl(RestoreShortUrlRequest request);
+
+    /**
+     * Migrate group to default
+     * @param groupIds Group ID List
+     */
+    void migrateGroupToDefault(List<String> groupIds);
 }

@@ -27,6 +27,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -244,5 +245,20 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                 info.getQrUrl(),
                 info.getExpiredAt());
 
+    }
+
+    /**
+     * Migrate group to default
+     *
+     * @param groupIds Group ID List
+     */
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void migrateGroupToDefault(List<String> groupIds) {
+        if (CollectionUtils.isEmpty(groupIds)) {
+            return;
+        }
+        //Migration of short chains with group ID over groupIds to default group 1
+        shortUrlRepository.updateGroupToNew(groupIds, "1");
     }
 }
