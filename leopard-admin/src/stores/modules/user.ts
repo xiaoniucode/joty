@@ -15,7 +15,6 @@ export const useUserStore = defineStore(
       avatar: '',
       token: '',
       menus: [],
-      initialize: false,
       roles: ['admin'],
     })
     const hasPerm = (perm: string): boolean => {
@@ -28,6 +27,7 @@ export const useUserStore = defineStore(
       api.action(user.login, {}, loginForm).then((res: any) => {
         localStorage.setItem('token', res.tokenValue)
         message.success('Login Success')
+          //根据不同的角色进行跳转
         router.push({ path: '/dashboard' })
       })
     }

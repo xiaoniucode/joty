@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { constantRoutes } from '@/router'
-import { useUserStore } from '@/stores/modules/user.ts'
+
 
 //菜单类型接口定义
 interface Menu {}
@@ -14,13 +14,12 @@ export const usePermissionStore = defineStore(
     //权限菜单初始化状态
     const initializedMenu = ref(false)
     // 获取权限菜单|可指定角色进行筛选
-    const getMenus = async (role: string[] = []): Promise<Menu[]> => {
+    const getMenus = async (roles: string[] = []): Promise<Menu[]> => {
       try {
         // 仅在未初始化时加载菜单路由
         if (!initializedMenu.value) {
           console.log('初始化权限菜单...')
-          const useUser = useUserStore()
-          menu.value = filterAsyncRoutes(constantRoutes, useUser.getRoles())
+          menu.value = filterAsyncRoutes(constantRoutes, roles)
           initializedMenu.value = true
         }
         return menu.value

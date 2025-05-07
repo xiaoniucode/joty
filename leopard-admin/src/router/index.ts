@@ -1,13 +1,24 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { staticRoutes } from '@/router/static.ts'
 import { asyncRoutes } from '@/router/async-routes.ts'
+//@ts-ignore
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 //合并路由 静态路由 异步路由
 export const constantRoutes = [...staticRoutes, ...asyncRoutes]
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: constantRoutes,
 })
-
+router.beforeEach(async (to, from, next) => {
+  //开启进度条
+  NProgress.start()
+  next();
+})
+router.afterEach(() => {
+  //关闭进度条
+  NProgress.done();
+});
 // todo 测试动态构建路由
 import Layout from '@/layouts/index.vue'
 

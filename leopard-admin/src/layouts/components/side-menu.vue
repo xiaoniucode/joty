@@ -3,6 +3,7 @@ import { onMounted, ref, watch } from 'vue'
 import MenuTree from '@/layouts/components/menu-tree.vue'
 import { useRoute } from 'vue-router'
 import { usePermissionStore } from '@/stores/modules/permission.ts'
+import {useUserStore} from "@/stores/modules/user.ts";
 
 const openKeys = ref<string[]>([])
 const selectedKeys = ref<string[]>([])
@@ -18,9 +19,10 @@ watch(
   },
 )
 const usePermission = usePermissionStore()
+const userStore = useUserStore()
 const menus = ref<any>([])
 onMounted(async () => {
-  menus.value = await usePermission.getMenus()
+  menus.value = await usePermission.getMenus(userStore.getRoles())
 })
 </script>
 
