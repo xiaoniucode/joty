@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MenuTree from '@/layouts/components/menu-tree.vue'
-import router from '@/router'
+import {router} from '@/router'
 
 defineProps(['menus'])
 const onClickMenu = async (menu: object) => {

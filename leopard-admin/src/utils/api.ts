@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { message } from 'ant-design-vue'
-import { user } from '@/api/system/user.ts'
-import router from '@/router'
+import {router }from '@/router'
 
 const baseApi = import.meta.env.VITE_APP_BASE_API
 const instance = axios.create({

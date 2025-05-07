@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import api from '@/utils/api.ts'
 import { user } from '@/api/system/user.ts'
 import { message } from 'ant-design-vue'
-import router from '@/router'
+import {router} from '@/router'
 
 export const useUserStore = defineStore(
   'user',
