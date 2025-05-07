@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { constantRoutes } from '@/router'
+import { useUserStore } from '@/stores/modules/user.ts'
 
 //菜单类型接口定义
 interface Menu {}
@@ -12,14 +13,14 @@ export const usePermissionStore = defineStore(
     const menu = ref<Menu[]>([])
     //权限菜单初始化状态
     const initializedMenu = ref(false)
-
     // 获取权限菜单|可指定角色进行筛选
     const getMenus = async (role: string[] = []): Promise<Menu[]> => {
       try {
         // 仅在未初始化时加载菜单路由
         if (!initializedMenu.value) {
           console.log('初始化权限菜单...')
-          menu.value = filterAsyncRoutes(constantRoutes, ['admin'])
+          const useUser = useUserStore()
+          menu.value = filterAsyncRoutes(constantRoutes, useUser.getRoles())
           initializedMenu.value = true
         }
         return menu.value
@@ -37,7 +38,7 @@ export const usePermissionStore = defineStore(
       const res: any = []
       routes.forEach((route) => {
         const tmp = { ...route }
-        if (hasPermission(roles, tmp)) {
+        if (hasRole(roles, tmp)) {
           if (tmp.children) {
             tmp.children = filterAsyncRoutes(tmp.children, roles)
           }
@@ -47,8 +48,8 @@ export const usePermissionStore = defineStore(
 
       return res
     }
-
-    const hasPermission = (roles: any[], route: any) => {
+    //判断某一个路由是否有对应角色权限
+    const hasRole = (roles: any[], route: any) => {
       if (route.meta && route.meta.roles) {
         return roles.some((role) => route.meta.roles.includes(role))
       } else {
@@ -72,7 +73,7 @@ export const usePermissionStore = defineStore(
   },
   {
     persist: {
-      storage: localStorage,
+      storage: sessionStorage,
     },
   },
 )

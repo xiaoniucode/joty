@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { staticRoutes } from '@/router/static.ts'
 import { asyncRoutes } from '@/router/async-routes.ts'
-
+//合并路由 静态路由 异步路由
 export const constantRoutes = [...staticRoutes, ...asyncRoutes]
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

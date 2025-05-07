@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import api from '@/utils/api.ts'
 import { user } from '@/api/system/user.ts'
 import { message } from 'ant-design-vue'
-import {router} from '@/router'
+import { router } from '@/router'
 
 export const useUserStore = defineStore(
   'user',
@@ -16,9 +16,13 @@ export const useUserStore = defineStore(
       token: '',
       menus: [],
       initialize: false,
+      roles: ['admin'],
     })
     const hasPerm = (perm: string): boolean => {
       return true
+    }
+    const getRoles=()=>{
+        return userinfo.value.roles
     }
     const login = async (loginForm: object) => {
       api.action(user.login, {}, loginForm).then((res: any) => {
@@ -33,7 +37,7 @@ export const useUserStore = defineStore(
       await api.action(user.logout)
       await router.push({ path: '/login' })
     }
-    return { logout, login, userinfo, hasPerm }
+    return { logout, login, userinfo, hasPerm ,getRoles}
   },
   { persist: true },
 )
