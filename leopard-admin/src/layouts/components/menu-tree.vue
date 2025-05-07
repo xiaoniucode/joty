@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import MenuTree from '@/layouts/components/menu-tree.vue'
-import {router} from '@/router'
+import { router } from '@/router'
 
 defineProps(['menus'])
-const onClickMenu = async (menu: object) => {
+const onClickMenu = (menu: any) => {
   router.push({ path: menu.path })
 }
-const onClickSubMenu = async (menu: object) => {}
 </script>
 
 <template>
@@ -21,7 +20,7 @@ const onClickSubMenu = async (menu: object) => {}
 
       <!--有多个子菜单-->
       <template v-else-if="menu.children && menu.children.length > 0 && menu.alwaysShow">
-        <a-sub-menu @click="onClickSubMenu(menu)" :key="menu.name">
+        <a-sub-menu :key="menu.name">
           <template #title>
             <component v-if="menu.meta && menu.meta.icon" :is="menu.meta.icon" />
             <span>{{ menu.meta.title }}</span>

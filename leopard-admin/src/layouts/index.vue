@@ -39,17 +39,11 @@
         </div>
         <div style="padding-right: 15px">
           <a-dropdown>
-            <img
-              style="height: 32px; border-radius: 50%"
-              src="@/assets/logo.jpeg"
-              class="ant-dropdown-link"
-              alt=""
-            />
-
+            <a-avatar :src="userStore.userinfo.avatar" />
             <template #overlay>
               <a-menu>
                 <a-menu-item>
-                  <router-link to="/account"> 个人设置 </router-link>
+                  <router-link to="/account"> 个人设置</router-link>
                 </a-menu-item>
                 <a-menu-divider />
                 <a-menu-item>

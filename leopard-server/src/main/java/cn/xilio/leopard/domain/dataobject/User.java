@@ -93,4 +93,9 @@ public class User extends Auditable {
      */
     @Column(name = "api_key", length = 512)
     private String apiKey;
+    /**
+     * 用户角色
+     */
+    @Column(name = "role", length = 256)
+    private String role;
 }

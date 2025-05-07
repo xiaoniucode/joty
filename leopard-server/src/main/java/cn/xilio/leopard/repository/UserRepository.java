@@ -12,4 +12,6 @@ public interface UserRepository {
     User getByName(String username);
 
     PageResponse<User> selectUsers(UserPageQueryRequest request);
+
+    User findById(String userId);
 }

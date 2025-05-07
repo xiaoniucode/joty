@@ -6,23 +6,26 @@ import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;
 import cn.xilio.leopard.core.common.page.PageResponse;
 import cn.xilio.leopard.domain.dataobject.User;
+import cn.xilio.leopard.domain.model.LoginUser;
 
 
 public interface UserService {
     /**
-     *  Login
+     * Login
+     *
      * @param request Login Request info
      * @return Token info
      */
     SaTokenInfo login(LoginRequest request);
 
     /**
-     *  Logout
+     * Logout
      */
     void logout();
 
     /**
-     *  Register. Successfully registered and automatically logged in
+     * Register. Successfully registered and automatically logged in
+     *
      * @param request Register Request info
      * @return Token info
      */
@@ -30,8 +33,17 @@ public interface UserService {
 
     /**
      * query user
+     *
      * @param request page query request
      * @return user list
      */
     PageResponse<User> list(UserPageQueryRequest request);
+
+    /**
+     * Obtain login user information
+     *
+     * @ param Current Login user
+     * @ return  user info
+     */
+    LoginUser getLoginUser(String userId);
 }

@@ -8,6 +8,7 @@ import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;
 import cn.xilio.leopard.core.common.page.PageResponse;
+import cn.xilio.leopard.domain.model.LoginUser;
 import cn.xilio.leopard.service.UserService;
 import cn.xilio.leopard.domain.event.LoginEvent;
 import cn.xilio.leopard.domain.event.LogoutEvent;
@@ -15,11 +16,13 @@ import cn.xilio.leopard.domain.dataobject.User;
 import cn.xilio.leopard.domain.enums.UserStatus;
 import cn.xilio.leopard.repository.UserRepository;
 import cn.xilio.leopard.core.common.exception.BizException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -85,7 +88,27 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public PageResponse<User> list(UserPageQueryRequest request) {
-       return userRepository.selectUsers(request);
+        return userRepository.selectUsers(request);
 
+    }
+
+    /**
+     * Obtain login user information
+     *
+     * @param userId
+     * @ param Current Login user
+     * @ return  user info
+     */
+    @Override
+    public LoginUser getLoginUser(String userId) {
+        User user = userRepository.findById(userId);
+        LoginUser loginUser = new LoginUser();
+        loginUser.setUid(user.getId());
+        loginUser.setUsername(user.getUsername());
+        loginUser.setNickname(user.getNickname());
+        loginUser.setAvatar(user.getAvatar());
+        loginUser.setEmail(user.getEmail());
+        loginUser.setRole(user.getRole());
+        return loginUser;
     }
 }

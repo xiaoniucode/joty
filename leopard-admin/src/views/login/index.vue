@@ -1,8 +1,6 @@
 <template>
   <a-row>
     <a-col :span="12"  class="login-bg">
-
-
     </a-col>
     <a-col :span="12">
       <div class="flex justify-center px-[5%] pt-[10%]">

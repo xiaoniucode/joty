@@ -1,7 +1,6 @@
 package cn.xilio.leopard.repository.impl;
 
 
-
 import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
 import cn.xilio.leopard.core.common.page.PageResponse;
 import cn.xilio.leopard.domain.dataobject.ShortUrl;
@@ -16,6 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
+
+import java.util.Optional;
 
 
 @Repository
@@ -45,7 +46,7 @@ public class JpaUserRepository implements UserRepository {
             return predicate;
         };
         PageRequest pageRequest = PageRequest.of(page < 1 ? 0 : (page - 1), size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<User> entityPage = userEntityRepository.findAll(spec,pageRequest);
+        Page<User> entityPage = userEntityRepository.findAll(spec, pageRequest);
         return PageResponse.of(
                 entityPage.getContent(),
                 (int) entityPage.getTotalElements(),
@@ -53,6 +54,11 @@ public class JpaUserRepository implements UserRepository {
                 entityPage.getSize(),
                 entityPage.hasNext()
         );
+    }
+
+    @Override
+    public User findById(String userId) {
+        return userEntityRepository.findById(userId).orElse(null);
     }
 }
 

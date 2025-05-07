@@ -57,7 +57,7 @@ export const usePermissionStore = defineStore(
     }
 
     // 重置菜单状态
-    const resetMenus = () => {
+    const resetPermissionState = () => {
       menu.value = []
       initializedMenu.value = false
       console.log('菜单状态已重置')
@@ -67,7 +67,7 @@ export const usePermissionStore = defineStore(
       menu,
       initializedMenu,
       getMenus,
-      resetMenus,
+        resetPermissionState,
     }
   },
   {
