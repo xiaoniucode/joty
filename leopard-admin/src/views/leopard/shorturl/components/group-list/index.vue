@@ -31,7 +31,7 @@ import { group } from '@/api/leopard/group.ts'
 
 import GroupFormModal from '@/views/leopard/shorturl/components/group-form-modal/index.vue'
 import {message, Modal} from 'ant-design-vue'
-const emit=defineEmits(['onSelectGroup'])
+const emit=defineEmits(['onSelectGroup','onChange'])
 const groupList = ref([])
 const selectedKeys = ref<string[]>(['1' ]);
 const loadGroups = async () => {
@@ -45,6 +45,7 @@ const onSelect = (selectedKeys: any) => {
 }
 const onSaveSuccess=async ()=>{
   await loadGroups()
+  emit('onChange')
 }
 const onContextMenuClick = (treeKey: string, menuKey: string) => {
   if (treeKey=='1'){

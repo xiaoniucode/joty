@@ -84,8 +84,12 @@ const showModal = (data: object) => {
     Object.assign(formState, { ...data, expiredAt: data.expiredAt ? dayjs(data.expiredAt) : null })
   }
 }
+const flushData=async ()=>{
+  await loadGroupData()
+}
 defineExpose({
   showModal,
+  flushData
 })
 
 const handleOk = (e: MouseEvent) => {

@@ -1,7 +1,7 @@
 <template>
   <a-flex gap="small">
     <a-flex style="min-width: 180px" justify="space-between">
-      <group-list @onSelectGroup="onSelectGroup" />
+      <group-list @onSelectGroup="onSelectGroup" @onChange="onGroupChange" />
       <a-divider type="vertical" style="height: 100%" />
     </a-flex>
 
@@ -9,7 +9,7 @@
       <page-header>
         <a-button danger @click="onBatchDelete" type="primary">批量删除</a-button>
         <a-button @click="onOpenCreateModal" v-hasPerm="'add'" type="primary">新增</a-button>
-        <div v-if="selectedRowKeys.length>0">选中: {{selectedRowKeys.length}} 条</div>
+        <div v-if="selectedRowKeys.length > 0">选中: {{ selectedRowKeys.length }} 条</div>
       </page-header>
       <a-table
         :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
@@ -83,6 +83,9 @@ const analysisRef = ref()
 
 const onOpenCreateModal = () => {
   urlFormModalRef.value.showModal(null)
+}
+const onGroupChange = async () => {
+  await urlFormModalRef.value.flushData()
 }
 const onEdit = (data: object) => {
   urlFormModalRef.value.showModal(data)
