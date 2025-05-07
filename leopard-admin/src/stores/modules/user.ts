@@ -55,10 +55,15 @@ export const useUserStore = defineStore(
       localStorage.removeItem('user')
     }
     const logout = async () => {
-      resetUserState()
-      usePermissionStore().resetPermissionState()
-      await api.action(user.logout)
-      await router.push({ path: '/login' })
+      try {
+        await api.action(user.logout)
+        resetUserState()
+        usePermissionStore().resetPermissionState()
+        await router.push({ path: '/login' })
+      } catch (err) {
+          resetUserState()
+          usePermissionStore().resetPermissionState()
+      }
     }
     return { logout, login, userinfo, hasPerm, getRoles }
   },
