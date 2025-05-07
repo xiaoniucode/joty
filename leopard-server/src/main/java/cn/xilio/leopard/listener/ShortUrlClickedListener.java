@@ -17,7 +17,7 @@ public class ShortUrlClickedListener {
     //@Autowired
     //private StatsRepository statsRepository;
 
-    @Async
+    @Async("shortUrlEventExecutor")
     @EventListener
     public void handleClick(ShortUrlClickedEvent event) {
         //记录访问日志

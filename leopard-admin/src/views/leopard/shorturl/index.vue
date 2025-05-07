@@ -30,13 +30,13 @@
           </template>
           <template v-else-if="column.key === 'status'">
             <span>
-              <a-tag v-if="record.status == 0" color="volcano"> 禁用 </a-tag>
-              <a-tag v-if="record.status == 1" color="green">正常</a-tag>
+              <a-tag :bordered="false" v-if="record.status == 0" color="volcano"> 禁用 </a-tag>
+              <a-tag :bordered="false" v-if="record.status == 1" color="green">正常</a-tag>
             </span>
           </template>
           <template v-else-if="column.key === 'expiredAt'">
-            <a-tag v-if="!record.expiredAt" > 永不过期</a-tag>
-            <span v-else> {{ record.expiredAt }}</span>
+            <a-tag color="blue" :bordered="false" v-if="!record.expiredAt">永不过期</a-tag>
+            <span :bordered="false" v-else> {{ record.expiredAt }}</span>
           </template>
           <template v-else-if="column.key === 'action'">
             <span>
@@ -145,14 +145,14 @@ const columns = [
     title: '标题',
     dataIndex: 'title',
     key: 'title',
-    width: 150,
+    width: 120,
     ellipsis: true,
   },
   {
     title: '短链接',
     dataIndex: 'shortUrl',
     key: 'shortUrl',
-    width: 224,
+    width: 230,
     ellipsis: true,
   },
   {
@@ -168,20 +168,21 @@ const columns = [
     ellipsis: true,
   },
   {
-    title: '二维码',
-    dataIndex: 'qrUrl',
-    key: 'qrUrl',
-    width: 80,
-  },
-  {
     title: '状态',
     key: 'status',
     dataIndex: 'status',
     width: 80,
   },
   {
+    title: '二维码',
+    dataIndex: 'qrUrl',
+    key: 'qrUrl',
+    width: 80,
+  },
+  {
     title: '操作',
     key: 'action',
+    width: 200,
   },
 ]
 

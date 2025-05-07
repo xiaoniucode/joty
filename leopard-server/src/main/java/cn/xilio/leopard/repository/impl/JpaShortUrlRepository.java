@@ -51,7 +51,7 @@ public class JpaShortUrlRepository implements ShortUrlRepository {
             }
             return predicate;
         };
-        PageRequest pageRequest = PageRequest.of(page < 1 ? 0 : (page - 1), size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        PageRequest pageRequest = PageRequest.of(page < 1 ? 0 : (page - 1), size, Sort.by(Sort.Direction.DESC, "updatedAt"));
         Page<ShortUrl> entityPage = shortUrlEntityRepository.findAll(spec, pageRequest);
         return PageResponse.of(
                 entityPage.getContent(),

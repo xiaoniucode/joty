@@ -21,7 +21,7 @@ public class GroupDeleteListener {
     private ShortUrlService shortUrlService;
 
     @EventListener
-    @Async
+    @Async("shortUrlEventExecutor")
     public void handle(GroupDeleteEvent event) {
         try {
             LOGGER.info("GroupDeleteEvent:[{}]", event.getGroupIds());
