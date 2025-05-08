@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
         newUser.setIsAdmin(false);
         User regResult = userRepository.saveUser(newUser);
         //Auto login
-        TokenInfo tokenInfo = SecurityUtils.login(regResult.getUsername());
+        TokenInfo tokenInfo = SecurityUtils.login(regResult.getId());
         eventPublisher.publishEvent(new LoginEvent(this));
         return tokenInfo;
     }
@@ -101,14 +101,14 @@ public class UserServiceImpl implements UserService {
     /**
      * Obtain login user information
      *
-     * @param username
+     * @param userId
      * @ param Current Login user
      * @ return  user info
      */
     @Override
-    public LoginUser getLoginUser(String username) {
-        return cacheManager.get(CacheKey.LOGIN_USER + username, s -> {
-            User user = userRepository.findByUsername(username);
+    public LoginUser getLoginUser(String userId) {
+        return cacheManager.get(CacheKey.LOGIN_USER + userId, s -> {
+            User user = userRepository.findById(userId);
             LoginUser loginUser = new LoginUser();
             loginUser.setUid(user.getId());
             loginUser.setUsername(user.getUsername());

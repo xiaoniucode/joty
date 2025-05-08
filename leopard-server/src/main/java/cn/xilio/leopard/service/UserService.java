@@ -45,7 +45,7 @@ public interface UserService {
      * @ param Current Login user
      * @ return  user info
      */
-    LoginUser getLoginUser(String username);
+    LoginUser getLoginUser(String userId);
 
     User getUserByUsername(String username);
     User getUserByUserId(String id);
