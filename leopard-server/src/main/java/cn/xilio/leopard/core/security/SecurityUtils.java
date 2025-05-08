@@ -1,9 +1,19 @@
 package cn.xilio.leopard.core.security;
 
+import cn.xilio.leopard.core.common.spring.SpringHelper;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.swing.*;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class SecurityUtils {
     /**
@@ -24,13 +34,54 @@ public class SecurityUtils {
     }
 
     public static TokenInfo login(Object id) {
-
-        return null;
+        String tokenValue = createLoginSession(id);
+        SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
+        TokenInfo tokenInfo = new TokenInfo();
+        tokenInfo.setLoginId(id);
+        tokenInfo.setTokenName(properties.getTokenName());
+        tokenInfo.setTokenValue(tokenValue);
+        tokenInfo.setTokenTimeout(properties.getTimeout());
+        return tokenInfo;
     }
 
+    private static String createLoginSession(Object id) {
+        checkLoginId(id);
+        String tokenValue = UUID.randomUUID().toString().replaceAll("-", ""); // 生成一个随机字符串
+        SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
+        String tokenName = properties.getTokenName();
+        StringRedisTemplate redisTemplate = SpringHelper.getBean(StringRedisTemplate.class);
+        String key = tokenName + ":login:token:" + tokenValue;
+        redisTemplate.opsForValue().set(key, id.toString(), properties.getActiveTimeout(), TimeUnit.SECONDS);
+        return tokenValue;
+    }
+
+    private static void checkLoginId(Object id) {
+        if (ObjectUtils.isEmpty(id) && !StringUtils.hasText(id.toString())) {
+            throw new IllegalArgumentException("登陆id不能为空");
+        }
+
+    }
+public static String getTokenValue() {
+    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    HttpServletRequest request = attributes.getRequest();
+    SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
+    String tokenName = properties.getTokenName();
+    String tokenValue = request.getHeader(tokenName);
+    if (!StringUtils.hasText(tokenValue)){
+        return null;
+    }
+    if (StringUtils.hasText(properties.getTokenPrefix()) && !tokenValue.startsWith(properties.getTokenPrefix() + " ")) {
+         throw new IllegalArgumentException("非法的token");
+    }
+    if (StringUtils.hasText(properties.getTokenPrefix()) && tokenValue.startsWith(properties.getTokenPrefix() + " ")) {
+        tokenValue = tokenValue.substring(properties.getTokenPrefix().length() + 1);
+    }
+    return tokenValue;
+}
     /**
      * 登陆
-     * @param id 唯一标识 登陆ID
+     *
+     * @param id      唯一标识 登陆ID
      * @param timeout 此次登录 token 的有效期, 单位:秒
      * @return 登陆令牌
      */
@@ -40,9 +91,14 @@ public class SecurityUtils {
     }
 
     public static void logout() {
-
-
+        String tokenValue = getTokenValue();
+        SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
+        String tokenName = properties.getTokenName();
+        String key = tokenName + ":login:token:" + tokenValue;
+        StringRedisTemplate redisTemplate = SpringHelper.getBean(StringRedisTemplate.class);
+        redisTemplate.delete(key);
     }
+
     public static void logout(Object id) {
 
 
