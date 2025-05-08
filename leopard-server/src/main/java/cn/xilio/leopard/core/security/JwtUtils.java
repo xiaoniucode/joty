@@ -1,5 +1,6 @@
-package cn.xilio.leopard.core.spring.security;
+package cn.xilio.leopard.core.security;
 
+import cn.xilio.leopard.core.common.spring.SpringHelper;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.JWTVerifier;
@@ -30,6 +31,8 @@ public class JwtUtils {
 
     public static String createToken(String issuer) {
         try {
+            SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
+
             Algorithm algorithm = Algorithm.RSA256(PUBLIC_KEY, PRIVATE_KEY);
             return JWT.create()
                     .withIssuer(issuer)

@@ -9,6 +9,9 @@ import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;
 import cn.xilio.leopard.core.common.page.PageResponse;
 import cn.xilio.leopard.core.config.CacheManager;
+import cn.xilio.leopard.core.security.JwtUtils;
+import cn.xilio.leopard.core.security.SecurityUtils;
+import cn.xilio.leopard.core.security.TokenInfo;
 import cn.xilio.leopard.domain.CacheKey;
 import cn.xilio.leopard.domain.model.LoginUser;
 import cn.xilio.leopard.service.UserService;
@@ -42,15 +45,13 @@ public class UserServiceImpl implements UserService {
      * @return Token info
      */
     @Override
-    public SaTokenInfo login(LoginRequest request) {
-        User user = userRepository.getByName(request.username());
+    public TokenInfo login(LoginRequest request) {
+        User user = userRepository.findByUsername(request.username());
         BizException.checkNull("6001", user);
         BizException.checkExpr("6003", UserStatus.DISABLED.getCode() == user.getStatus());
-        StpUtil.login(user.getId(), new SaLoginParameter()
-                .setIsLastingCookie(true)
-                .setIsWriteHeader(true));
+        TokenInfo tokenInfo = SecurityUtils.login(user.getUsername());
         eventPublisher.publishEvent(new LoginEvent(this));
-        return StpUtil.getTokenInfo();
+        return tokenInfo;
     }
 
     /**
@@ -59,8 +60,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public void logout() {
-        String uid = StpUtil.getLoginIdAsString();
-        StpUtil.logout(uid);
+        String uid = SecurityUtils.getLoginIdAsString();
+        SecurityUtils.logout(uid);
         cacheManager.delete(CacheKey.LOGIN_USER + uid);
         eventPublisher.publishEvent(new LogoutEvent(this));
     }
@@ -72,19 +73,17 @@ public class UserServiceImpl implements UserService {
      * @return Token info
      */
     @Override
-    public SaTokenInfo registerAndLogin(RegisterRequest request) {
+    public TokenInfo registerAndLogin(RegisterRequest request) {
         //check username
-        User dbUser = userRepository.getByName(request.username());
+        User dbUser = userRepository.findByUsername(request.username());
         BizException.checkExpr("6004", !ObjectUtils.isEmpty(dbUser));
         User newUser = request.toUser();
         newUser.setIsAdmin(false);
         User regResult = userRepository.saveUser(newUser);
         //Auto login
-        StpUtil.login(regResult.getId(), new SaLoginParameter()
-                .setIsLastingCookie(true)
-                .setIsWriteHeader(true));
+        TokenInfo tokenInfo = SecurityUtils.login(regResult.getUsername());
         eventPublisher.publishEvent(new LoginEvent(this));
-        return StpUtil.getTokenInfo();
+        return tokenInfo;
     }
 
     /**
@@ -102,14 +101,14 @@ public class UserServiceImpl implements UserService {
     /**
      * Obtain login user information
      *
-     * @param userId
+     * @param username
      * @ param Current Login user
      * @ return  user info
      */
     @Override
-    public LoginUser getLoginUser(String userId) {
-        return cacheManager.get(CacheKey.LOGIN_USER + userId, s -> {
-            User user = userRepository.findById(userId);
+    public LoginUser getLoginUser(String username) {
+        return cacheManager.get(CacheKey.LOGIN_USER + username, s -> {
+            User user = userRepository.findByUsername(username);
             LoginUser loginUser = new LoginUser();
             loginUser.setUid(user.getId());
             loginUser.setUsername(user.getUsername());
@@ -120,5 +119,10 @@ public class UserServiceImpl implements UserService {
             return loginUser;
         });
 
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }

@@ -1,4 +1,4 @@
-package cn.xilio.leopard.core.spring.security;
+package cn.xilio.leopard.core.security;
 
 
 import jakarta.servlet.FilterChain;
@@ -17,9 +17,6 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-
-
     private final UserDetailsService userDetailsService;
 
     public JwtAuthenticationFilter(UserDetailsService userDetailsService) {

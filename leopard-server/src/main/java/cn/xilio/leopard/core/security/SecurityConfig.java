@@ -1,9 +1,10 @@
-package cn.xilio.leopard.core.spring.security;
+package cn.xilio.leopard.core.security;
 
 
-import cn.xilio.leopard.core.spring.security.handler.CustomAccessDeniedHandler;
-import cn.xilio.leopard.core.spring.security.handler.CustomAuthenticationEntryPoint;
+import cn.xilio.leopard.core.security.handler.CustomAccessDeniedHandler;
+import cn.xilio.leopard.core.security.handler.CustomAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -28,7 +29,21 @@ public class SecurityConfig {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
     @Autowired
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    @Value("${leopard.file.publicPath}")
+    private String publicPath;
 
+    private final String[] excludePaths = {
+            "/api/user/login",
+            "/{code:^[a-zA-Z0-9]{6}$}",
+            "/favicon.ico",
+            "/doc.html",
+            "/webjars/**",
+            "/swagger-resources/**",
+            "/v2/api-docs/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            publicPath + "/**"
+    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -36,9 +51,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // 禁用 CSRF（前后端分离不需要）
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 无状态会话
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/user/login").permitAll() // 允许公开访问登录接口
-                        // .requestMatchers("/api/test/user").hasAuthority("USER")
-                        // .requestMatchers("/api/test/admin").hasAnyAuthority("ADMIN")
+                        .requestMatchers(excludePaths).permitAll()
+                        .requestMatchers("/api/user/get").authenticated()
+                        .requestMatchers("/api/**").hasAuthority("USER")
+                        .requestMatchers("/**").hasAnyAuthority("ADMIN")
                         .anyRequest().authenticated() // 其他请求需要认证
                 ).exceptionHandling(ex -> ex
                         .authenticationEntryPoint(customAuthenticationEntryPoint) // 未登录处理

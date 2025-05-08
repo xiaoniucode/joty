@@ -1,10 +1,10 @@
 package cn.xilio.leopard.service;
 
-import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;
 import cn.xilio.leopard.core.common.page.PageResponse;
+import cn.xilio.leopard.core.security.TokenInfo;
 import cn.xilio.leopard.domain.dataobject.User;
 import cn.xilio.leopard.domain.model.LoginUser;
 
@@ -16,7 +16,7 @@ public interface UserService {
      * @param request Login Request info
      * @return Token info
      */
-    SaTokenInfo login(LoginRequest request);
+    TokenInfo login(LoginRequest request);
 
     /**
      * Logout
@@ -29,7 +29,7 @@ public interface UserService {
      * @param request Register Request info
      * @return Token info
      */
-    SaTokenInfo registerAndLogin(RegisterRequest request);
+    TokenInfo registerAndLogin(RegisterRequest request);
 
     /**
      * query user
@@ -45,5 +45,7 @@ public interface UserService {
      * @ param Current Login user
      * @ return  user info
      */
-    LoginUser getLoginUser(String userId);
+    LoginUser getLoginUser(String username);
+
+    User getUserByUsername(String username);
 }

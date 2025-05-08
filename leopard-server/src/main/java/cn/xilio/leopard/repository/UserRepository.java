@@ -9,7 +9,7 @@ public interface UserRepository {
 
     public User saveUser(User user);
 
-    User getByName(String username);
+    User findByUsername(String username);
 
     PageResponse<User> selectUsers(UserPageQueryRequest request);
 

@@ -1,4 +1,4 @@
-package cn.xilio.leopard.core.spring.security;
+package cn.xilio.leopard.core.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,7 +11,7 @@ public class SecurityUtils {
      *
      * @return 用户唯一标识
      */
-    public static String getUserId() {
+    public static String getLoginIdAsString() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!ObjectUtils.isEmpty(authentication) && authentication.isAuthenticated()) {
             Object principal = authentication.getPrincipal();
@@ -22,4 +22,36 @@ public class SecurityUtils {
         }
         return null;
     }
+
+    public static TokenInfo login(Object id) {
+
+        return null;
+    }
+
+    /**
+     * 登陆
+     * @param id 唯一标识 登陆ID
+     * @param timeout 此次登录 token 的有效期, 单位:秒
+     * @return 登陆令牌
+     */
+    public static TokenInfo login(Object id, long timeout) {
+
+        return null;
+    }
+
+    public static void logout() {
+
+
+    }
+    public static void logout(Object id) {
+
+
+    }
+
+    public static boolean isLogin() {
+
+        return false;
+    }
+
+
 }

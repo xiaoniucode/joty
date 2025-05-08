@@ -1,4 +1,4 @@
-package cn.xilio.leopard.core.spring.security.handler;
+package cn.xilio.leopard.core.security.handler;
 
 import cn.xilio.leopard.core.common.util.LocaleUtils;
 import cn.xilio.leopard.core.common.util.Result;

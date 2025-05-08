@@ -1,0 +1,35 @@
+package cn.xilio.leopard.core.security;
+
+import cn.xilio.leopard.core.config.CacheManager;
+import cn.xilio.leopard.domain.CacheKey;
+import cn.xilio.leopard.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.function.Function;
+
+@Service
+public class CustomUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return (UserDetails) cacheManager.get(CacheKey.LOGIN_USER + username, (Function<String, Object>) s -> {
+            cn.xilio.leopard.domain.dataobject.User user = userService.getUserByUsername(username);
+            String role = user.getRole();
+            return User.withUsername(user.getUsername())
+                    .password(user.getPassword())
+                    .roles(role)
+                    .build();
+        });
+
+    }
+}

@@ -30,7 +30,7 @@ public class JpaUserRepository implements UserRepository {
     }
 
     @Override
-    public User getByName(String username) {
+    public User findByUsername(String username) {
         Specification<User> spec = (root, query, cb) ->
                 cb.equal(root.get("username"), username);
         return userEntityRepository.findOne(spec).orElse(null);
