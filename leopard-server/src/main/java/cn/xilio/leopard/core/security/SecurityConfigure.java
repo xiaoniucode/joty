@@ -4,6 +4,7 @@ import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.exception.NotRoleException;
 import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.interceptor.SaInterceptor;
+import cn.dev33.satoken.router.SaHttpMethod;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
 
@@ -27,7 +28,7 @@ public class SecurityConfigure implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin()))
+        registry.addInterceptor(new SaInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns("/api/user/login");
     }
@@ -71,23 +72,34 @@ public class SecurityConfigure implements WebMvcConfigurer {
 
                     // ---------- 设置一些安全响应头 ----------
                     SaHolder.getResponse()
-                            // 允许指定域访问跨域资源
                             .setHeader("Access-Control-Allow-Origin", "*")
                             // 允许所有请求方式
                             .setHeader("Access-Control-Allow-Methods", "*")
                             // 允许的header参数
-                            .setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type,accept,Origin,User-Agent,DNT,Cache-Control,Content-Type,Range,referer,connection,content-length,accept-language")
+                            .setHeader("Access-Control-Allow-Headers", "*")
                             // 有效时间
                             .setHeader("Access-Control-Max-Age", "3600")
-                            // 服务器名称
-                            .setServer("sa-server")
+
+
+//                            // 允许指定域访问跨域资源
+//                            .setHeader("Access-Control-Allow-Origin", "*")
+//                            // 允许所有请求方式
+//                            .setHeader("Access-Control-Allow-Methods", "*")
+//                            // 允许的header参数
+//                            .setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type,accept,Origin,User-Agent,DNT,Cache-Control,Content-Type,Range,referer,connection,content-length,accept-language")
+//                            // 有效时间
+//                            .setHeader("Access-Control-Max-Age", "3600")
+//                            // 服务器名称
+//                            .setServer("sa-server")
+
+
                             // 是否可以在iframe显示视图： DENY=不可以 | SAMEORIGIN=同域下可以 | ALLOW-FROM uri=指定域名下可以
                             .setHeader("X-Frame-Options", "SAMEORIGIN")
                             // 是否启用浏览器默认XSS防护： 0=禁用 | 1=启用 | 1; mode=block 启用, 并在检查到XSS攻击时，停止渲染页面
                             .setHeader("X-XSS-Protection", "1; mode=block")
                             // 禁用浏览器内容嗅探
-                            .setHeader("X-Content-Type-Options", "nosniff")
-                    ;
+                            .setHeader("X-Content-Type-Options", "nosniff");
+
                 });
     }
 
