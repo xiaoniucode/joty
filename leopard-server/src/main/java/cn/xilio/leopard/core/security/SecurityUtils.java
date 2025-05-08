@@ -61,23 +61,25 @@ public class SecurityUtils {
         }
 
     }
-public static String getTokenValue() {
-    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-    HttpServletRequest request = attributes.getRequest();
-    SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
-    String tokenName = properties.getTokenName();
-    String tokenValue = request.getHeader(tokenName);
-    if (!StringUtils.hasText(tokenValue)){
-        return null;
+
+    public static String getTokenValue() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
+        String tokenName = getTokenName();
+        String tokenValue = request.getHeader(tokenName);
+        if (!StringUtils.hasText(tokenValue)) {
+            return null;
+        }
+        if (StringUtils.hasText(properties.getTokenPrefix()) && !tokenValue.startsWith(properties.getTokenPrefix() + " ")) {
+            throw new IllegalArgumentException("非法的token");
+        }
+        if (StringUtils.hasText(properties.getTokenPrefix()) && tokenValue.startsWith(properties.getTokenPrefix() + " ")) {
+            tokenValue = tokenValue.substring(properties.getTokenPrefix().length() + 1);
+        }
+        return tokenValue;
     }
-    if (StringUtils.hasText(properties.getTokenPrefix()) && !tokenValue.startsWith(properties.getTokenPrefix() + " ")) {
-         throw new IllegalArgumentException("非法的token");
-    }
-    if (StringUtils.hasText(properties.getTokenPrefix()) && tokenValue.startsWith(properties.getTokenPrefix() + " ")) {
-        tokenValue = tokenValue.substring(properties.getTokenPrefix().length() + 1);
-    }
-    return tokenValue;
-}
+
     /**
      * 登陆
      *
@@ -92,22 +94,24 @@ public static String getTokenValue() {
 
     public static void logout() {
         String tokenValue = getTokenValue();
-        SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
-        String tokenName = properties.getTokenName();
+        String tokenName = getTokenName();
         String key = tokenName + ":login:token:" + tokenValue;
         StringRedisTemplate redisTemplate = SpringHelper.getBean(StringRedisTemplate.class);
         redisTemplate.delete(key);
     }
 
-    public static void logout(Object id) {
-
-
+    public static String getTokenName() {
+        return SpringHelper.getBean(SecurityProperties.class).getTokenName();
     }
 
     public static boolean isLogin() {
-
-        return false;
+        String tokenValue = getTokenValue();
+        if (tokenValue == null) {
+            return false;
+        }
+        StringRedisTemplate redisTemplate = SpringHelper.getBean(StringRedisTemplate.class);
+        String key = getTokenName() + ":login:token:" + tokenValue;
+        String loginId = redisTemplate.opsForValue().get(key);
+        return StringUtils.hasText(loginId);
     }
-
-
 }
