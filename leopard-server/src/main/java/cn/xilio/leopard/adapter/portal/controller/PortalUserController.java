@@ -1,6 +1,7 @@
 package cn.xilio.leopard.adapter.portal.controller;
 
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;

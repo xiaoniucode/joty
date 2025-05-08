@@ -1,13 +1,11 @@
 package cn.xilio.leopard.adapter.admin.controller;
 
 
-import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
-import cn.xilio.leopard.core.common.page.PageResponse;
-import cn.xilio.leopard.domain.dataobject.User;
 import cn.xilio.leopard.service.UserService;
-import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.util.Result;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 public class AdminUserController {
     @Autowired
     private UserService userService;
 
     @PostMapping(value = "list", name = "All user list")
-    @SaCheckPermission("user:list")
-    public Result list(@Validated @RequestBody UserPageQueryRequest request) {
+    public Result list(@Validated @RequestBody UserPageQueryRequest request, HttpServletRequest request2) {
         return Result.success(userService.list(request));
     }
 

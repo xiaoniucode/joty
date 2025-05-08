@@ -11,7 +11,6 @@ export const staticRoutes = [
     path: '/',
     name: 'accountLayout',
     component: Layout,
-    redirect: '/account',
     meta: { title: 'account' },
     hidden: true,
     children: [

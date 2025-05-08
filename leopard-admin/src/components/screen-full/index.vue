@@ -1,5 +1,5 @@
 <template>
-  <div style="font-size: 28px; font-weight: 600">
+  <div style="font-size: 25px; font-weight: 800">
     <component
       @click="click"
       :is="isFullscreen ? 'FullscreenExitOutlined' : 'FullscreenOutlined'"

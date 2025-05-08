@@ -37,6 +37,7 @@ export const asyncRoutes = [
     name: 'ShortUrl',
     component: Layout,
     alwaysShow: false,
+    redirect: '/stats',
     meta: { title: '短链管理', icon: 'SlackCircleFilled', roles: ['user']},
     children: [
       {
