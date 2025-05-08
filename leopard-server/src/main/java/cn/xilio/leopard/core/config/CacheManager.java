@@ -11,7 +11,7 @@ public interface CacheManager {
     void put(String key, Object value);
 
     // 清理缓存
-    void evict(String key);
+    void delete(String key);
 
     <T> T getHash(String key, String hKey, Function<String, T> loader);
 

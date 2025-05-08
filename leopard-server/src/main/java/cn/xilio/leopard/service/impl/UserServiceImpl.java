@@ -8,6 +8,8 @@ import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;
 import cn.xilio.leopard.core.common.page.PageResponse;
+import cn.xilio.leopard.core.config.CacheManager;
+import cn.xilio.leopard.domain.CacheKey;
 import cn.xilio.leopard.domain.model.LoginUser;
 import cn.xilio.leopard.service.UserService;
 import cn.xilio.leopard.domain.event.LoginEvent;
@@ -16,6 +18,7 @@ import cn.xilio.leopard.domain.dataobject.User;
 import cn.xilio.leopard.domain.enums.UserStatus;
 import cn.xilio.leopard.repository.UserRepository;
 import cn.xilio.leopard.core.common.exception.BizException;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -29,6 +32,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private ApplicationEventPublisher eventPublisher;
+    @Autowired
+    private CacheManager cacheManager;
 
     /**
      * Login
@@ -52,9 +57,11 @@ public class UserServiceImpl implements UserService {
      * Logout
      */
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void logout() {
         String uid = StpUtil.getLoginIdAsString();
         StpUtil.logout(uid);
+        cacheManager.delete(CacheKey.LOGIN_USER + uid);
         eventPublisher.publishEvent(new LogoutEvent(this));
     }
 
@@ -101,14 +108,17 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public LoginUser getLoginUser(String userId) {
-        User user = userRepository.findById(userId);
-        LoginUser loginUser = new LoginUser();
-        loginUser.setUid(user.getId());
-        loginUser.setUsername(user.getUsername());
-        loginUser.setNickname(user.getNickname());
-        loginUser.setAvatar(user.getAvatar());
-        loginUser.setEmail(user.getEmail());
-        loginUser.setRole(user.getRole());
-        return loginUser;
+        return cacheManager.get(CacheKey.LOGIN_USER + userId, s -> {
+            User user = userRepository.findById(userId);
+            LoginUser loginUser = new LoginUser();
+            loginUser.setUid(user.getId());
+            loginUser.setUsername(user.getUsername());
+            loginUser.setNickname(user.getNickname());
+            loginUser.setAvatar(user.getAvatar());
+            loginUser.setEmail(user.getEmail());
+            loginUser.setRole(user.getRole());
+            return loginUser;
+        });
+
     }
 }

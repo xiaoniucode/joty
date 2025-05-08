@@ -55,7 +55,7 @@ public class MultiLevelCacheManager implements CacheManager {
     }
 
     @Override
-    public void evict(String key) {
+    public void delete(String key) {
         // 清理本地缓存
         caffeineCache.invalidate(key);
         // 清理远程缓存
