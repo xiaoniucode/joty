@@ -1,6 +1,7 @@
 package cn.xilio.leopard.core.security;
 
 import cn.dev33.satoken.context.SaHolder;
+import cn.dev33.satoken.exception.NotRoleException;
 import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaRouter;
@@ -58,8 +59,11 @@ public class SecurityConfigure implements WebMvcConfigurer {
                 .setError(e -> {
                     e.printStackTrace();
                     SaHolder.getResponse().setHeader("content-type", "application/json; charset=utf-8");
-                    Result res = Result.error("401", LocaleUtils.getLocaleMessage("401"));
-                    return new Gson().toJson(res);
+                    if (e instanceof NotRoleException ne) {
+                        return new Gson().toJson(Result.error("403", LocaleUtils.getLocaleMessage("403")));
+                    } else {
+                        return new Gson().toJson(Result.error("401", LocaleUtils.getLocaleMessage("403")));
+                    }
                 })
 
                 // 前置函数：在每次认证函数之前执行（BeforeAuth 不受 includeList 与 excludeList 的限制，所有请求都会进入）
