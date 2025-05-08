@@ -1,18 +1,22 @@
 package cn.xilio.leopard.core.security;
 
 
+import cn.xilio.leopard.core.common.spring.SpringHelper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.swing.*;
 import java.io.IOException;
 
 @Component
@@ -26,30 +30,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String header = request.getHeader("Authorization");
-//        if (header == null || !header.startsWith("Bearer ")) {
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
-//
-//        String token = header.substring(7);
+        SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
+        String token = request.getHeader(properties.getTokenName());
+        if (token == null || (StringUtils.hasText(properties.getTokenPrefix()) && !token.startsWith(properties.getTokenPrefix() + " "))) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if (StringUtils.hasText(properties.getTokenPrefix())) {
+            token = token.substring(7);
+        }
         try {
-//            Claims claims = Jwts.parser()
-//                    .setSigningKey(jwtSecret)
-//                    .parseClaimsJws(token)
-//                    .getBody();
-//            String username = claims.getSubject();
-            String username="admin";
-
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            StringRedisTemplate redisTemplate = SpringHelper.getBean(StringRedisTemplate.class);
+            String key = properties.getTokenName() + ":login:token:" + token;
+            String loginId = redisTemplate.opsForValue().get(key);
+            if (StringUtils.hasText(loginId) && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(loginId);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            // JWT 解析失败，忽略
+e.printStackTrace();
         }
 
         filterChain.doFilter(request, response);

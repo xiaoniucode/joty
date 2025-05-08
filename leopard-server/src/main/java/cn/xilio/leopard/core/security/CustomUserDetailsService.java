@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.function.Function;
 
@@ -21,11 +22,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     private CacheManager cacheManager;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return (UserDetails) cacheManager.get(CacheKey.LOGIN_USER + username, (Function<String, Object>) s -> {
-            cn.xilio.leopard.domain.dataobject.User user = userService.getUserByUsername(username);
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        return (UserDetails) cacheManager.get(CacheKey.LOGIN_USER + id, (Function<String, Object>) s -> {
+            cn.xilio.leopard.domain.dataobject.User user = userService.getUserByUserId(id);
+            if (ObjectUtils.isEmpty(user)){
+                throw new UsernameNotFoundException("用户不存在");
+            }
             String role = user.getRole();
-            return User.withUsername(user.getUsername())
+            return User.withUsername(user.getId())
                     .password(user.getPassword())
                     .roles(role)
                     .build();

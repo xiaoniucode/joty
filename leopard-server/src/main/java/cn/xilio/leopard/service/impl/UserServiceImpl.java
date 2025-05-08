@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(request.username());
         BizException.checkNull("6001", user);
         BizException.checkExpr("6003", UserStatus.DISABLED.getCode() == user.getStatus());
-        TokenInfo tokenInfo = SecurityUtils.login(user.getUsername());
+        TokenInfo tokenInfo = SecurityUtils.login(user.getId());
         eventPublisher.publishEvent(new LoginEvent(this));
         return tokenInfo;
     }
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackOn = Exception.class)
     public void logout() {
         String uid = SecurityUtils.getLoginIdAsString();
-        SecurityUtils.logout(uid);
+        SecurityUtils.logout();
         cacheManager.delete(CacheKey.LOGIN_USER + uid);
         eventPublisher.publishEvent(new LogoutEvent(this));
     }
@@ -124,5 +124,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User getUserByUserId(String id) {
+        return userRepository.findById(id);
     }
 }

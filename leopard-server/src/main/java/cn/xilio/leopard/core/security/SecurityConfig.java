@@ -52,7 +52,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 无状态会话
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(excludePaths).permitAll()
-                    //    .requestMatchers("/api/user/get").authenticated()
+                        .requestMatchers("/api/user/logout").authenticated()
                         //.requestMatchers("/api/**").hasAuthority("USER")
                        //.requestMatchers("/**").hasAnyAuthority("ADMIN")
                         .anyRequest().authenticated() // 其他请求需要认证
