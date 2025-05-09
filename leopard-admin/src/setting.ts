@@ -14,5 +14,5 @@ export const setting = {
   /**
    * 侧边栏logo 只有sidebarLogo=true才会展示
    */
-  logo: '/logo.jpeg',
+  logo: '/logo.png',
 }
