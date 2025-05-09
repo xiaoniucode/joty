@@ -95,7 +95,7 @@ const appStore = useAppStore()
 .trigger {
   font-size: 18px;
   line-height: 56px;
-  padding: 0 24px;
+  padding: 0 18px;
   cursor: pointer;
   transition: color 0.3s;
 }
