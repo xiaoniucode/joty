@@ -53,7 +53,7 @@ interface FormState {
 }
 
 const formState = reactive<FormState>({
-  username: '1',
+  username: 'admin',
   password: '123456',
   remember: true,
 })

@@ -10,7 +10,7 @@ export const setting = {
   /**
    * 语言环境 //zh-CN or en-US
    */
-  language: 'zh-CN',
+  language: 'en-US',
   /**
    * 侧边栏logo 只有sidebarLogo=true才会展示
    */

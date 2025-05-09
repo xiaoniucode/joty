@@ -48,14 +48,14 @@
           <screen-full id="screenfull" />
           <a-dropdown>
             <span>
-             <a-flex align="center">
+              <a-flex align="center">
                 <a-avatar :src="userStore.userinfo.avatar" />
-              <span>
-                <span v-if="userStore.userinfo.nickname">{{ userStore.userinfo.nickname }}</span>
-                <span v-else>{{ userStore.userinfo.username }}</span>
-                <DownOutlined />
-              </span>
-             </a-flex>
+                <span>
+                  <span v-if="userStore.userinfo.nickname">{{ userStore.userinfo.nickname }}</span>
+                  <span v-else>{{ userStore.userinfo.username }}</span>
+                  <DownOutlined />
+                </span>
+              </a-flex>
             </span>
             <template #overlay>
               <a-menu>
