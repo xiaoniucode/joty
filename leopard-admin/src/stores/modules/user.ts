@@ -38,10 +38,10 @@ export const useUserStore = defineStore(
       return userinfo.value.token
     }
     const isAdmin = () => {
-      return userinfo.value.roles.includes('admin')
+      return userinfo.value.roles.includes('ADMIN')
     }
     const hasRole = (role: string) => {
-      return userinfo.value.roles.includes(role)
+      return userinfo.value.roles.includes(role.toUpperCase())
     }
     const login = async (loginForm: object) => {
       api.action(user.login, {}, loginForm).then((res: any) => {
@@ -51,7 +51,7 @@ export const useUserStore = defineStore(
         api.action(user.get).then((loginUser: any) => {
           userinfo.value = { ...loginUser, roles: [loginUser.role], token: res.tokenValue }
           //根据不同的角色进行跳转
-          if (loginUser.role == 'admin') {
+          if (loginUser.role == 'ADMIN') {
             router.push({ path: '/dashboard' })
           } else {
             router.push({ path: '/stats' })
