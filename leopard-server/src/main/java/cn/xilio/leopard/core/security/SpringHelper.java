@@ -1,4 +1,4 @@
-package cn.xilio.leopard.core.common.spring;
+package cn.xilio.leopard.core.security;
 
 
 import jakarta.annotation.PostConstruct;

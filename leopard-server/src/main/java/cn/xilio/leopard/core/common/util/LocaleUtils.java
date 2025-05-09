@@ -1,7 +1,7 @@
 package cn.xilio.leopard.core.common.util;
 
 
-import cn.xilio.leopard.core.common.spring.SpringHelper;
+import cn.xilio.leopard.core.security.SpringHelper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 

@@ -21,7 +21,5 @@ public class SecurityProperties {
     /**
      * 忽略的URL 不认证和授权
      */
-    private String[] ignoreUrls = {
-
-    };
+    private String[] ignoreUrls = {};
 }

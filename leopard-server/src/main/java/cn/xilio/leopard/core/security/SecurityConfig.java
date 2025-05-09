@@ -16,15 +16,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-//开启权限
 @EnableWebSecurity
-// 启用方法级权限控制
 @EnableMethodSecurity
 public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-
     private final SecurityProperties properties;
 
     public SecurityConfig(SecurityProperties properties) {
@@ -42,7 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/**").hasAnyRole("USER")
                         .requestMatchers("/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated() // 其他请求需要认证
-                ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // 添加 JWT 过滤器
+                ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

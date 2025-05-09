@@ -1,6 +1,5 @@
 package cn.xilio.leopard.core.security;
 
-import cn.xilio.leopard.core.common.spring.SpringHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
@@ -11,7 +10,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.swing.*;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
