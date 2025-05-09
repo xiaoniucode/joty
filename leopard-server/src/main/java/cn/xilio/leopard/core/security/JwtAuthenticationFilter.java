@@ -20,9 +20,11 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
+    private final StringRedisTemplate redisTemplate;
 
-    public JwtAuthenticationFilter(UserDetailsService userDetailsService) {
+    public JwtAuthenticationFilter(UserDetailsService userDetailsService, StringRedisTemplate redisTemplate) {
         this.userDetailsService = userDetailsService;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -37,7 +39,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             token = token.substring(7);
         }
         try {
-            StringRedisTemplate redisTemplate = SpringHelper.getBean(StringRedisTemplate.class);
             String key = SecurityUtils.getTokenName() + ":login:token:" + token;
             String loginId = redisTemplate.opsForValue().get(key);
             if (StringUtils.hasText(loginId) && SecurityContextHolder.getContext().getAuthentication() == null) {
