@@ -5,6 +5,7 @@ import cn.xilio.leopard.service.UserService;
 import cn.xilio.leopard.core.common.util.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public class AdminUserController {
     @Autowired
     private UserService userService;
-
+    @PreAuthorize("hasRole('hello')")
     @PostMapping(value = "list", name = "All user list")
     public Result list(@Validated @RequestBody UserPageQueryRequest request, HttpServletRequest request2) {
         return Result.success(userService.list(request));

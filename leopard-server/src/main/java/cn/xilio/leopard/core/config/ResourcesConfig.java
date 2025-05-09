@@ -13,9 +13,9 @@ import java.nio.file.Paths;
 @Configuration
 @RequiredArgsConstructor
 public class ResourcesConfig implements WebMvcConfigurer {
-    @Value("${leopard.file.localPath}")
+    @Value("${leopard.file.local-path}")
     private String localPath;
-    @Value("${leopard.file.publicPath}")
+    @Value("${leopard.file.public-path}")
     private String publicPath;
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

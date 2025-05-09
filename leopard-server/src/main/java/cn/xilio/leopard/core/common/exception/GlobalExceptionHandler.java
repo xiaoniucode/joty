@@ -6,6 +6,8 @@ import cn.xilio.leopard.core.common.util.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,6 +30,19 @@ public class GlobalExceptionHandler {
         String message = LocaleUtils.getLocaleMessage("400", new Object[]{defaultMessage});
         return Result.error(Integer.toString(HttpStatus.BAD_REQUEST.value()), message);
     }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public Result handleAuthorizationDeniedException(AuthorizationDeniedException e) {
+        String message = LocaleUtils.getLocaleMessage("403");
+        return Result.error(Integer.toString(HttpStatus.FORBIDDEN.value()), message);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public Result handleAuthenticationException(AuthenticationException e) {
+        String message = LocaleUtils.getLocaleMessage("401");
+        return Result.error(Integer.toString(HttpStatus.UNAUTHORIZED.value()), message);
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {

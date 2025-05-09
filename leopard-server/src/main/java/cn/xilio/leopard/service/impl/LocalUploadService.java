@@ -19,11 +19,11 @@ import java.nio.file.Paths;
 
 @Primary
 @Component
-@ConditionalOnProperty(name = "leopard.file.uploadModel", havingValue = "Local")
+@ConditionalOnProperty(name = "leopard.file.upload-model", havingValue = "Local")
 public class LocalUploadService extends AbstractUploadService {
-    @Value("${leopard.file.localPath}")
+    @Value("${leopard.file.local-path}")
     private String localPath;
-    @Value("${leopard.file.publicPath}")
+    @Value("${leopard.file.public-path}")
     private String publicPath;
 
 

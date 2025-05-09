@@ -17,4 +17,11 @@ public class SecurityProperties {
     private long timeout = 2592000;               // Token有效期（秒），默认30天
     private long activeTimeout = -1;               // Token活跃期（秒），-1表示不限制
     private boolean Concurrent = true;          // 是否允许多地登录
+    private Boolean isShare = false;
+    /**
+     * 忽略的URL 不认证和授权
+     */
+    private String[] ignoreUrls = {
+
+    };
 }
