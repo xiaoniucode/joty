@@ -53,8 +53,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(excludePaths).permitAll()
                         .requestMatchers("/api/user/logout").authenticated()
-                        //.requestMatchers("/api/**").hasAuthority("USER")
-                       //.requestMatchers("/**").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/api/**").hasAnyRole("USER")
+                       .requestMatchers("/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated() // 其他请求需要认证
                 ).exceptionHandling(ex -> ex
                         .authenticationEntryPoint(customAuthenticationEntryPoint) // 未登录处理

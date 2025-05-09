@@ -1,6 +1,7 @@
 package cn.xilio.leopard.core.config.jpa;
 
-import cn.dev33.satoken.stp.StpUtil;
+
+import cn.xilio.leopard.core.security.SecurityUtils;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.util.StringUtils;
 
@@ -9,8 +10,8 @@ import java.util.Optional;
 public class AuditorAwareImpl implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
-        if (StpUtil.isLogin()) {
-            String uid = StpUtil.getLoginIdAsString();
+        if (SecurityUtils.isLogin()) {
+            String uid = SecurityUtils.getLoginIdAsString();
             if (StringUtils.hasText(uid)) {
                 return Optional.of(uid);
             }

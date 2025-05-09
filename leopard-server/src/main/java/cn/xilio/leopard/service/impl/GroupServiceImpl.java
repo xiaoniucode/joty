@@ -1,9 +1,10 @@
 package cn.xilio.leopard.service.impl;
 
 
-import cn.dev33.satoken.stp.StpUtil;
+
 import cn.xilio.leopard.adapter.portal.dto.request.CreateGroupRequest;
 import cn.xilio.leopard.core.common.exception.BizException;
+import cn.xilio.leopard.core.security.SecurityUtils;
 import cn.xilio.leopard.domain.event.GroupDeleteEvent;
 import cn.xilio.leopard.service.GroupService;
 import cn.xilio.leopard.domain.dataobject.Group;
@@ -33,7 +34,7 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public Group getById(String groupId) {
-        String userId = StpUtil.getLoginIdAsString();
+        String userId = SecurityUtils.getLoginIdAsString();
         return groupRepository.getById(groupId, userId);
     }
 
@@ -46,7 +47,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional(rollbackOn = Exception.class)
     public void saveGroup(CreateGroupRequest request) {
         if (StringUtils.hasText(request.id())) {
-            String userId = StpUtil.getLoginIdAsString();
+            String userId = SecurityUtils.getLoginIdAsString();
             Group oldGroup = groupRepository.getById(request.id(), userId);
             BizException.checkNull("1008", oldGroup);
             BeanUtils.copyProperties(request, oldGroup);
@@ -65,7 +66,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public void deleteGroup(List<String> ids) {
-        String userId = StpUtil.getLoginIdAsString();
+        String userId = SecurityUtils.getLoginIdAsString();
         groupRepository.deleteBatch(ids, userId);
         //Move the short links within the group to the default group
         eventPublisher.publishEvent(new GroupDeleteEvent(this,ids));

@@ -1,10 +1,11 @@
 package cn.xilio.leopard.service.impl;
 
-import cn.dev33.satoken.stp.StpUtil;
+
 import cn.hutool.core.util.RandomUtil;
 
 import cn.xilio.leopard.adapter.portal.dto.request.*;
 import cn.xilio.leopard.adapter.portal.dto.response.SingleShortUrlResponse;
+import cn.xilio.leopard.core.security.SecurityUtils;
 import cn.xilio.leopard.domain.event.ShortUrlDeleteEvent;
 import cn.xilio.leopard.domain.event.ShortUrlUpdateEvent;
 import cn.xilio.leopard.service.ShortUrlService;
@@ -124,7 +125,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public void deleteShortUrl(List<String> ids) {
-        String userId = StpUtil.getLoginIdAsString();
+        String userId = SecurityUtils.getLoginIdAsString();
         //find exist short url by ids
         List<ShortUrl> olds = shortUrlRepository.findByIds(ids, userId);
         List<String> existIds = olds.stream().map(ShortUrl::getId).toList();
@@ -143,7 +144,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      */
     @Override
     public PageResponse<ShortUrl> getShortUrlsByUser(ShortUrlPageRequest request) {
-        String userId = StpUtil.getLoginIdAsString();
+        String userId = SecurityUtils.getLoginIdAsString();
         return shortUrlRepository.page(request, userId);
     }
 
@@ -166,7 +167,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      */
     @Override
     public ShortUrl getShortUrlInfo(String id) {
-        String userId = StpUtil.getLoginIdAsString();
+        String userId = SecurityUtils.getLoginIdAsString();
         return shortUrlRepository.findById(id, userId);
     }
 
@@ -198,7 +199,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public void update(UpdateShortUrlRequest request) {
-        ShortUrl old = shortUrlRepository.findById(request.id(), StpUtil.getLoginIdAsString());
+        ShortUrl old = shortUrlRepository.findById(request.id(), SecurityUtils.getLoginIdAsString());
         BizException.checkNull("1007", old);
         BeanUtils.copyProperties(request, old);
         shortUrlRepository.save(old);

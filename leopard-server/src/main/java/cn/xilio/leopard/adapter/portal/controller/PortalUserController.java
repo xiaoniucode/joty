@@ -1,10 +1,9 @@
 package cn.xilio.leopard.adapter.portal.controller;
 
 
-import cn.dev33.satoken.annotation.SaCheckLogin;
-import cn.dev33.satoken.stp.StpUtil;
 import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;
+import cn.xilio.leopard.core.security.SecurityUtils;
 import cn.xilio.leopard.domain.model.LoginUser;
 import cn.xilio.leopard.service.UserService;
 import cn.xilio.leopard.core.common.util.Result;
@@ -30,7 +29,7 @@ public class PortalUserController {
     @Operation(summary = "获取登陆用户信息")
     @GetMapping("get")
     public Result get() {
-        String userId = StpUtil.getLoginIdAsString();
+        String userId = SecurityUtils.getLoginIdAsString();
         LoginUser loginUser = userService.getLoginUser(userId);
         return Result.success(loginUser);
     }

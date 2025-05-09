@@ -1,8 +1,6 @@
 package cn.xilio.leopard.core.common.exception;
 
 
-import cn.dev33.satoken.exception.NotLoginException;
-import cn.dev33.satoken.exception.NotRoleException;
 import cn.xilio.leopard.core.common.util.LocaleUtils;
 import cn.xilio.leopard.core.common.util.Result;
 import org.slf4j.Logger;
@@ -38,18 +36,7 @@ public class GlobalExceptionHandler {
         String message = LocaleUtils.getLocaleMessage("400", new Object[]{defaultMessage});
         return Result.error(Integer.toString(HttpStatus.BAD_REQUEST.value()), message);
     }
-    @ExceptionHandler(NotLoginException.class)
-    public Result handleNotLoginException(NotLoginException e) {
-        String message = LocaleUtils.getLocaleMessage("401");
-        return Result.error(Integer.toString(HttpStatus.UNAUTHORIZED.value()), message);
-    }
 
-
-    @ExceptionHandler(NotRoleException.class)
-    public Result handleNotRoleException(NotRoleException e) {
-        String message = LocaleUtils.getLocaleMessage("403");
-        return Result.error(Integer.toString(HttpStatus.FORBIDDEN.value()), message);
-    }
     @ExceptionHandler(Exception.class)
     public Result handleGenericException(Exception e) {
         logger.error("Unexpected error", e);

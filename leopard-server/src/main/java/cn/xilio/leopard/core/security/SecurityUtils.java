@@ -35,19 +35,27 @@ public class SecurityUtils {
 
     public static TokenInfo login(Object id) {
         String tokenValue = createLoginSession(id);
-        SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
+        return createTokenInfo(id, tokenValue);
+    }
+
+    public static SecurityProperties getConfig() {
+        return SpringHelper.getBean(SecurityProperties.class);
+    }
+
+    private static TokenInfo createTokenInfo(Object id, String tokenValue) {
         TokenInfo tokenInfo = new TokenInfo();
         tokenInfo.setLoginId(id);
-        tokenInfo.setTokenName(properties.getTokenName());
+        tokenInfo.setTokenName(getConfig().getTokenName());
         tokenInfo.setTokenValue(tokenValue);
-        tokenInfo.setTokenTimeout(properties.getTimeout());
+        tokenInfo.setTokenTimeout(getConfig().getTimeout());
         return tokenInfo;
     }
 
     private static String createLoginSession(Object id) {
         checkLoginId(id);
-        String tokenValue = UUID.randomUUID().toString().replaceAll("-", ""); // 生成一个随机字符串
         SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
+
+        String tokenValue = UUID.randomUUID().toString().replaceAll("-", ""); // 生成一个随机字符串
         String tokenName = properties.getTokenName();
         StringRedisTemplate redisTemplate = SpringHelper.getBean(StringRedisTemplate.class);
         String key = tokenName + ":login:token:" + tokenValue;
@@ -79,19 +87,6 @@ public class SecurityUtils {
         }
         return tokenValue;
     }
-
-    /**
-     * 登陆
-     *
-     * @param id      唯一标识 登陆ID
-     * @param timeout 此次登录 token 的有效期, 单位:秒
-     * @return 登陆令牌
-     */
-    public static TokenInfo login(Object id, long timeout) {
-
-        return null;
-    }
-
     public static void logout() {
         String tokenValue = getTokenValue();
         String tokenName = getTokenName();

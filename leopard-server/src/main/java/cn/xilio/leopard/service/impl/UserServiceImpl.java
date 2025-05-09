@@ -1,15 +1,10 @@
 package cn.xilio.leopard.service.impl;
 
-import cn.dev33.satoken.stp.SaTokenInfo;
-import cn.dev33.satoken.stp.StpUtil;
-import cn.dev33.satoken.stp.parameter.SaLoginParameter;
-
 import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;
 import cn.xilio.leopard.core.common.page.PageResponse;
 import cn.xilio.leopard.core.config.CacheManager;
-import cn.xilio.leopard.core.security.JwtUtils;
 import cn.xilio.leopard.core.security.SecurityUtils;
 import cn.xilio.leopard.core.security.TokenInfo;
 import cn.xilio.leopard.domain.CacheKey;
