@@ -21,6 +21,7 @@ leopard:
     # 生成短链接时，发生重复的时候最多尝试次数，用于保证短码的唯一性
     max-try-times: 10
   task:
+    #定时任务 定期清理掉过期的短链接
     expire-url-clean: 0 0 0 * * ?
   file:
     upload-model: Local
