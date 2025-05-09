@@ -44,13 +44,19 @@
           />
           <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
         </div>
-        <a-flex align="center" style="padding-right: 15px" gap="8">
+        <a-flex align="center" style="padding-right: 15px" gap="10">
           <screen-full id="screenfull" />
           <a-dropdown>
             <span>
-              <a-avatar :src="userStore.userinfo.avatar" />
+             <a-flex align="center">
+                <a-avatar :src="userStore.userinfo.avatar" />
+              <span>
+                <span v-if="userStore.userinfo.nickname">{{ userStore.userinfo.nickname }}</span>
+                <span v-else>{{ userStore.userinfo.username }}</span>
+                <DownOutlined />
+              </span>
+             </a-flex>
             </span>
-
             <template #overlay>
               <a-menu>
                 <a-menu-item>
@@ -113,6 +119,4 @@ const appStore = useAppStore()
 .site-layout .site-layout-background {
   background: #fff;
 }
-
-
 </style>
