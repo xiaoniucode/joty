@@ -18,17 +18,33 @@ export const asyncRoutes = [
   },
   {
     path: '/',
-    name: 'member',
+    name: 'OS',
     component: Layout,
-    meta: { title: '会员管理', icon: 'SlackCircleFilled', roles: ['admin'] },
+    meta: { title: '组织架构', icon: 'SlackCircleFilled', roles: ['admin'] },
     alwaysShow: true,
     children: [
       {
-        path: 'member-list',
-        name: 'MemberList',
-        component: () => import('@/views/system/member/member-list/index.vue'),
+        path: 'user-list',
+        name: 'UserList',
+        component: () => import('@/views/system/os/user/index.vue'),
         hidden: false,
-        meta: { title: '会员用户', icon: 'IeCircleFilled' },
+        meta: { title: '用户管理', icon: 'IeCircleFilled' },
+      },
+    ],
+  },
+  {
+    path: '/',
+    name: 'setting',
+    component: Layout,
+    meta: { title: '系统设置', icon: 'SlackCircleFilled', roles: ['admin'] },
+    alwaysShow: true,
+    children: [
+      {
+        path: 'cache',
+        name: 'Cache',
+        component: () => import('@/views/system/setting/cache/index.vue'),
+        hidden: false,
+        meta: { title: '缓存管理', icon: 'IeCircleFilled' },
       },
     ],
   },
@@ -38,12 +54,12 @@ export const asyncRoutes = [
     component: Layout,
     alwaysShow: false,
     redirect: '/stats',
-    meta: { title: '短链管理', icon: 'SlackCircleFilled', roles: ['user']},
+    meta: { title: '短链管理', icon: 'SlackCircleFilled', roles: ['user'] },
     children: [
       {
         path: 'stats',
         name: 'Stats',
-        meta: { title: '数据统计', icon: 'DotChartOutlined'},
+        meta: { title: '数据统计', icon: 'DotChartOutlined' },
         component: () => import('@/views/leopard/stats/index.vue'),
       },
       {

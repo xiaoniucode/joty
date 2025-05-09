@@ -16,7 +16,7 @@ import java.util.List;
 public class AdminUserController {
     @Autowired
     private UserService userService;
-    @PreAuthorize("hasRole('hello')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "list", name = "All user list")
     public Result list(@Validated @RequestBody UserPageQueryRequest request, HttpServletRequest request2) {
         return Result.success(userService.list(request));
