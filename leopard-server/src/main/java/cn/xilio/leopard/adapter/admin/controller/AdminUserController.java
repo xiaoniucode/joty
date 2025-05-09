@@ -1,7 +1,5 @@
 package cn.xilio.leopard.adapter.admin.controller;
 
-
-
 import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
 import cn.xilio.leopard.service.UserService;
 import cn.xilio.leopard.core.common.util.Result;

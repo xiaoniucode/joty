@@ -102,17 +102,18 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public LoginUser getLoginUser(String userId) {
-        return cacheManager.get(CacheKey.LOGIN_USER + userId, s -> {
-            User user = userRepository.findById(userId);
-            LoginUser loginUser = new LoginUser();
-            loginUser.setUid(user.getId());
-            loginUser.setUsername(user.getUsername());
-            loginUser.setNickname(user.getNickname());
-            loginUser.setAvatar(user.getAvatar());
-            loginUser.setEmail(user.getEmail());
-            loginUser.setRole(user.getRole());
-            return loginUser;
-        });
+        User user = userRepository.findById(userId);
+        LoginUser loginUser = new LoginUser();
+        loginUser.setUid(user.getId());
+        loginUser.setUsername(user.getUsername());
+        loginUser.setNickname(user.getNickname());
+        loginUser.setAvatar(user.getAvatar());
+        loginUser.setEmail(user.getEmail());
+        loginUser.setRole(user.getRole());
+        return loginUser;
+//        return cacheManager.get(CacheKey.LOGIN_USER + userId, s -> {
+//
+//        });
 
     }
 

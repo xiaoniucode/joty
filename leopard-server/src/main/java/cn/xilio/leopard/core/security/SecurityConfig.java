@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,12 +49,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        http.cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable) // 禁用 CSRF（前后端分离不需要）
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 无状态会话
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(excludePaths).permitAll()
-                        .requestMatchers("/api/user/logout").authenticated()
+                        .requestMatchers("/api/user/logout","/api/user/get").authenticated()
                         .requestMatchers("/api/**").hasAnyRole("USER")
                        .requestMatchers("/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated() // 其他请求需要认证
