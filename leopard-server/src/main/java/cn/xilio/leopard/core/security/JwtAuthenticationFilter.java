@@ -30,18 +30,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
-        String token = request.getHeader(properties.getTokenName());
-        if (token == null || (StringUtils.hasText(properties.getTokenPrefix()) && !token.startsWith(properties.getTokenPrefix() + " "))) {
+        String token = request.getHeader(SecurityUtils.getTokenName());
+        if (token == null || (StringUtils.hasText(SecurityUtils.getTokenPrefix()) && !token.startsWith(SecurityUtils.getTokenPrefix() + " "))) {
             filterChain.doFilter(request, response);
             return;
         }
-        if (StringUtils.hasText(properties.getTokenPrefix())) {
+        if (StringUtils.hasText(SecurityUtils.getTokenPrefix())) {
             token = token.substring(7);
         }
         try {
             StringRedisTemplate redisTemplate = SpringHelper.getBean(StringRedisTemplate.class);
-            String key = properties.getTokenName() + ":login:token:" + token;
+            String key = SecurityUtils.getTokenName() + ":login:token:" + token;
             String loginId = redisTemplate.opsForValue().get(key);
             if (StringUtils.hasText(loginId) && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(loginId);
@@ -51,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-e.printStackTrace();
+            e.printStackTrace();
         }
 
         filterChain.doFilter(request, response);

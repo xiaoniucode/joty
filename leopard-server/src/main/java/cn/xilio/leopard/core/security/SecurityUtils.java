@@ -72,6 +72,9 @@ public class SecurityUtils {
 
     public static String getTokenValue() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (ObjectUtils.isEmpty(attributes)){
+            throw new IllegalArgumentException("当前请求不存在");
+        }
         HttpServletRequest request = attributes.getRequest();
         SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
         String tokenName = getTokenName();
@@ -87,6 +90,7 @@ public class SecurityUtils {
         }
         return tokenValue;
     }
+
     public static void logout() {
         String tokenValue = getTokenValue();
         String tokenName = getTokenName();
@@ -96,7 +100,11 @@ public class SecurityUtils {
     }
 
     public static String getTokenName() {
-        return SpringHelper.getBean(SecurityProperties.class).getTokenName();
+        return getConfig().getTokenName();
+    }
+
+    public static String getTokenPrefix() {
+        return getConfig().getTokenPrefix();
     }
 
     public static boolean isLogin() {
