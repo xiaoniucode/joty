@@ -53,13 +53,11 @@ public class SecurityUtils {
 
     private static String createLoginSession(Object id) {
         checkLoginId(id);
-        SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
-
         String tokenValue = UUID.randomUUID().toString().replaceAll("-", ""); // 生成一个随机字符串
-        String tokenName = properties.getTokenName();
+        String tokenName = getTokenName();
         StringRedisTemplate redisTemplate = SpringHelper.getBean(StringRedisTemplate.class);
         String key = tokenName + ":login:token:" + tokenValue;
-        redisTemplate.opsForValue().set(key, id.toString(), properties.getActiveTimeout(), TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key, id.toString(), getConfig().getActiveTimeout(), TimeUnit.SECONDS);
         return tokenValue;
     }
 
@@ -76,17 +74,16 @@ public class SecurityUtils {
             throw new IllegalArgumentException("当前请求不存在");
         }
         HttpServletRequest request = attributes.getRequest();
-        SecurityProperties properties = SpringHelper.getBean(SecurityProperties.class);
         String tokenName = getTokenName();
         String tokenValue = request.getHeader(tokenName);
         if (!StringUtils.hasText(tokenValue)) {
             return null;
         }
-        if (StringUtils.hasText(properties.getTokenPrefix()) && !tokenValue.startsWith(properties.getTokenPrefix() + " ")) {
+        if (StringUtils.hasText(getTokenPrefix()) && !tokenValue.startsWith(getTokenPrefix() + " ")) {
             throw new IllegalArgumentException("非法的token");
         }
-        if (StringUtils.hasText(properties.getTokenPrefix()) && tokenValue.startsWith(properties.getTokenPrefix() + " ")) {
-            tokenValue = tokenValue.substring(properties.getTokenPrefix().length() + 1);
+        if (StringUtils.hasText(getTokenPrefix()) && tokenValue.startsWith(getTokenPrefix() + " ")) {
+            tokenValue = tokenValue.substring(getTokenPrefix().length() + 1);
         }
         return tokenValue;
     }
