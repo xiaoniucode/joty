@@ -12,7 +12,7 @@ export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: constantRoutes,
 })
-const LOGIN_PATH='/login'
+const LOGIN_PATH = '/login'
 router.beforeEach(async (to, from, next) => {
   //开启进度条
   NProgress.start()
@@ -29,7 +29,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // 登录页，则跳转到首页
-  if (to.path === LOGIN_PATH) {
+  if (to.path === LOGIN_PATH || to.path === '/') {
     next({
       path: useUserStore().isAdmin() ? '/dashboard' : '/stats',
     })
