@@ -10,6 +10,8 @@ import cn.xilio.leopard.core.security.TokenInfo;
 import cn.xilio.leopard.domain.dataobject.User;
 import cn.xilio.leopard.domain.model.LoginUser;
 
+import java.util.List;
+
 
 public interface UserService {
     /**
@@ -63,4 +65,10 @@ public interface UserService {
      * @param request User info
      */
     void updateUser(UpdateUserRequest request);
+
+    /**
+     * Delete user by id
+     * @param ids id list
+     */
+    void deleteUser(List<String> ids);
 }

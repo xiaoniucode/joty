@@ -19,11 +19,6 @@
       <a-form-item label="邮箱" name="email">
         <a-input v-model:value="formState.email" placeholder="请输入邮箱" />
       </a-form-item>
-
-      <a-form-item label="手机号" name="mobile">
-        <a-input v-model:value="formState.mobile" placeholder="请输入手机号" />
-      </a-form-item>
-
       <a-form-item label="头像" name="avatar">
         <a-upload
           v-model:file-list="fileList"
@@ -43,30 +38,30 @@
         <a-input-password v-model:value="formState.password" placeholder="请输入密码" />
       </a-form-item>
 
-      <a-form-item label="确认密码" name="confirmPassword" v-if="!isEdit">
-        <a-input-password v-model:value="formState.confirmPassword" placeholder="请再次输入密码" />
-      </a-form-item>
-      <a-form-item v-if="formState.role!='ADMIN'" label="状态" name="status">
-        <a-radio-group v-model:value="formState.status">
-          <a-radio :value="1">正常</a-radio>
-          <a-radio :value="0">禁用</a-radio>
-        </a-radio-group>
+      <a-form-item label="排序" name="sort">
+        <a-input-number id="inputNumber" v-model:value="formState.sort" />
       </a-form-item>
 
       <a-form-item label="备注" name="remark">
         <a-textarea v-model:value="formState.remark" placeholder="请输入备注" />
+      </a-form-item>
+      <a-form-item v-if="formState.role != 'ADMIN'" label="状态" name="status">
+        <a-radio-group v-model:value="formState.status">
+          <a-radio :value="1">正常</a-radio>
+          <a-radio :value="0">禁用</a-radio>
+        </a-radio-group>
       </a-form-item>
     </a-form>
   </a-modal>
 </template>
 
 <script lang="ts" setup>
-import {ref, reactive, toRaw} from 'vue'
+import { ref, reactive, toRaw } from 'vue'
 import { message } from 'ant-design-vue'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import type { UploadProps } from 'ant-design-vue'
 import api from '@/utils/api.ts'
-import {user} from "@/api/system/user.ts";
+import { user } from '@/api/system/user.ts'
 
 const open = ref(false)
 const formRef = ref()
@@ -74,16 +69,15 @@ const emit = defineEmits(['onSaveSuccess'])
 
 // 表单状态
 interface FormState {
-  id?: string | undefined
+  id?: undefined
   username: string
   nickname: string
   email: string
-  mobile: string
   avatar: string
   password: string
-  confirmPassword: string
   status: number
   remark: string
+  sort: number
   role: string
 }
 
@@ -92,12 +86,11 @@ const INITIAL_STATE: FormState = {
   username: '',
   nickname: '',
   email: '',
-  mobile: '',
   avatar: '',
   password: '',
-  confirmPassword: '',
   status: 1,
   remark: '',
+  sort: 0,
   role: '',
 }
 
@@ -130,17 +123,9 @@ const rules = {
     { max: 30, message: '昵称最多30个字符', trigger: 'blur' },
   ],
   email: [{ type: 'email', message: '请输入有效的邮箱地址', trigger: 'blur' }],
-  mobile: [{ pattern: /^1[3-9]\d{9}$/, message: '请输入有效的手机号', trigger: 'blur' }],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
     { min: 6, max: 20, message: '密码长度6-20个字符', trigger: 'blur' },
-  ],
-  confirmPassword: [
-    { required: true, message: '请确认密码', trigger: 'blur' },
-    {
-      validator: (_, value) =>
-        value === formState.password ? Promise.resolve() : Promise.reject('两次输入的密码不一致'),
-    },
   ],
 }
 
@@ -156,7 +141,6 @@ const showModal = (data: object | null) => {
     Object.assign(formState, data)
     // 编辑时不显示密码字段
     formState.password = ''
-    formState.confirmPassword = ''
   }
 }
 
@@ -168,22 +152,18 @@ const resetForm = () => {
 const handleOk = () => {
   formRef.value.validate().then(() => {
     const payload = { ...toRaw(formState) }
+    //@ts-ignore
+    delete payload.role
     // 编辑时不更新密码
     if (isEdit.value) {
+      //@ts-ignore
       delete payload.password
-      delete payload.confirmPassword
     }
-
-    api
-      .action(user.save, {}, payload)
-      .then(() => {
-        message.success(isEdit.value ? '更新成功' : '创建成功')
-        open.value = false
-        emit('onSaveSuccess')
-      })
-      .catch((err) => {
-        message.error(err.message || '操作失败')
-      })
+    api.action(isEdit.value ? user.update : user.add, {}, payload).then(() => {
+      message.success(isEdit.value ? '更新成功' : '创建成功')
+      open.value = false
+      emit('onSaveSuccess')
+    })
   })
 }
 

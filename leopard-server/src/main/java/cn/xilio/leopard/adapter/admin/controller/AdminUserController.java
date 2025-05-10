@@ -29,18 +29,19 @@ public class AdminUserController {
         return Result.success();
     }
     @PostMapping(value = "add", name = "Add a user  ")
-    public Result add(@RequestBody AddUserRequest request) {
+    public Result add(@Validated @RequestBody AddUserRequest request) {
         userService.addUser(request);
         return Result.success();
     }
-    @PutMapping(value = "add", name = "Add a user  ")
-    public Result update(@RequestBody UpdateUserRequest request) {
+    @PutMapping(value = "update", name = "Update a user  ")
+    public Result update(@Validated @RequestBody UpdateUserRequest request) {
         userService.updateUser(request);
         return Result.success();
     }
 
     @DeleteMapping(value = "del", name = "Batch delete user")
     public Result del(@RequestBody List<String> ids) {
+        userService.deleteUser(ids);
         return Result.success();
     }
 

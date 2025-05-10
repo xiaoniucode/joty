@@ -48,7 +48,7 @@
       </div>
     </a-flex>
   </a-flex>
-  <UserForm ref="userFormModalRef" />
+  <UserForm ref="userFormModalRef" @onSaveSuccess="onSaveSuccess" />
 </template>
 <script lang="ts" setup>
 import { onMounted, reactive, ref, watch } from 'vue'
@@ -80,6 +80,9 @@ const onLoadTableData = async () => {
   })
 }
 onLoadTableData()
+const onSaveSuccess = async () => {
+  await onLoadTableData()
+}
 onMounted(() => {})
 watch(
   pageQuery,

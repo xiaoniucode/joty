@@ -2,6 +2,7 @@ package cn.xilio.leopard.domain.dataobject;
 
 
 import cn.xilio.leopard.core.config.jpa.Auditable;
+import cn.xilio.leopard.domain.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -61,7 +62,7 @@ public class User extends Auditable {
      * 逻辑删除标志
      */
     @Column(name = "deleted", nullable = false)
-    private Integer deleted;
+    private Integer deleted=0;
 
     /**
      * 创建者ID
@@ -92,4 +93,9 @@ public class User extends Auditable {
      */
     @Column(name = "role", length = 256)
     private String role;
+    /**
+     * 排序
+     */
+    @Column(name = "sort")
+    private Integer sort;
 }

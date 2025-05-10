@@ -27,6 +27,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
@@ -144,11 +146,12 @@ public class UserServiceImpl implements UserService {
     public void addUser(AddUserRequest request) {
         //check username
         User oldUser = userRepository.findByUsername(request.username());
-        BizException.checkNull("6004",oldUser);
+        BizException.checkExpr("6004", !ObjectUtils.isEmpty(oldUser));
         User newUser = request.toUser();
         newUser.setRole(UserRole.USER.name());
         newUser.setStatus(UserStatus.NORMAL.getCode());
         //密码加密
+        newUser.setPassword(request.password());
         userRepository.saveUser(newUser);
     }
 
@@ -168,5 +171,15 @@ public class UserServiceImpl implements UserService {
             oldUser.setStatus(UserStatus.NORMAL.getCode());
         }
         userRepository.saveUser(oldUser);
+    }
+
+    /**
+     * Delete user by id
+     *
+     * @param ids id list
+     */
+    @Override
+    public void deleteUser(List<String> ids) {
+        userRepository.logicDeleteUser(ids);
     }
 }
