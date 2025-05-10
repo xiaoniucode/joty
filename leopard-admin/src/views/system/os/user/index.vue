@@ -2,14 +2,16 @@
   <a-flex gap="small">
     <a-flex style="flex: 1" vertical>
       <page-header>
-        <a-button danger @click="onOpenCreateModal" type="primary">批量删除</a-button>
+        <a-button danger @click="onBatchDelete" type="primary">批量删除</a-button>
         <a-button @click="onOpenCreateModal" type="primary">新增</a-button>
+        <div v-if="selectedRowKeys.length > 0">选中: {{ selectedRowKeys.length }} 条</div>
       </page-header>
       <a-table
-        :row-selection="rowSelection"
+        :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         :columns="columns"
         :pagination="false"
         :data-source="tableData"
+        row-key="id"
         :scroll="{ y: 500 }"
       >
         <template #bodyCell="{ column, record }">
@@ -54,7 +56,6 @@
 import { onMounted, reactive, ref, watch } from 'vue'
 import api from '@/utils/api.ts'
 import PageHeader from '@/components/page-header.vue'
-
 import { message, Modal } from 'ant-design-vue'
 import { user } from '@/api/system/user.ts'
 import UserForm from './components/user-form-modal.vue'
@@ -67,6 +68,29 @@ const userFormModalRef = ref()
 
 const onOpenCreateModal = () => {
   userFormModalRef.value.showModal(null)
+}
+const selectedRowKeys = ref<string[]>([])
+const onSelectChange = (selectedKeys: string[]) => {
+  selectedRowKeys.value = selectedKeys
+}
+const onBatchDelete = async () => {
+  if (selectedRowKeys.value.length < 1) {
+    message.warning('请至少选择一条记录')
+    return
+  }
+  Modal.confirm({
+    title: '你确定要删除?',
+    content: '删除后不可恢复',
+    okText: '确认',
+    okType: 'danger',
+    cancelText: '取消',
+    onOk() {
+      api.action(user.del, {}, selectedRowKeys.value).then((res: any) => {
+        message.success('删除成功')
+        onLoadTableData()
+      })
+    },
+  })
 }
 const onEdit = (data: object) => {
   userFormModalRef.value.showModal(data)
@@ -106,18 +130,7 @@ const onDelete = async (id: string) => {
     },
   })
 }
-const rowSelection = ref({
-  checkStrictly: false,
-  onChange: (selectedRowKeys: (string | number)[], selectedRows: any) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-  },
-  onSelect: (record: any, selected: boolean, selectedRows: any) => {
-    console.log(record, selected, selectedRows)
-  },
-  onSelectAll: (selected: boolean, selectedRows: any, changeRows: any) => {
-    console.log(selected, selectedRows, changeRows)
-  },
-})
+
 const columns = [
   {
     title: '用户名',
