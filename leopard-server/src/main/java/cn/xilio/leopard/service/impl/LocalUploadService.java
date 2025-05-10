@@ -1,5 +1,6 @@
 package cn.xilio.leopard.service.impl;
 
+import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.util.RandomUtil;
 
 import cn.xilio.leopard.core.common.exception.BizException;
@@ -10,11 +11,17 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 
 @Primary
@@ -43,7 +50,7 @@ public class LocalUploadService extends AbstractUploadService {
 
             // 3. 保存文件
             Path targetPath = Paths.get(filePath);
-            Files.copy(inputStream, targetPath);
+            Files.copy(targetPath, targetPath);
 
             // 4. 构造访问全路径
             String domain = WebUtils.getDomain();
@@ -51,14 +58,34 @@ public class LocalUploadService extends AbstractUploadService {
             return domain + relativePath;
         } catch (Exception e) {
             throw new BizException("6006");
-        } finally {
-            if (!ObjectUtils.isEmpty(inputStream)) {
-                try {
-                    inputStream.close();
-                } catch (Exception ignored) {
+        }
+    }
 
-                }
+    @Override
+    public String upload(MultipartFile file) {
+        try {
+            String fileType = FileTypeUtil.getType(file.getInputStream());
+            // 1. 生成文件名
+            String id = RandomUtil.randomString(32);
+            String fileName = id + "." + fileType;
+            String filePath = localPath + "/" + fileName;
+
+            // 2. 确保目录存在
+            Path directory = Paths.get(localPath);
+            if (!Files.exists(directory)) {
+                Files.createDirectories(directory);
             }
+
+            // 3. 保存文件
+            Path targetPath = Paths.get(filePath);
+            file.transferTo(targetPath);
+
+            // 4. 构造访问全路径
+            String domain = WebUtils.getDomain();
+            String relativePath = publicPath + "/" + fileName;
+            return domain + relativePath;
+        } catch (Exception e) {
+            throw new BizException("6006");
         }
     }
 }

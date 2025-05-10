@@ -8,4 +8,5 @@ export const user: ApiModule = {
   del: { url: '/user/del', method: 'delete' },
   login: { url: '/api/user/login', method: 'post' },
   logout: { url: '/api/user/logout', method: 'post' },
+  uploadAvatar: { url: '/user/upload-avatar', method: 'post' },
 } as const

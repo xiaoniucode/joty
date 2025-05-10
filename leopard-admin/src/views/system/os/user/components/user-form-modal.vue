@@ -24,7 +24,9 @@
           v-model:file-list="fileList"
           list-type="picture-card"
           :show-upload-list="false"
-          :before-upload="beforeUpload"
+          :action="uploadUrl"
+          :headers="headers"
+          @change="handleChange"
         >
           <a-image v-if="formState.avatar" :src="formState.avatar" :preview="false" />
           <div v-else>
@@ -56,17 +58,21 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, toRaw } from 'vue'
-import { message } from 'ant-design-vue'
+import {ref, reactive, toRaw, computed} from 'vue'
+import {message, type UploadChangeParam} from 'ant-design-vue'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import type { UploadProps } from 'ant-design-vue'
 import api from '@/utils/api.ts'
 import { user } from '@/api/system/user.ts'
+import { useUserStore } from '@/stores/modules/user.ts'
 
 const open = ref(false)
 const formRef = ref()
 const emit = defineEmits(['onSaveSuccess'])
-
+const userStore = useUserStore()
+const headers = computed(() => ({
+  [userStore.getTokenName()]: 'Bearer '+userStore.getToken()
+}))
 // 表单状态
 interface FormState {
   id?: undefined
@@ -98,6 +104,8 @@ const formState = reactive({ ...INITIAL_STATE })
 
 // 上传处理
 const fileList = ref([])
+const baseApi = import.meta.env.VITE_APP_BASE_API
+const uploadUrl = ref(baseApi + user.uploadAvatar.url)
 const beforeUpload: UploadProps['beforeUpload'] = (file) => {
   const isImage = file.type.startsWith('image/')
   if (!isImage) {
@@ -111,6 +119,18 @@ const beforeUpload: UploadProps['beforeUpload'] = (file) => {
   }
   return false
 }
+const handleChange = (info: UploadChangeParam) => {
+  if (info.file.status !== 'uploading') {
+    console.log(info.file, info.fileList);
+  }
+  if (info.file.status === 'done') {
+    const avatar=info.file.response.data
+    formState.avatar=avatar
+    message.success(`上传成功`);
+  } else if (info.file.status === 'error') {
+    message.error(`上传失败`);
+  }
+};
 
 // 表单验证规则
 const rules = {

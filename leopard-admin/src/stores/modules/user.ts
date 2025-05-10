@@ -12,6 +12,7 @@ interface UserInfo {
   nickname?: string
   email?: string
   avatar: string
+  tokenName: string
   token: string
   roles: string[]
 }
@@ -23,6 +24,7 @@ const INIT_USERINFO = {
   email: '',
   avatar: '',
   token: '',
+  tokenName: '',
   roles: [],
 }
 export const useUserStore = defineStore(
@@ -37,6 +39,9 @@ export const useUserStore = defineStore(
     const getToken = () => {
       return userinfo.value.token
     }
+    const getTokenName = () => {
+      return userinfo.value.tokenName
+    }
     const isAdmin = () => {
       return userinfo.value.roles.includes('ADMIN')
     }
@@ -45,11 +50,11 @@ export const useUserStore = defineStore(
     }
     const login = async (loginForm: object) => {
       api.action(user.login, {}, loginForm).then((res: any) => {
-        userinfo.value = { ...INIT_USERINFO, token: res.tokenValue }
+        userinfo.value = { ...INIT_USERINFO, token: res.tokenValue ,tokenName: res.tokenName}
         message.success('登陆成功')
         //登陆成功以后获取用户信息
         api.action(user.get).then((loginUser: any) => {
-          userinfo.value = { ...loginUser, roles: [loginUser.role], token: res.tokenValue }
+          userinfo.value = { ...loginUser, roles: [loginUser.role], token: res.tokenValue ,tokenName: res.tokenName}
           //根据不同的角色进行跳转
           if (loginUser.role == 'ADMIN') {
             router.push({ path: '/dashboard' })
@@ -74,7 +79,7 @@ export const useUserStore = defineStore(
         usePermissionStore().resetPermissionState()
       }
     }
-    return { logout, login, userinfo, getRoles, getToken, isAdmin, hasRole }
+    return { logout, login, userinfo, getRoles, getToken, isAdmin, hasRole, getTokenName }
   },
   { persist: true },
 )

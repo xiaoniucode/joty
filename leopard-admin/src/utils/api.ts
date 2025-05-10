@@ -16,7 +16,7 @@ instance.interceptors.request.use(
     config.headers['Accept-Language'] = useAppStore().config.language || 'zh-CN'
     const token = useUserStore().getToken()
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`
+      config.headers[useUserStore().getTokenName()] = `Bearer ${token}`
     }
     return config
   },

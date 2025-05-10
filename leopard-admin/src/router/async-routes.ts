@@ -21,13 +21,12 @@ export const asyncRoutes = [
     name: 'OS',
     component: Layout,
     meta: { title: '组织架构', icon: 'SlackCircleFilled', roles: ['admin'] },
-    alwaysShow: true,
+    alwaysShow: false,
     children: [
       {
         path: 'user-list',
         name: 'UserList',
         component: () => import('@/views/system/os/user/index.vue'),
-        hidden: false,
         meta: { title: '用户管理', icon: 'IeCircleFilled' },
       },
     ],
@@ -37,7 +36,7 @@ export const asyncRoutes = [
     name: 'setting',
     component: Layout,
     meta: { title: '系统设置', icon: 'SlackCircleFilled', roles: ['admin'] },
-    alwaysShow: true,
+    alwaysShow: false,
     children: [
       {
         path: 'cache',
