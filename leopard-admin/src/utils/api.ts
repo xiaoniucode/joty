@@ -8,7 +8,7 @@ const baseApi = import.meta.env.VITE_APP_BASE_API
 
 const instance = axios.create({
   baseURL: baseApi + '/',
-  timeout: 1000,
+  timeout: 6000,
 })
 //请求拦截器
 instance.interceptors.request.use(

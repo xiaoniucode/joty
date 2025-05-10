@@ -1,5 +1,6 @@
 package cn.xilio.leopard.service.impl;
 
+import cn.xilio.leopard.adapter.admin.dto.request.SaveUserRequest;
 import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;
@@ -22,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -125,5 +128,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByUserId(String id) {
         return userRepository.findById(id);
+    }
+
+    /**
+     * Save User
+     *
+     * @param request User info
+     */
+    @Override
+    public void saveUser(SaveUserRequest request) {
+        List<String> roles = SecurityUtils.getRoles();
+        boolean isAdmin = roles.contains("ADMIN");
     }
 }

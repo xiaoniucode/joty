@@ -61,11 +61,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
+import {ref, reactive, toRaw} from 'vue'
 import { message } from 'ant-design-vue'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import type { UploadProps } from 'ant-design-vue'
 import api from '@/utils/api.ts'
+import {user} from "@/api/system/user.ts";
 
 const open = ref(false)
 const formRef = ref()
@@ -174,7 +175,7 @@ const handleOk = () => {
     }
 
     api
-      .action(isEdit.value ? user.update : user.create, {}, payload)
+      .action(user.save, {}, payload)
       .then(() => {
         message.success(isEdit.value ? '更新成功' : '创建成功')
         open.value = false

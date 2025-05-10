@@ -3,6 +3,7 @@ package cn.xilio.leopard.core.security;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.ObjectUtils;
@@ -10,8 +11,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class SecurityUtils {
     /**
@@ -68,7 +71,7 @@ public class SecurityUtils {
 
     public static String getTokenValue() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (ObjectUtils.isEmpty(attributes)){
+        if (ObjectUtils.isEmpty(attributes)) {
             throw new IllegalArgumentException("当前请求不存在");
         }
         HttpServletRequest request = attributes.getRequest();
@@ -111,5 +114,41 @@ public class SecurityUtils {
         String key = getTokenName() + ":login:token:" + tokenValue;
         String loginId = redisTemplate.opsForValue().get(key);
         return StringUtils.hasText(loginId);
+    }
+
+    /**
+     * 获取用户的角色列表
+     *
+     * @return 角色列表
+     */
+    public static List<String> getRoles() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return List.of();
+        }
+
+        return authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .filter(authority -> authority.startsWith("ROLE_")) // 过滤出角色
+                .map(role -> role.substring(5)) // 去除"ROLE_"前缀（5个字符）
+                .collect(Collectors.toList());
+
+    }
+
+    /**
+     * 从Security上下文中获取当前用户的权限列表（非角色权限）
+     *
+     * @return 权限列表（如 ["user:read", "order:delete"]）
+     */
+    public static List<String> getPermissions() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return List.of();
+        }
+
+        return authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .filter(authority -> !authority.startsWith("ROLE_")) // 过滤掉角色
+                .collect(Collectors.toList());
     }
 }

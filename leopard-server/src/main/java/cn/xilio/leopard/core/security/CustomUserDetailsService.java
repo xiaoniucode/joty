@@ -4,6 +4,7 @@ import cn.xilio.leopard.core.config.CacheManager;
 import cn.xilio.leopard.domain.CacheKey;
 import cn.xilio.leopard.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
         cn.xilio.leopard.domain.dataobject.User user = userService.getUserByUserId(id);
-        if (ObjectUtils.isEmpty(user)){
+        if (ObjectUtils.isEmpty(user)) {
             throw new UsernameNotFoundException("用户不存在");
         }
         String role = user.getRole();

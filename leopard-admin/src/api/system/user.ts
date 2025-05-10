@@ -3,7 +3,7 @@ import type { ApiModule } from '@/utils/api'
 export const user: ApiModule = {
   get: { url: '/api/user/get', method: 'get' },
   list: { url: '/user/list', method: 'post' },
-  add: { url: '/user/add', method: 'post' },
+  save: { url: '/user/save', method: 'post' },
   del: { url: '/user/del', method: 'delete' },
   login: { url: '/api/user/login', method: 'post' },
   logout: { url: '/api/user/logout', method: 'post' },
