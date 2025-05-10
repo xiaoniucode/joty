@@ -79,7 +79,7 @@ export const useUserStore = defineStore(
         usePermissionStore().resetPermissionState()
       }
     }
-    return { logout, login, userinfo, getRoles, getToken, isAdmin, hasRole, getTokenName }
+    return { logout, login, userinfo, getRoles, getToken, isAdmin, hasRole, getTokenName,resetUserState }
   },
   { persist: true },
 )

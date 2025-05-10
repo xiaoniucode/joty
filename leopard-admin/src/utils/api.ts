@@ -34,9 +34,7 @@ instance.interceptors.response.use(
       return data
     } else if (code == '401') {
       message.error(msg)
-      //清空本地cookie
-      localStorage.removeItem('token')
-      //跳转到登陆
+      useUserStore().resetUserState()
       router.push({ path: '/login' })
     } else {
       message.error(msg)
