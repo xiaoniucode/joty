@@ -55,4 +55,6 @@ public interface GroupRepository {
     long getCountByUser(String userId);
 
     void deleteBatch(List<String> ids, String userId);
+
+    void addGroup(Group group);
 }

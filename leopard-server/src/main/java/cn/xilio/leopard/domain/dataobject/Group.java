@@ -37,18 +37,9 @@ public class Group extends Auditable {
      */
     @Column(name = "sort")
     private Integer sort;
-
     /**
-     * 创建者ID
+     * 分组所属用户
      */
-    @CreatedBy
-    @Column(name = "created_by", length = 64, nullable = false)
-    private String createdBy;
-
-    /**
-     * 更新者ID
-     */
-    @LastModifiedBy
-    @Column(name = "updated_by", length = 64)
-    private String updatedBy;
+    @Column(name = "user_id", length = 64, nullable = false)
+    private String userId;
 }

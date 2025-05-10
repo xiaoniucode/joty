@@ -5,6 +5,7 @@ package cn.xilio.leopard.service.impl;
 import cn.xilio.leopard.adapter.portal.dto.request.CreateGroupRequest;
 import cn.xilio.leopard.core.common.exception.BizException;
 import cn.xilio.leopard.core.security.SecurityUtils;
+import cn.xilio.leopard.domain.Constants;
 import cn.xilio.leopard.domain.event.GroupDeleteEvent;
 import cn.xilio.leopard.service.GroupService;
 import cn.xilio.leopard.domain.dataobject.Group;
@@ -46,14 +47,15 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public void saveGroup(CreateGroupRequest request) {
+        String userId = SecurityUtils.getLoginIdAsString();
         if (StringUtils.hasText(request.id())) {
-            String userId = SecurityUtils.getLoginIdAsString();
             Group oldGroup = groupRepository.getById(request.id(), userId);
             BizException.checkNull("1008", oldGroup);
             BeanUtils.copyProperties(request, oldGroup);
             groupRepository.saveGroup(oldGroup);
         } else {
             Group group = request.toGroup();
+            group.setUserId(userId);
             groupRepository.saveGroup(group);
         }
     }
@@ -76,10 +78,27 @@ public class GroupServiceImpl implements GroupService {
      * Get the pagination list of groups
      *
      * @param request Page request information
+     * @param userId User Id
      * @return Group list
      */
     @Override
-    public PageResponse<Group> page(PageQuery request) {
-        return groupRepository.getGroupsByUser(request, "1");
+    public PageResponse<Group> page(PageQuery request,String userId) {
+        return groupRepository.getGroupsByUser(request,userId );
+    }
+
+    /**
+     * Create a default group for user
+     *
+     * @param userId User id
+     */
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void createDefaultGroup(String userId) {
+        Group group = new Group();
+        group.setId(Constants.DEFAULT_GROUP_ID);
+        group.setName(Constants.DEFAULT_GROUP_NAME);
+        group.setSort(-99);
+        group.setUserId(userId);
+        groupRepository.addGroup(group);
     }
 }

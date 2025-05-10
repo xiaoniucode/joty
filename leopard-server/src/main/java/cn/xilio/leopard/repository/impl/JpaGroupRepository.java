@@ -1,28 +1,32 @@
 package cn.xilio.leopard.repository.impl;
 
 
-
 import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.page.PageResponse;
 import cn.xilio.leopard.domain.dataobject.Group;
 import cn.xilio.leopard.repository.GroupRepository;
 import cn.xilio.leopard.repository.dao.GroupEntityRepository;
 import jakarta.annotation.Resource;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.Predicate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Repository
-public class JpaGroupRepository   implements GroupRepository {
+public class JpaGroupRepository implements GroupRepository {
     @Resource
     private GroupEntityRepository groupEntityRepository;
+    @Autowired
+    private EntityManager entityManager;
 
     /**
      * Delete a group based on its ID
@@ -35,7 +39,7 @@ public class JpaGroupRepository   implements GroupRepository {
     public long deleteById(String groupId, String userId) {
         Specification<Group> spec = (root, query, cb) ->
                 cb.and(
-                        cb.equal(root.get("createdBy"), userId),
+                        cb.equal(root.get("userId"), userId),
                         cb.equal(root.get("id"), groupId)
                 );
         return groupEntityRepository.delete(spec);
@@ -64,7 +68,7 @@ public class JpaGroupRepository   implements GroupRepository {
         int page = query.getPage();
         int size = query.getSize();
         Specification<Group> spec = (root, query1, cb) ->
-                cb.equal(root.get("createdBy"), userId);
+                cb.equal(root.get("userId"), userId);
         PageRequest pageRequest = PageRequest.of(
                 page < 1 ? 0 : (page - 1),
                 size,
@@ -93,7 +97,7 @@ public class JpaGroupRepository   implements GroupRepository {
         Specification<Group> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(cb.equal(root.get("id"), groupId));
-            predicates.add(cb.equal(root.get("createdBy"), userId));
+            predicates.add(cb.equal(root.get("userId"), userId));
             return cb.and(predicates.toArray(new Predicate[0]));
         };
         return groupEntityRepository.findOne(spec).orElse(null);
@@ -108,7 +112,7 @@ public class JpaGroupRepository   implements GroupRepository {
     @Override
     public long getCountByUser(String userId) {
         Specification<Group> spec = (root, query, cb) ->
-                cb.equal(root.get("createdBy"), userId);
+                cb.equal(root.get("userId"), userId);
         return groupEntityRepository.count(spec);
     }
 
@@ -117,13 +121,37 @@ public class JpaGroupRepository   implements GroupRepository {
         Specification<Group> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(root.get("id").in(ids));
-            predicates.add(cb.equal(root.get("createdBy"), userId));
+            predicates.add(cb.equal(root.get("userId"), userId));
             return cb.and(predicates.toArray(new Predicate[0]));
         };
         List<Group> groups = groupEntityRepository.findAll(spec);
         if (!groups.isEmpty()) {
             groupEntityRepository.deleteAll(groups);
         }
+    }
+
+    @Override
+    public void addGroup(Group group) {
+        String sql = """
+                INSERT INTO t_group (
+                    id, name, remark, sort, user_id, 
+                     created_at, updated_at
+                ) VALUES (
+                    ?, ?, ?, ?, ?, 
+                    ?, ?
+                )
+                """;
+        group.setCreatedAt(LocalDateTime.now());
+        group.setUpdatedAt(LocalDateTime.now());
+        entityManager.createNativeQuery(sql)
+                .setParameter(1, group.getId())
+                .setParameter(2, group.getName())
+                .setParameter(3, group.getRemark())
+                .setParameter(4, group.getSort())
+                .setParameter(5, group.getUserId())
+                .setParameter(6, group.getCreatedAt())
+                .setParameter(7, group.getUpdatedAt())
+                .executeUpdate();
     }
 }
 

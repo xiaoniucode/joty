@@ -50,7 +50,7 @@ public class LocalUploadService extends AbstractUploadService {
 
             // 3. 保存文件
             Path targetPath = Paths.get(filePath);
-            Files.copy(targetPath, targetPath);
+            Files.copy(inputStream, targetPath);
 
             // 4. 构造访问全路径
             String domain = WebUtils.getDomain();

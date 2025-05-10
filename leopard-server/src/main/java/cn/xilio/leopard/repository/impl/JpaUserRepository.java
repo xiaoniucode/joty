@@ -47,7 +47,6 @@ public class JpaUserRepository implements UserRepository {
         int size = request.getSize();
         Specification<User> spec = (root, query, cb) -> {
             Predicate predicate = cb.equal(root.get("deleted"), 0);
-
             return predicate;
         };
         PageRequest pageRequest = PageRequest.of(page < 1 ? 0 : (page - 1), size, Sort.by(Sort.Direction.ASC, "sort"));

@@ -37,5 +37,11 @@ public interface GroupService {
      * @param request Page request information
      * @return Group list
      */
-    PageResponse<Group> page(PageQuery request);
+    PageResponse<Group> page(PageQuery request,String userId);
+
+    /**
+     * Create a default group for user
+     * @param userId User id
+     */
+    void createDefaultGroup(String userId);
 }

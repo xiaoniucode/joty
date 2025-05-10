@@ -2,6 +2,7 @@ package cn.xilio.leopard.adapter.portal.controller;
 
 
 import cn.xilio.leopard.adapter.portal.dto.request.CreateGroupRequest;
+import cn.xilio.leopard.core.security.SecurityUtils;
 import cn.xilio.leopard.service.GroupService;
 import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.util.Result;
@@ -36,7 +37,8 @@ public class PortalGroupController {
     @Operation(summary = "获取分组列表")
     @PostMapping(value = "list", name = "Get group list")
     public Result getGroups(@Validated @RequestBody PageQuery request) {
-        return Result.success(groupService.page(request));
+        String uid = SecurityUtils.getLoginIdAsString();
+        return Result.success(groupService.page(request,uid));
     }
 
     @Operation(summary = "获取分组详情")

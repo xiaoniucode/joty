@@ -12,6 +12,7 @@ import cn.xilio.leopard.core.security.TokenInfo;
 import cn.xilio.leopard.domain.CacheKey;
 import cn.xilio.leopard.domain.enums.UserRole;
 import cn.xilio.leopard.domain.model.LoginUser;
+import cn.xilio.leopard.service.GroupService;
 import cn.xilio.leopard.service.UserService;
 import cn.xilio.leopard.domain.event.LoginEvent;
 import cn.xilio.leopard.domain.event.LogoutEvent;
@@ -38,6 +39,8 @@ public class UserServiceImpl implements UserService {
     private ApplicationEventPublisher eventPublisher;
     @Autowired
     private CacheManager cacheManager;
+    @Autowired
+    private GroupService groupService;
 
     /**
      * Login
@@ -143,6 +146,7 @@ public class UserServiceImpl implements UserService {
      * @param request User info
      */
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void addUser(AddUserRequest request) {
         //check username
         User oldUser = userRepository.findByUsername(request.username());
@@ -152,7 +156,10 @@ public class UserServiceImpl implements UserService {
         newUser.setStatus(UserStatus.NORMAL.getCode());
         //密码加密
         newUser.setPassword(request.password());
-        userRepository.saveUser(newUser);
+        User u = userRepository.saveUser(newUser);
+        //创建默认分组
+        groupService.createDefaultGroup(u.getId());
+
     }
 
     /**
@@ -171,6 +178,7 @@ public class UserServiceImpl implements UserService {
             oldUser.setStatus(UserStatus.NORMAL.getCode());
         }
         userRepository.saveUser(oldUser);
+        //todo 禁用用户后需要强制用户下线 避免继续提交数据
     }
 
     /**
