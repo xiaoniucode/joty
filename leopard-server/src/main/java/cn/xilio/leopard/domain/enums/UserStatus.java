@@ -23,7 +23,7 @@ public enum UserStatus {
     /**
      * 状态码
      */
-    private final byte code;
+    private final Integer code;
 
     /**
      * 状态描述
@@ -31,7 +31,7 @@ public enum UserStatus {
     private final String desc;
 
     UserStatus(Integer code, String desc) {
-        this.code = code.byteValue();
+        this.code = code;
         this.desc = desc;
     }
 }

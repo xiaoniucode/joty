@@ -1,6 +1,7 @@
 package cn.xilio.leopard.service;
 
-import cn.xilio.leopard.adapter.admin.dto.request.SaveUserRequest;
+import cn.xilio.leopard.adapter.admin.dto.request.AddUserRequest;
+import cn.xilio.leopard.adapter.admin.dto.request.UpdateUserRequest;
 import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;
@@ -52,8 +53,14 @@ public interface UserService {
     User getUserByUserId(String id);
 
     /**
-     * Save User
+     * Add a User
      * @param request User info
      */
-    void saveUser(SaveUserRequest request);
+    void addUser(AddUserRequest request);
+
+    /**
+     * Update user
+     * @param request User info
+     */
+    void updateUser(UpdateUserRequest request);
 }

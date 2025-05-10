@@ -1,6 +1,7 @@
 package cn.xilio.leopard.adapter.admin.controller;
 
-import cn.xilio.leopard.adapter.admin.dto.request.SaveUserRequest;
+import cn.xilio.leopard.adapter.admin.dto.request.AddUserRequest;
+import cn.xilio.leopard.adapter.admin.dto.request.UpdateUserRequest;
 import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
 import cn.xilio.leopard.service.UserService;
 import cn.xilio.leopard.core.common.util.Result;
@@ -27,9 +28,14 @@ public class AdminUserController {
     public Result get(@RequestParam String userId) {
         return Result.success();
     }
-    @PostMapping(value = "save", name = "Save user info")
-    public Result save(@RequestBody SaveUserRequest request) {
-        userService.saveUser(request);
+    @PostMapping(value = "add", name = "Add a user  ")
+    public Result add(@RequestBody AddUserRequest request) {
+        userService.addUser(request);
+        return Result.success();
+    }
+    @PutMapping(value = "add", name = "Add a user  ")
+    public Result update(@RequestBody UpdateUserRequest request) {
+        userService.updateUser(request);
         return Result.success();
     }
 

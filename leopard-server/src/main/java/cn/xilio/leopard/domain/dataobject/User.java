@@ -64,12 +64,6 @@ public class User extends Auditable {
     private Integer deleted;
 
     /**
-     * 是否管理员
-     */
-    @Column(name = "is_admin", nullable = false)
-    private Boolean isAdmin = false;
-
-    /**
      * 创建者ID
      */
     @CreatedBy

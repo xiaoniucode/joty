@@ -1,6 +1,7 @@
 package cn.xilio.leopard.service.impl;
 
-import cn.xilio.leopard.adapter.admin.dto.request.SaveUserRequest;
+import cn.xilio.leopard.adapter.admin.dto.request.AddUserRequest;
+import cn.xilio.leopard.adapter.admin.dto.request.UpdateUserRequest;
 import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;
@@ -9,6 +10,7 @@ import cn.xilio.leopard.core.config.CacheManager;
 import cn.xilio.leopard.core.security.SecurityUtils;
 import cn.xilio.leopard.core.security.TokenInfo;
 import cn.xilio.leopard.domain.CacheKey;
+import cn.xilio.leopard.domain.enums.UserRole;
 import cn.xilio.leopard.domain.model.LoginUser;
 import cn.xilio.leopard.service.UserService;
 import cn.xilio.leopard.domain.event.LoginEvent;
@@ -19,12 +21,11 @@ import cn.xilio.leopard.repository.UserRepository;
 import cn.xilio.leopard.core.common.exception.BizException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -76,7 +77,11 @@ public class UserServiceImpl implements UserService {
         User dbUser = userRepository.findByUsername(request.username());
         BizException.checkExpr("6004", !ObjectUtils.isEmpty(dbUser));
         User newUser = request.toUser();
-        newUser.setIsAdmin(false);
+        newUser.setRole(UserRole.USER.name());
+        newUser.setStatus(UserStatus.NORMAL.getCode());
+        newUser.setNickname(request.username());
+        //密码加密
+
         User regResult = userRepository.saveUser(newUser);
         //Auto login
         TokenInfo tokenInfo = SecurityUtils.login(regResult.getId());
@@ -136,8 +141,32 @@ public class UserServiceImpl implements UserService {
      * @param request User info
      */
     @Override
-    public void saveUser(SaveUserRequest request) {
-        List<String> roles = SecurityUtils.getRoles();
-        boolean isAdmin = roles.contains("ADMIN");
+    public void addUser(AddUserRequest request) {
+        //check username
+        User oldUser = userRepository.findByUsername(request.username());
+        BizException.checkNull("6004",oldUser);
+        User newUser = request.toUser();
+        newUser.setRole(UserRole.USER.name());
+        newUser.setStatus(UserStatus.NORMAL.getCode());
+        //密码加密
+        userRepository.saveUser(newUser);
+    }
+
+    /**
+     * Update user
+     *
+     * @param request User info
+     */
+    @Override
+    public void updateUser(UpdateUserRequest request) {
+        User oldUser = userRepository.findById(request.id());
+        BizException.checkNull("6001", oldUser);
+        BeanUtils.copyProperties(request, oldUser);
+        //是否是超级管理员 改类型管理员只有一个
+        if (UserRole.ADMIN.name().equalsIgnoreCase(oldUser.getRole())) {
+            //超级管理员的状态不能够进行修改
+            oldUser.setStatus(UserStatus.NORMAL.getCode());
+        }
+        userRepository.saveUser(oldUser);
     }
 }
