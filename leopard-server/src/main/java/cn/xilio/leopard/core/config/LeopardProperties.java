@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "leopard")
 public class LeopardProperties {
+    private Boolean demoModel = false;
     private Code code = new Code();
     private Task task = new Task();
     private File file = new File();

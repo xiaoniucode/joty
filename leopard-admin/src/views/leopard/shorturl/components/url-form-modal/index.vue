@@ -148,7 +148,7 @@ const formState: UnwrapRef<FormState> = reactive({
 })
 const rules: Record<string, Rule[]> = {
   title: [
-    { required: false, trigger: 'change' },
+    { required: true, trigger: 'change' },
     { min: 1, max: 50, message: '长度在1-50内', trigger: 'blur' },
   ],
   originalUrl: [{ required: true, message: '请输入长链接', trigger: 'change' }],

@@ -27,6 +27,8 @@ leopard:
     upload-model: Local
     public-path: /fs
     local-path: /Users/liuxin/Desktop/leopard/upload
+  # 是否开启演示模式 演示模式不支持用户更新某些数据
+  demo-model: false
 security:
   # Token名称
   token-name: Authorization

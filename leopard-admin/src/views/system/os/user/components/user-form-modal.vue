@@ -93,7 +93,7 @@ const INITIAL_STATE: FormState = {
   nickname: '',
   email: '',
   avatar: '',
-  password: '',
+  password: '123456',
   status: 1,
   remark: '',
   sort: 0,

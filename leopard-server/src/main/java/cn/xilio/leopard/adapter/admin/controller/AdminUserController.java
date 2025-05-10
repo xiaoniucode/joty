@@ -1,6 +1,5 @@
 package cn.xilio.leopard.adapter.admin.controller;
 
-import cn.hutool.core.io.FileTypeUtil;
 import cn.xilio.leopard.adapter.admin.dto.request.AddUserRequest;
 import cn.xilio.leopard.adapter.admin.dto.request.UpdateUserRequest;
 import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
@@ -12,14 +11,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
