@@ -23,7 +23,7 @@ interface FormState {
 
 const formState = ref<FormState>({
   username: 'admin',
-  password: '123456',
+  password: 'hlsh@$@$&%',
 })
 
 const loading = ref(false)
@@ -32,7 +32,6 @@ const onFinish = (values: FormState) => {
   loading.value = true
   userStore.login(values).then((res) => {
     loading.value = false
-    message.success('登陆成功！')
   })
 }
 

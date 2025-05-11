@@ -8,7 +8,7 @@ const baseApi = import.meta.env.VITE_APP_BASE_API
 
 const instance = axios.create({
   baseURL: baseApi + '/',
-  timeout: 6000,
+  timeout: 60 * 1000,
 })
 //请求拦截器
 instance.interceptors.request.use(
@@ -42,10 +42,19 @@ instance.interceptors.response.use(
     }
   },
   function (error) {
-    const { code } = error
-    if (code == 'ERR_NETWORK') {
-      message.error('服务暂不可用')
+    if (error.status === 401) {
+      useUserStore().logout()
+      throw error
     }
+    let message = error.message
+    if (message === 'Network Error') {
+      message = '服务端网络故障'
+    } else if (message.includes('timeout')) {
+      message = '接口请求超时'
+    } else if (message.includes('Request failed with status code')) {
+      message = `接口${message.substr(message.length - 3)}异常`
+    }
+    message.error(message)
     return Promise.reject(error)
   },
 )

@@ -8,16 +8,16 @@
     <!-- 右侧登录表单 -->
     <div class="login-form-wrapper">
       <h2 class="form-title">{{siteTitle}}</h2>
-      <LoginFrom
-        :username
-        v-if="mode == 'login'"
-        @on-register="(val) => { mode = 'register';username=val}"
-      />
-      <RegisterForm
-        :username
-        v-if="mode == 'register'"
-        @on-login="(val) => { mode = 'login';username=val}"
-      />
+        <LoginFrom
+          :username
+          v-if="mode == 'login'"
+          @on-register="(val) => { mode = 'register';username=val}"
+        />
+        <RegisterForm
+          :username
+          v-else-if="mode == 'register'"
+          @on-login="(val) => { mode = 'login';username=val}"
+        />
     </div>
   </div>
 </template>

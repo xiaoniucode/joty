@@ -19,7 +19,7 @@ export const setting = {
    */
   logo: '/logo.png',
   /**
-   * 是否开启网站注册功能
+   * 是否开启网站注册功能 需要结合后端接口实现
    */
   enableRegister: true,
 }
