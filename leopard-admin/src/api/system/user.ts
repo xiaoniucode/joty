@@ -7,6 +7,7 @@ export const user: ApiModule = {
   update: { url: '/user/update', method: 'put' },
   del: { url: '/user/del', method: 'delete' },
   login: { url: '/api/user/login', method: 'post' },
+  register: { url: '/api/user/reg', method: 'post' },
   logout: { url: '/api/user/logout', method: 'post' },
   uploadAvatar: { url: '/user/upload-avatar', method: 'post' },
 } as const

@@ -1,75 +1,98 @@
 <template>
-  <a-row>
-    <a-col :span="12"  class="login-bg">
-    </a-col>
-    <a-col :span="12">
-      <div class="flex justify-center px-[5%] pt-[10%]">
-        <a-form
-            :model="formState"
-            name="basic"
-            autocomplete="off"
-            @finish="onFinish"
-            @finishFailed="onFinishFailed"
-        >
-          <a-form-item
-              label="用户名"
-              name="username"
-              :rules="[{ required: true, message: 'Please input your username!' }]"
-          >
-            <a-input v-model:value="formState.username" />
-          </a-form-item>
+  <div class="login-container">
+    <!-- 左侧图片背景 -->
+    <div class="login-bg">
+      <img src="/login_bg.jpg" alt="Login Background" />
+    </div>
 
-          <a-form-item
-              label="密码"
-              name="password"
-              :rules="[{ required: true, message: 'Please input your password!' }]"
-          >
-            <a-input-password v-model:value="formState.password" />
-          </a-form-item>
-
-          <a-form-item name="remember">
-            <a-checkbox v-model:checked="formState.remember">记住我</a-checkbox>
-          </a-form-item>
-
-          <a-form-item>
-            <a-button type="primary" html-type="submit">登陆</a-button>
-          </a-form-item>
-        </a-form>
-      </div>
-
-    </a-col>
-  </a-row>
-
+    <!-- 右侧登录表单 -->
+    <div class="login-form-wrapper">
+      <h2 class="form-title">{{siteTitle}}</h2>
+      <LoginFrom
+        :username
+        v-if="mode == 'login'"
+        @on-register="(val) => { mode = 'register';username=val}"
+      />
+      <RegisterForm
+        :username
+        v-if="mode == 'register'"
+        @on-login="(val) => { mode = 'login';username=val}"
+      />
+    </div>
+  </div>
 </template>
-<script lang="ts" setup>
-import { reactive } from 'vue'
 
-import {useUserStore} from "@/stores/modules/user.ts";
-const userStore=useUserStore()
-interface FormState {
-  username: string
-  password: string
-  remember: boolean
-}
+<script setup lang="ts">
+import LoginFrom from './components/LoginForm.vue'
+import RegisterForm from './components/RegisterForm.vue'
+import { ref } from 'vue'
+import {useAppStore} from "@/stores/modules/app.ts";
 
-const formState = reactive<FormState>({
-  username: 'admin',
-  password: '123456',
-  remember: true,
-})
-const onFinish = (values: any) => {
-  userStore.login(formState)
+const mode = ref<'login' | 'register'>('login')
+const username = ref<string>()
+const appStore =  useAppStore()
+const siteTitle=appStore.config.siteName
 
-}
-
-const onFinishFailed = (errorInfo: any) => {}
 </script>
 
 <style scoped>
- @import "tailwindcss";
- .login-bg{
-   background-image: url("/login_bg.jpg");
-   object-fit: contain;
-   height: 100vh;
- }
+.login-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.login-bg {
+  flex: 1;
+  background: #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.login-form-wrapper {
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 40px;
+  background: #fff;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
+}
+
+.login-form {
+  max-width: 320px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.form-title {
+  margin-bottom: 24px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+  font-size: 24px;
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+  }
+
+  .login-bg {
+    display: none;
+  }
+
+  .login-form-wrapper {
+    width: 100%;
+    padding: 40px 24px;
+  }
+}
 </style>

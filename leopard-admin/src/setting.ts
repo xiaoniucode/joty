@@ -1,3 +1,6 @@
+/**
+ * 默认静态配置 可以通过服务端动态修改
+ */
 export const setting = {
   /**
    * 系统名字
@@ -15,4 +18,8 @@ export const setting = {
    * 侧边栏logo 只有sidebarLogo=true才会展示
    */
   logo: '/logo.png',
+  /**
+   * 是否开启网站注册功能
+   */
+  enableRegister: true,
 }
