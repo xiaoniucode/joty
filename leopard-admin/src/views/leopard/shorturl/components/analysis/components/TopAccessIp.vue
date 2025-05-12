@@ -8,9 +8,9 @@ const props = defineProps<{
 const columns = [
   {
     title: 'IP地址',
-    name: 'ip',
-    dataIndex: 'ip',
-    key: 'ip',
+    name: 'name',
+    dataIndex: 'name',
+    key: 'name',
   },
   {
     title: 'IP访问次数',
@@ -20,7 +20,7 @@ const columns = [
   },
 ]
 const data = ref([])
-api.action(stats.getTopAccessIp, { shortCode: props.shortCode }).then((res: any) => {
+api.action(stats.getAccessCountByType, {},{ type:'IP',shortCode: props.shortCode }).then((res: any) => {
   data.value = res
 })
 </script>

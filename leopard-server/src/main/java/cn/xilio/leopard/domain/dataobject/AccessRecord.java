@@ -54,6 +54,21 @@ public class AccessRecord {
      */
     @Column(name = "referer", length = 1024)
     private String referer;
+    /**
+     * 国家
+     */
+    @Column(name = "country", length = 30)
+    private String country;
+    /**
+     * 省份
+     */
+    @Column(name = "province", length = 30)
+    private String province;
+    /**
+     * 城市
+     */
+    @Column(name = "city", length = 100)
+    private String city;
 
     /**
      * 短码
