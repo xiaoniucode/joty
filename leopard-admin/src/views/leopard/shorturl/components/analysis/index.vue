@@ -8,7 +8,7 @@
           <a-row :gutter="15">
             <a-col :span="12">
               <a-card style="width: 100%" title="高频访问IP">
-              <TopAccessIp short-code="1001"/>
+              <TopAccessIp :shortCode="baseData.shortCode"/>
               </a-card>
             </a-col>
             <a-col :span="12">
@@ -44,7 +44,9 @@ import TopAccessIp from "@/views/leopard/shorturl/components/analysis/components
 
 const activeKey = ref('1')
 const open = ref<boolean>(false)
+const baseData=ref<any>({})
 const showDrawer = (data = null) => {
+  baseData.value=data
   open.value = true
 }
 const onClose = () => {
