@@ -1,7 +1,7 @@
 package cn.xilio.leopard.listener;
 
 import cn.xilio.leopard.domain.event.ShortUrlClickedEvent;
-import cn.xilio.leopard.service.AccessRecordService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 public class ShortUrlClickedListener {
     @Autowired
     private StringRedisTemplate redisTemplate;
-    @Autowired
-    private AccessRecordService accessRecordService;
     //@Autowired
     //private StatsRepository statsRepository;
 

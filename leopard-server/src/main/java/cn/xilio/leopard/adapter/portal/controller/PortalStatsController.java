@@ -14,15 +14,35 @@ import org.springframework.web.bind.annotation.RestController;
 public class PortalStatsController {
     @Autowired
     private StatsService statsService;
+
     @GetMapping("get-by-url")
     public Result getByUrl(@RequestParam("id") String id) {
         String userId = SecurityUtils.getLoginIdAsString();
-        return Result.success(statsService.getByUrl(id,userId));
+        return Result.success(statsService.getByUrl(id, userId));
+    }
+
+    @GetMapping("get-top-access-ip")
+    public Result getTopAccessIps(@RequestParam("shortCode") String shortCode) {
+        return Result.success(statsService.getTopAccessIps(shortCode));
+    }
+
+    @GetMapping("get-os-access-count")
+    public Result getOsAccess(@RequestParam("shortCode") String shortCode) {
+        return Result.success(statsService.getOsAccess(shortCode));
+    }
+
+    @GetMapping("get-browser-access-count")
+    public Result getBrowserAccess(@RequestParam("shortCode") String shortCode) {
+        return Result.success(statsService.getBrowserAccess(shortCode));
+    }
+
+    @GetMapping("get-device-access-count")
+    public Result getDeviceAccess(@RequestParam("shortCode") String shortCode) {
+        return Result.success(statsService.getDeviceAccess(shortCode));
     }
 
     @GetMapping("dashboard")
     public Result dashboard() {
-
         return Result.success();
     }
 }
