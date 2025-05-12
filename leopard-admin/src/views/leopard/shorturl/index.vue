@@ -23,24 +23,24 @@
           <template v-if="column.key === 'title'">
             <a-flex vertical>
               <span>{{ record.title }}</span>
-              <span>{{ record.createdAt }}</span>
+              <span style="color:grey">{{ record.createdAt }}</span>
             </a-flex>
           </template>
           <template v-if="column.key === 'status'">
             <a-flex vertical>
-              <span>今日 10</span>
-              <span>累计 100</span>
+              <span>今日  10</span>
+              <span>累计  100</span>
             </a-flex>
           </template>
           <template v-if="column.key === 'shortUrl'">
             <span>
               <a-flex :gap="40" justify="space-between" align="center">
-                <a-flex vertical gap="1">
+                <a-flex vertical :gap="1">
                   <a :href="record.shortUrl" target="_blank">
                     {{ record.shortUrl }}
                   </a>
-                  <span style="color: gray" :href="record.originalUrl" target="_blank">
-                    {{ record.originalUrl }}
+                  <span class="truncate-url" style="color: gray" :href="record.originalUrl" target="_blank">
+
                   </span>
                 </a-flex>
                 <a-flex gap="10">
@@ -53,7 +53,6 @@
                     </template>
                     <QrcodeOutlined />
                   </a-popover>
-
                   <CopyOutlined @click="common.copy(record.shortUrl, true)" />
                 </a-flex>
               </a-flex>
@@ -120,7 +119,6 @@ const columns = [
     title: '短链接',
     dataIndex: 'shortUrl',
     key: 'shortUrl',
-    //width: 500,
     ellipsis: true,
   },
   {
@@ -173,7 +171,7 @@ const onEdit = (data: object) => {
   urlFormModalRef.value.showModal(data)
 }
 const onShowAnalysis = (item: object) => {
-  analysisRef.value.showModal(item)
+  analysisRef.value.showDrawer(item)
 }
 
 const total = ref(0)
@@ -242,4 +240,12 @@ const onBatchDelete = async () => {
   })
 }
 </script>
-<style scoped></style>
+<style scoped>
+.truncate-url {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>
