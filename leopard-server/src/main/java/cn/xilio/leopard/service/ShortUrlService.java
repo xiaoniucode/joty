@@ -3,6 +3,7 @@ package cn.xilio.leopard.service;
 
 
 import cn.xilio.leopard.adapter.portal.dto.request.*;
+import cn.xilio.leopard.adapter.portal.dto.response.ShortUrlWithStats;
 import cn.xilio.leopard.adapter.portal.dto.response.SingleShortUrlResponse;
 import cn.xilio.leopard.domain.dataobject.ShortUrl;
 import cn.xilio.leopard.core.common.page.PageQuery;
@@ -41,7 +42,7 @@ public interface ShortUrlService {
      * @param request Page request information
      * @return Short chain list
      */
-    PageResponse<ShortUrl> getShortUrlsByUser(ShortUrlPageRequest request);
+    PageResponse<ShortUrlWithStats> getShortUrlsByUser(ShortUrlPageRequest request);
 
     /**
      * Get the pagination list of short links

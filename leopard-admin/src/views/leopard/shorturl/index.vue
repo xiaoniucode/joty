@@ -23,13 +23,25 @@
           <template v-if="column.key === 'title'">
             <a-flex vertical>
               <span>{{ record.title }}</span>
-              <span style="color:grey">{{ record.createdAt }}</span>
+              <span class="su-gray" style="color: grey">{{ record.createdAt }}</span>
             </a-flex>
           </template>
-          <template v-if="column.key === 'status'">
+          <template v-if="column.key === 'total'">
             <a-flex vertical>
-              <span>今日  10</span>
-              <span>累计  100</span>
+              <div class="su-gray">
+                <span style="margin-right: 10px">今日</span>
+                <span>{{ record.todayVisits }}</span>
+              </div>
+              <div class="su-gray">
+                <span class="su-gray" style="margin-right: 10px">累计</span>
+                <span>{{ record.totalVisits }}</span>
+              </div>
+            </a-flex>
+          </template>
+          <template v-if="column.key === 'ip'">
+            <a-flex vertical>
+              <span class="su-gray">{{ record.todayVisitors }}</span>
+              <span class="su-gray">{{ record.totalVisitors }}</span>
             </a-flex>
           </template>
           <template v-if="column.key === 'shortUrl'">
@@ -39,8 +51,12 @@
                   <a :href="record.shortUrl" target="_blank">
                     {{ record.shortUrl }}
                   </a>
-                  <span class="truncate-url" style="color: gray" :href="record.originalUrl" target="_blank">
-
+                  <span
+                    class="truncate-url"
+                    style="color: gray"
+                    :href="record.originalUrl"
+                    target="_blank"
+                  >
                   </span>
                 </a-flex>
                 <a-flex gap="10">
@@ -48,7 +64,9 @@
                     <template #content>
                       <a-flex vertical align="center" :gap="8">
                         <a-qrcode ref="qrcodeCanvasRef" :value="record.qrUrl" />
-                        <a-button type="primary" @click="downloadChanger(record.shortCode)">下载二维码</a-button>
+                        <a-button type="primary" @click="downloadChanger(record.shortCode)"
+                          >下载二维码</a-button
+                        >
                       </a-flex>
                     </template>
                     <QrcodeOutlined />
@@ -123,8 +141,8 @@ const columns = [
   },
   {
     title: '访问次数',
-    dataIndex: 'status',
-    key: 'status',
+    dataIndex: 'total',
+    key: 'total',
     width: 100,
     ellipsis: true,
   },
@@ -148,16 +166,16 @@ const columns = [
     width: 160,
   },
 ]
-const qrcodeCanvasRef = ref();
-const downloadChanger = async (shortCode:string) => {
-  const url = qrcodeCanvasRef.value.toDataURL();
-  const a = document.createElement('a');
-  a.download = `${shortCode}.png`;
-  a.href = url;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-};
+const qrcodeCanvasRef = ref()
+const downloadChanger = async (shortCode: string) => {
+  const url = qrcodeCanvasRef.value.toDataURL()
+  const a = document.createElement('a')
+  a.download = `${shortCode}.png`
+  a.href = url
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+}
 const urlFormModalRef = ref()
 const analysisRef = ref()
 
@@ -247,5 +265,9 @@ const onBatchDelete = async () => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.su-gray {
+  color: #71798b;
 }
 </style>

@@ -4,6 +4,7 @@ package cn.xilio.leopard.service.impl;
 import cn.hutool.core.util.RandomUtil;
 
 import cn.xilio.leopard.adapter.portal.dto.request.*;
+import cn.xilio.leopard.adapter.portal.dto.response.ShortUrlWithStats;
 import cn.xilio.leopard.adapter.portal.dto.response.SingleShortUrlResponse;
 import cn.xilio.leopard.core.security.SecurityUtils;
 import cn.xilio.leopard.domain.event.ShortUrlDeleteEvent;
@@ -143,9 +144,9 @@ public class ShortUrlServiceImpl implements ShortUrlService {
      * @return Short chain list
      */
     @Override
-    public PageResponse<ShortUrl> getShortUrlsByUser(ShortUrlPageRequest request) {
+    public PageResponse<ShortUrlWithStats> getShortUrlsByUser(ShortUrlPageRequest request) {
         String userId = SecurityUtils.getLoginIdAsString();
-        return shortUrlRepository.page(request, userId);
+        return shortUrlRepository.pageWithStats(request, userId);
     }
 
     /**

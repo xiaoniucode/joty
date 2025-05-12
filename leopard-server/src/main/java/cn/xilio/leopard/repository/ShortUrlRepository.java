@@ -3,6 +3,7 @@ package cn.xilio.leopard.repository;
 
 
 import cn.xilio.leopard.adapter.portal.dto.request.ShortUrlPageRequest;
+import cn.xilio.leopard.adapter.portal.dto.response.ShortUrlWithStats;
 import cn.xilio.leopard.domain.dataobject.ShortUrl;
 import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.page.PageResponse;
@@ -67,4 +68,5 @@ public interface ShortUrlRepository {
      * @param newGroup New group
      */
     void updateGroupToNew(List<String> groupIds, String newGroup);
+    public PageResponse<ShortUrlWithStats> pageWithStats(ShortUrlPageRequest request, String userId);
 }
