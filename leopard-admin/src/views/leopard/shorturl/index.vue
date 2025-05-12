@@ -20,28 +20,53 @@
         :scroll="{ y: 500 }"
       >
         <template #bodyCell="{ column, record }">
+          <template v-if="column.key === 'title'">
+            <a-flex vertical>
+              <span>{{ record.title }}</span>
+              <span>{{ record.createdAt }}</span>
+            </a-flex>
+          </template>
+          <template v-if="column.key === 'status'">
+            <a-flex vertical>
+              <span>今日 10</span>
+              <span>累计 100</span>
+            </a-flex>
+          </template>
           <template v-if="column.key === 'shortUrl'">
-            <a :href="record.shortUrl" target="_blank">
-              {{ record.shortUrl }}
-            </a>
-          </template>
-          <template v-if="column.key === 'qrUrl'">
-            <a-image :width="64" :src="record.qrUrl" fallback="/error_image.png" />
-          </template>
-          <template v-else-if="column.key === 'status'">
             <span>
-              <a-tag :bordered="false" v-if="record.status == 0" color="volcano"> 禁用 </a-tag>
-              <a-tag :bordered="false" v-if="record.status == 1" color="green">正常</a-tag>
+              <a-flex :gap="40" justify="space-between" align="center">
+                <a-flex vertical gap="1">
+                  <a :href="record.shortUrl" target="_blank">
+                    {{ record.shortUrl }}
+                  </a>
+                  <span style="color: gray" :href="record.originalUrl" target="_blank">
+                    {{ record.originalUrl }}
+                  </span>
+                </a-flex>
+                <a-flex gap="10">
+                  <a-popover trigger="focus" placement="bottom">
+                    <template #content>
+                      <a-flex vertical align="center" :gap="8">
+                        <a-qrcode ref="qrcodeCanvasRef" :value="record.qrUrl" />
+                        <a-button type="primary" @click="downloadChanger(record.shortCode)">下载二维码</a-button>
+                      </a-flex>
+                    </template>
+                    <QrcodeOutlined />
+                  </a-popover>
+
+                  <CopyOutlined @click="common.copy(record.shortUrl, true)" />
+                </a-flex>
+              </a-flex>
             </span>
           </template>
           <template v-else-if="column.key === 'expiredAt'">
-            <a-tag color="blue" :bordered="false" v-if="!record.expiredAt">永不过期</a-tag>
-            <span :bordered="false" v-else> {{ record.expiredAt }}</span>
+            <span>
+              <a-tag color="orange" :bordered="false" v-if="!record.expiredAt">永不过期</a-tag>
+              <span v-else> {{ record.expiredAt }}</span>
+            </span>
           </template>
           <template v-else-if="column.key === 'action'">
             <span>
-              <a @click="common.copy(record.shortUrl, true)">复制</a>
-              <a-divider type="vertical" />
               <a @click="onShowAnalysis(record)">数据</a>
               <a-divider type="vertical" />
               <a @click="onDelete(record.id)">删除</a>
@@ -67,6 +92,7 @@
   <Analysis ref="analysisRef" />
 </template>
 <script lang="ts" setup>
+import { QrcodeOutlined, CopyOutlined } from '@ant-design/icons-vue'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import api from '@/utils/api.ts'
 import { short_url } from '@/api/leopard/shorturl.ts'
@@ -82,6 +108,58 @@ const pageQuery = reactive({
   size: 5,
   groupId: '1',
 })
+const columns = [
+  {
+    title: '标题',
+    dataIndex: 'title',
+    key: 'title',
+    width: 200,
+    ellipsis: true,
+  },
+  {
+    title: '短链接',
+    dataIndex: 'shortUrl',
+    key: 'shortUrl',
+    //width: 500,
+    ellipsis: true,
+  },
+  {
+    title: '访问次数',
+    dataIndex: 'status',
+    key: 'status',
+    width: 100,
+    ellipsis: true,
+  },
+  {
+    title: '访问人数',
+    dataIndex: 'ip',
+    key: 'ip',
+    width: 100,
+    ellipsis: true,
+  },
+  {
+    title: '有效期',
+    dataIndex: 'expiredAt',
+    key: 'expiredAt',
+    ellipsis: true,
+    width: 120,
+  },
+  {
+    title: '操作',
+    key: 'action',
+    width: 160,
+  },
+]
+const qrcodeCanvasRef = ref();
+const downloadChanger = async (shortCode:string) => {
+  const url = qrcodeCanvasRef.value.toDataURL();
+  const a = document.createElement('a');
+  a.download = `${shortCode}.png`;
+  a.href = url;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+};
 const urlFormModalRef = ref()
 const analysisRef = ref()
 
@@ -140,52 +218,6 @@ const onSelectGroup = async (groupId: any) => {
   await onLoadTableData()
 }
 
-const columns = [
-  {
-    title: '标题',
-    dataIndex: 'title',
-    key: 'title',
-    width: 120,
-    ellipsis: true,
-  },
-  {
-    title: '短链接',
-    dataIndex: 'shortUrl',
-    key: 'shortUrl',
-    width: 230,
-    ellipsis: true,
-  },
-  {
-    title: '长链接',
-    dataIndex: 'originalUrl',
-    key: 'originalUrl',
-    ellipsis: true,
-  },
-  {
-    title: '有效期',
-    dataIndex: 'expiredAt',
-    key: 'expiredAt',
-    ellipsis: true,
-  },
-  {
-    title: '状态',
-    key: 'status',
-    dataIndex: 'status',
-    width: 80,
-  },
-  {
-    title: '二维码',
-    dataIndex: 'qrUrl',
-    key: 'qrUrl',
-    width: 80,
-  },
-  {
-    title: '操作',
-    key: 'action',
-    width: 200,
-  },
-]
-
 const selectedRowKeys = ref<string[]>([])
 const onSelectChange = (selectedKeys: string[]) => {
   selectedRowKeys.value = selectedKeys
@@ -210,6 +242,4 @@ const onBatchDelete = async () => {
   })
 }
 </script>
-<style scoped>
-@import 'tailwindcss';
-</style>
+<style scoped></style>
