@@ -46,7 +46,7 @@ public class JpaAccessRecordRepository implements AccessRecordRepository {
                 END) AS name,
                 COUNT(id) AS count
             FROM access_record
-            WHERE short_code = :shortCode
+            WHERE short_code = :shortCode AND (:type != 'PROVINCE' OR country = '中国')
             GROUP BY 
                 CASE :type
                     WHEN 'IP' THEN ip_address
@@ -58,7 +58,7 @@ public class JpaAccessRecordRepository implements AccessRecordRepository {
                     ELSE 'unknown'
                 END
             ORDER BY count DESC
-            LIMIT 1000
+            LIMIT 10
         """;
 
                 // 创建原生查询并手动映射结果
@@ -86,7 +86,7 @@ public class JpaAccessRecordRepository implements AccessRecordRepository {
 
             return predicate;
         };
-        PageRequest pageRequest = PageRequest.of(page < 1 ? 0 : (page - 1), size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        PageRequest pageRequest = PageRequest.of(page < 1 ? 0 : (page - 1), size, Sort.by(Sort.Direction.DESC, "accessTime"));
         Page<AccessRecord> entityPage = accessRecordEntityRepository.findAll(spec, pageRequest);
         return PageResponse.of(
                 entityPage.getContent(),

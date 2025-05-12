@@ -1,5 +1,6 @@
 package cn.xilio.leopard.domain.dataobject;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -79,6 +80,7 @@ public class AccessRecord {
     /**
      * 访问时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:MM:ss", timezone = "GMT+8")
     @Column(name = "access_time", nullable = false)
     private LocalDateTime accessTime;
 }

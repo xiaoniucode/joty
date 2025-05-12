@@ -45,7 +45,9 @@
           </a-row>
         </a-flex>
       </a-tab-pane>
-      <a-tab-pane key="2" tab="访问记录" force-render> </a-tab-pane>
+      <a-tab-pane key="2" tab="访问记录" force-render>
+      <AccessRecord :short-code="baseData.shortCode"/>
+      </a-tab-pane>
     </a-tabs>
   </a-drawer>
 </template>
@@ -54,6 +56,7 @@ import { ref } from 'vue'
 import TopAccessIp from "@/views/leopard/shorturl/components/analysis/components/TopAccessIp.vue";
 import OsAccessCount from "@/views/leopard/shorturl/components/analysis/components/OsAccessCount.vue";
 import AreaAccessCount from "@/views/leopard/shorturl/components/analysis/components/AreaAccessCount.vue";
+import AccessRecord from "@/views/leopard/shorturl/components/analysis/components/AccessRecord.vue";
 
 const activeKey = ref('1')
 const open = ref<boolean>(false)
