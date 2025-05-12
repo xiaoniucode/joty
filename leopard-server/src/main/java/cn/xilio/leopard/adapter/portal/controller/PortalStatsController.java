@@ -1,6 +1,7 @@
 package cn.xilio.leopard.adapter.portal.controller;
 
 import cn.xilio.leopard.adapter.portal.dto.request.StatsAccessCountRequest;
+import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.util.Result;
 import cn.xilio.leopard.core.security.SecurityUtils;
 import cn.xilio.leopard.service.StatsService;
@@ -15,6 +16,10 @@ public class PortalStatsController {
     @PostMapping("get-access-count-by-type")
     public Result getAccessCountByType(@RequestBody StatsAccessCountRequest request) {
         return Result.success(statsService.getAccessCountByType( request));
+    }
+    @PostMapping("records")
+    public Result records(@RequestParam("shortCode")String shortCode,@RequestBody PageQuery request) {
+        return Result.success(statsService.records(shortCode, request));
     }
     @GetMapping("dashboard")
     public Result dashboard() {

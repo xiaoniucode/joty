@@ -2,10 +2,11 @@
 
 import * as echarts from "echarts";
 import {onMounted} from "vue";
+const props = defineProps<{
+  id?: string
+}>()
 onMounted(()=>{
-
-
-  var chartDom = document.getElementById('pie');
+  var chartDom = document.getElementById(props.id);
   var myChart = echarts.init(chartDom);
   var option;
 
@@ -13,26 +14,30 @@ onMounted(()=>{
     title: {
       text: 'Referer of a Website',
       subtext: 'Fake Data',
-      left: 'center'
+      left: 'center',
+      show:false
     },
     tooltip: {
-      trigger: 'item'
+      trigger: 'item',
+
     },
+
     legend: {
       orient: 'vertical',
-      left: 'left'
+      left: 'left',
+      show:false
     },
+
     series: [
       {
         name: 'Access From',
         type: 'pie',
         radius: '50%',
         data: [
-          { value: 1048, name: 'Search Engine' },
-          { value: 735, name: 'Direct' },
-          { value: 580, name: 'Email' },
-          { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' }
+          { value: 1048, name: 'IOS' },
+          { value: 735, name: 'Windows' },
+          { value: 580, name: 'MAC IOS' },
+
         ],
         emphasis: {
           itemStyle: {
@@ -51,7 +56,7 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div id="pie" style="width: 600px;height:400px;"></div>
+  <div :id="id" style="width: 400px;height:400px;"></div>
 </template>
 
 <style scoped>

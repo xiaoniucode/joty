@@ -2,6 +2,7 @@ package cn.xilio.leopard.repository.dao;
 
 import cn.xilio.leopard.domain.dataobject.AccessRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface AccessRecordEntityRepository extends JpaRepository<AccessRecord, String> {
+public interface AccessRecordEntityRepository extends JpaRepository<AccessRecord, String>, JpaSpecificationExecutor<AccessRecord> {
     // 查询总访问次数和总访问人数
     @Query(nativeQuery = true, value = """
         SELECT 
