@@ -46,7 +46,7 @@
         </a-flex>
       </a-tab-pane>
       <a-tab-pane key="2" tab="访问记录" force-render>
-      <AccessRecord :short-code="baseData.shortCode"/>
+      <AccessRecord :short-code="baseData.shortCode" :key="new Date().getMilliseconds()"/>
       </a-tab-pane>
     </a-tabs>
   </a-drawer>
@@ -66,6 +66,7 @@ const showDrawer = (data = null) => {
   open.value = true
 }
 const onClose = () => {
+  baseData.value=null
   open.value = false
 }
 defineExpose({

@@ -6,7 +6,7 @@ const props = defineProps<{
   id?: string
 }>()
 onMounted(()=>{
-  var chartDom = document.getElementById(props.id);
+  var chartDom = document.getElementById("id");
   var myChart = echarts.init(chartDom);
   var option;
 
@@ -56,7 +56,7 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div :id="id" style="width: 400px;height:400px;"></div>
+  <div id="id" style="width: 400px;height:400px;"></div>
 </template>
 
 <style scoped>

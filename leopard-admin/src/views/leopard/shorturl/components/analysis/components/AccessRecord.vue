@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import api from '@/utils/api.ts'
 import { stats } from '@/api/leopard/stats.ts'
-import { reactive, ref } from 'vue'
+import {onMounted, onUpdated, reactive, ref, watch} from 'vue'
 
 const props = defineProps<{
   shortCode: string
@@ -50,12 +50,34 @@ const columns = [
 ]
 const pageQuery = reactive({
   page: 1,
-  size: 5,
+  size: 10,
 })
+const total = ref(0)
+// 数据获取逻辑
 const data = ref([])
-api.action(stats.records, { shortCode: props.shortCode }, pageQuery).then((res: any) => {
+const fetchData = async () => {
+  const res = await <any>api.action(stats.records,
+      { shortCode: props.shortCode }, pageQuery)
   data.value = res.records
-})
+  total.value = res.total
+}
+
+
+const selectedRowKeys = ref<string[]>([])
+const onSelectChange = (selectedKeys: string[]) => {
+  selectedRowKeys.value = selectedKeys
+}
+watch(
+    pageQuery,
+    (newPage) => {
+      fetchData()
+    },
+    { deep: true },
+)
+// 初始加载
+onMounted(fetchData)
+// 暴露刷新方法
+defineExpose({ fetchData })
 import googleIcon from '@/assets/icon/browser/google32.svg'
 import macOsIcon from '@/assets/icon/browser/mac-os.svg'
 import diannao from '@/assets/icon/browser/diannao.svg'
@@ -63,7 +85,7 @@ import wifi from '@/assets/icon/browser/wifi.svg'
 </script>
 
 <template>
-  <a-table :pagination="false" :columns="columns" :data-source="data">
+  <a-table :pagination="false"   :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }" :columns="columns" :data-source="data">
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'area'">
         <a-flex vertical>
@@ -81,4 +103,13 @@ import wifi from '@/assets/icon/browser/wifi.svg'
       </template>
     </template>
   </a-table>
+  <div>
+    <a-pagination
+        style="float: right; margin: 15px"
+        v-model:current="pageQuery.page"
+        v-model:pageSize="pageQuery.size"
+        show-size-changer
+        :total="total"
+    />
+  </div>
 </template>
