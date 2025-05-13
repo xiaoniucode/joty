@@ -1,9 +1,11 @@
 <template>
-  <a-drawer width="70%" title="数据报表" placement="right" :open="open" @close="onClose">
+  <a-drawer width="80%" title="数据报表" placement="right" :open="open" @close="onClose">
     <a-tabs v-model:activeKey="activeKey">
       <a-tab-pane key="1" tab="图表数据">
         <a-flex vertical :gap="15">
-          <a-card title="24小时数据曲线"> ddd</a-card>
+          <a-card title="访问数据">
+          <visit-stats :key="baseData.shortCode"/>
+          </a-card>
           <a-card title="地区分布">
             <AreaAccessCount :short-code="baseData.shortCode" :key="baseData.shortCode" />
           </a-card>
@@ -56,6 +58,7 @@ import TopAccessIp from '@/views/leopard/shorturl/components/analysis/components
 import OsAccessCount from '@/views/leopard/shorturl/components/analysis/components/OsAccessCount.vue'
 import AreaAccessCount from '@/views/leopard/shorturl/components/analysis/components/AreaAccessCount.vue'
 import AccessRecord from '@/views/leopard/shorturl/components/analysis/components/AccessRecord.vue'
+import VisitStats from "@/views/leopard/shorturl/components/analysis/components/VisitStats.vue";
 
 const activeKey = ref('1')
 const open = ref<boolean>(false)

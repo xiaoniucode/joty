@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import PieChart from '@/components/echart/pie-chart/index.vue'
+
+import Scatter from "@/components/echart/scatter/index.vue";
 const props = defineProps<{
   shortCode: string
 }>()
 </script>
 
 <template>
-<pie-chart :key="shortCode"/>
+<Scatter :key="shortCode"/>
 </template>
 
 <style scoped>

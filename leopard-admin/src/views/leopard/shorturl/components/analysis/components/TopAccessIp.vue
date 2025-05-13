@@ -26,5 +26,5 @@ api.action(stats.getAccessCountByType, {},{ type:'IP',shortCode: props.shortCode
 </script>
 
 <template>
-  <a-table :pagination="false" :columns="columns" :data-source="data"/>
+  <a-table :key="shortCode" :pagination="false" :columns="columns" :data-source="data"/>
 </template>
