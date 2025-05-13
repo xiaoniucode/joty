@@ -1,10 +1,6 @@
 <template>
-  <a-flex gap="small">
-    <a-flex style="min-width: 180px" justify="space-between">
-      <group-list @onSelectGroup="onSelectGroup" @onChange="onGroupChange" />
-      <a-divider type="vertical" style="height: 100%" />
-    </a-flex>
-
+  <a-flex>
+    <group-list @onSelectGroup="onSelectGroup" @onChange="onGroupChange" />
     <a-flex style="flex: 1" vertical>
       <page-header>
         <a-button danger @click="onBatchDelete" type="primary">批量删除</a-button>
@@ -106,7 +102,7 @@
   </a-flex>
 
   <url-form-modal ref="urlFormModalRef" @onSaveSuccess="onSaveSuccess" />
-  <Analysis ref="analysisRef" />
+  <Analysis ref="analysisRef" :key="new Date().getMilliseconds()" />
 </template>
 <script lang="ts" setup>
 import { QrcodeOutlined, CopyOutlined } from '@ant-design/icons-vue'
