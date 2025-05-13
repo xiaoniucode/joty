@@ -5,7 +5,7 @@ defineOptions({
   name: 'Scatter',
 })
 onMounted(()=>{
-  var chartDom = document.getElementById('main');
+  var chartDom = document.getElementById('Scatter');
   var myChart = echarts.init(chartDom);
   var option;
 
@@ -42,7 +42,7 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div id="line" style="width: 600px;height:400px;"></div>
+  <div id="Scatter" style="width: 1000px;height:400px;"></div>
 </template>
 
 <style scoped>

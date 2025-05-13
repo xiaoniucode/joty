@@ -4,10 +4,16 @@
       <a-tab-pane key="1" tab="图表数据">
         <a-flex vertical :gap="15">
           <a-card title="访问数据">
-          <visit-stats :key="baseData.shortCode"/>
+          <visit-stats :key="baseData.shortCode" :short-code="baseData.shortCode"/>
           </a-card>
           <a-card title="地区分布">
             <AreaAccessCount :short-code="baseData.shortCode" :key="baseData.shortCode" />
+          </a-card>
+          <a-card title="24小时访问量分布">
+            <HourDistribution :short-code="baseData.shortCode" :key="baseData.shortCode" />
+          </a-card>
+          <a-card title="本周访问分布">
+            <WeeklyDistribution :short-code="baseData.shortCode" :key="baseData.shortCode" />
           </a-card>
           <a-row :gutter="15">
             <a-col :span="12">
@@ -25,12 +31,12 @@
           <a-row :gutter="15">
             <a-col :span="12">
               <a-card title="访问浏览器">
-                <OsAccessCount :key="baseData.shortCode" />
+                <OsAccessCount :key="baseData.shortCode" :short-code="baseData.shortCode"/>
               </a-card>
             </a-col>
             <a-col :span="12">
               <a-card title="访问设备">
-                <OsAccessCount :key="baseData.shortCode" />
+                <OsAccessCount :key="baseData.shortCode" :short-code="baseData.shortCode" />
               </a-card>
             </a-col>
           </a-row>
@@ -40,7 +46,7 @@
             </a-col>
             <a-col :span="12">
               <a-card title="访客类型">
-                <OsAccessCount :key="baseData.shortCode" />
+                <OsAccessCount :key="baseData.shortCode" :short-code="baseData.shortCode"/>
               </a-card>
             </a-col>
           </a-row>
@@ -59,6 +65,8 @@ import OsAccessCount from '@/views/leopard/shorturl/components/analysis/componen
 import AreaAccessCount from '@/views/leopard/shorturl/components/analysis/components/AreaAccessCount.vue'
 import AccessRecord from '@/views/leopard/shorturl/components/analysis/components/AccessRecord.vue'
 import VisitStats from "@/views/leopard/shorturl/components/analysis/components/VisitStats.vue";
+import HourDistribution from "@/views/leopard/shorturl/components/analysis/components/HourDistribution.vue";
+import WeeklyDistribution from "@/views/leopard/shorturl/components/analysis/components/WeeklyDistribution.vue";
 
 const activeKey = ref('1')
 const open = ref<boolean>(false)

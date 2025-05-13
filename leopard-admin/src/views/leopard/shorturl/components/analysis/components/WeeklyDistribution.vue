@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import BarChart from "@/components/echart/bar-chart/index.vue";
 
-import Scatter from "@/components/echart/scatter/index.vue";
 defineOptions({
-  name: 'HourDistribution',
+  name: 'WeeklyDistribution',
 })
 const props = defineProps<{
   shortCode: string
@@ -10,7 +10,7 @@ const props = defineProps<{
 </script>
 
 <template>
-<Scatter :key="shortCode"/>
+  <BarChart :key="shortCode"/>
 </template>
 
 <style scoped>

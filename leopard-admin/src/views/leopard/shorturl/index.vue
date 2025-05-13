@@ -1,105 +1,109 @@
 <template>
-  <a-flex>
-    <group-list @onSelectGroup="onSelectGroup" @onChange="onGroupChange" />
-    <a-flex style="flex: 1" vertical>
-      <page-header>
-        <a-button danger @click="onBatchDelete" type="primary">批量删除</a-button>
-        <a-button @click="onOpenCreateModal" v-hasPerm="'add'" type="primary">新增</a-button>
-        <div v-if="selectedRowKeys.length > 0">选中: {{ selectedRowKeys.length }} 条</div>
-      </page-header>
-      <a-table
-        :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
-        :columns="columns"
-        :pagination="false"
-        :data-source="tableData"
-        row-key="id"
-        :scroll="{ y: 500 }"
-      >
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'title'">
-            <a-flex vertical>
-              <span>{{ record.title }}</span>
-              <span class="su-gray" style="color: grey">{{ record.createdAt }}</span>
-            </a-flex>
-          </template>
-          <template v-if="column.key === 'total'">
-            <a-flex vertical>
-              <div class="su-gray">
-                <span style="margin-right: 10px">今日</span>
-                <span>{{ record.todayVisits }}</span>
-              </div>
-              <div class="su-gray">
-                <span class="su-gray" style="margin-right: 10px">累计</span>
-                <span>{{ record.totalVisits }}</span>
-              </div>
-            </a-flex>
-          </template>
-          <template v-if="column.key === 'ip'">
-            <a-flex vertical>
-              <span class="su-gray">{{ record.todayVisitors }}</span>
-              <span class="su-gray">{{ record.totalVisitors }}</span>
-            </a-flex>
-          </template>
-          <template v-if="column.key === 'shortUrl'">
-            <span>
-              <a-flex :gap="40" justify="space-between" align="center">
-                <a-flex vertical :gap="1">
-                  <a :href="record.shortUrl" target="_blank">
-                    {{ record.shortUrl }}
-                  </a>
-                  <span
-                    class="truncate-url"
-                    style="color: gray"
-                    :href="record.originalUrl"
-                    target="_blank"
-                  >
-                  </span>
-                </a-flex>
-                <a-flex gap="10">
-                  <a-popover trigger="focus" placement="bottom">
-                    <template #content>
-                      <a-flex vertical align="center" :gap="8">
-                        <a-qrcode ref="qrcodeCanvasRef" :value="record.qrUrl" />
-                        <a-button type="primary" @click="downloadChanger(record.shortCode)"
-                          >下载二维码</a-button
-                        >
-                      </a-flex>
-                    </template>
-                    <QrcodeOutlined />
-                  </a-popover>
-                  <CopyOutlined @click="common.copy(record.shortUrl, true)" />
-                </a-flex>
+  <a-row>
+    <a-col :span="4">
+      <group-list @onSelectGroup="onSelectGroup" @onChange="onGroupChange" />
+    </a-col>
+    <a-col :span="20">
+      <a-flex style="flex: 1" vertical>
+        <page-header>
+          <a-button danger @click="onBatchDelete" type="primary">批量删除</a-button>
+          <a-button @click="onOpenCreateModal" v-hasPerm="'add'" type="primary">新增</a-button>
+          <div v-if="selectedRowKeys.length > 0">选中: {{ selectedRowKeys.length }} 条</div>
+        </page-header>
+        <a-table
+          :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+          :columns="columns"
+          :pagination="false"
+          :data-source="tableData"
+          row-key="id"
+          :scroll="{ y: 500 }"
+        >
+          <template #bodyCell="{ column, record }">
+            <template v-if="column.key === 'title'">
+              <a-flex vertical>
+                <span>{{ record.title }}</span>
+                <span class="su-gray" style="color: grey">{{ record.createdAt }}</span>
               </a-flex>
-            </span>
+            </template>
+            <template v-if="column.key === 'total'">
+              <a-flex vertical>
+                <div class="su-gray">
+                  <span style="margin-right: 10px">今日</span>
+                  <span>{{ record.todayVisits }}</span>
+                </div>
+                <div class="su-gray">
+                  <span class="su-gray" style="margin-right: 10px">累计</span>
+                  <span>{{ record.totalVisits }}</span>
+                </div>
+              </a-flex>
+            </template>
+            <template v-if="column.key === 'ip'">
+              <a-flex vertical>
+                <span class="su-gray">{{ record.todayVisitors }}</span>
+                <span class="su-gray">{{ record.totalVisitors }}</span>
+              </a-flex>
+            </template>
+            <template v-if="column.key === 'shortUrl'">
+              <span>
+                <a-flex :gap="40" justify="space-between" align="center">
+                  <a-flex vertical :gap="1">
+                    <a :href="record.shortUrl" target="_blank">
+                      {{ record.shortUrl }}
+                    </a>
+                    <span
+                      class="truncate-url"
+                      style="color: gray"
+                      :href="record.originalUrl"
+                      target="_blank"
+                    >
+                    </span>
+                  </a-flex>
+                  <a-flex gap="10">
+                    <a-popover trigger="focus" placement="bottom">
+                      <template #content>
+                        <a-flex vertical align="center" :gap="8">
+                          <a-qrcode ref="qrcodeCanvasRef" :value="record.qrUrl" />
+                          <a-button type="primary" @click="downloadChanger(record.shortCode)"
+                            >下载二维码</a-button
+                          >
+                        </a-flex>
+                      </template>
+                      <QrcodeOutlined />
+                    </a-popover>
+                    <CopyOutlined @click="common.copy(record.shortUrl, true)" />
+                  </a-flex>
+                </a-flex>
+              </span>
+            </template>
+            <template v-else-if="column.key === 'expiredAt'">
+              <span>
+                <a-tag color="orange" :bordered="false" v-if="!record.expiredAt">永不过期</a-tag>
+                <span v-else> {{ record.expiredAt }}</span>
+              </span>
+            </template>
+            <template v-else-if="column.key === 'action'">
+              <span>
+                <a @click="onShowAnalysis(record)">数据</a>
+                <a-divider type="vertical" />
+                <a @click="onDelete(record.id)">删除</a>
+                <a-divider type="vertical" />
+                <a @click="onEdit(record)">编辑</a>
+              </span>
+            </template>
           </template>
-          <template v-else-if="column.key === 'expiredAt'">
-            <span>
-              <a-tag color="orange" :bordered="false" v-if="!record.expiredAt">永不过期</a-tag>
-              <span v-else> {{ record.expiredAt }}</span>
-            </span>
-          </template>
-          <template v-else-if="column.key === 'action'">
-            <span>
-              <a @click="onShowAnalysis(record)">数据</a>
-              <a-divider type="vertical" />
-              <a @click="onDelete(record.id)">删除</a>
-              <a-divider type="vertical" />
-              <a @click="onEdit(record)">编辑</a>
-            </span>
-          </template>
-        </template>
-      </a-table>
-      <div>
-        <a-pagination
-          style="float: right; margin: 15px"
-          v-model:current="pageQuery.page"
-          v-model:pageSize="pageQuery.size"
-          show-size-changer
-          :total="total"
-        />
-      </div>
-    </a-flex>
-  </a-flex>
+        </a-table>
+        <div>
+          <a-pagination
+            style="float: right; margin: 15px"
+            v-model:current="pageQuery.page"
+            v-model:pageSize="pageQuery.size"
+            show-size-changer
+            :total="total"
+          />
+        </div>
+      </a-flex>
+    </a-col>
+  </a-row>
 
   <url-form-modal ref="urlFormModalRef" @onSaveSuccess="onSaveSuccess" />
   <Analysis ref="analysisRef" :key="new Date().getMilliseconds()" />

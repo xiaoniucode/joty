@@ -1,5 +1,5 @@
 <template>
-  <a-row style="width: 150px">
+  <a-flex>
     <a-flex vertical gap="small" style="width: 100%">
       <a-flex justify="space-between">
         <div style="font-size: 18px">短链分组</div>
@@ -14,8 +14,9 @@
         </div>
       </a-flex>
     </a-flex>
-  </a-row>
-  <a-divider type="vertical" style="height: 100vh" />
+    <a-divider type="vertical" style="height: 100vh" />
+  </a-flex>
+
   <group-form-modal ref="groupFormModalRef" @onSaveSuccess="onSaveSuccess" />
 </template>
 <script lang="ts" setup>
