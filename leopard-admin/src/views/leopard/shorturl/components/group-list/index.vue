@@ -6,12 +6,7 @@
         <PlusSquareOutlined @click="onOpenGroupModal" />
       </a-flex>
       <a-flex vertical gap="small">
-        <div v-for="item in groupList">
-          <a-flex justify="space-between" align="center">
-            <div style="font-size: 14px">{{ item.name }}</div>
-            <span>10</span>
-          </a-flex>
-        </div>
+        <DocTree :tree-data="groupList"/>
       </a-flex>
     </a-flex>
     <a-divider type="vertical" style="height: 100vh" />
@@ -27,6 +22,7 @@ import { group } from '@/api/leopard/group.ts'
 import GroupFormModal from '@/views/leopard/shorturl/components/group-form-modal/index.vue'
 import { message, Modal } from 'ant-design-vue'
 import { PlusSquareOutlined } from '@ant-design/icons-vue'
+import DocTree from "@/components/doc-tree/index.vue";
 
 const emit = defineEmits(['onSelectGroup', 'onChange'])
 const groupList = ref([])

@@ -4,12 +4,9 @@ import type { TreeProps } from 'ant-design-vue'
 
 defineOptions({ name: 'DocTree' })
 
-const treeData: TreeProps['treeData'] = [
-  { title: '默认分组', key: '0-0' },
-  { title: '人工智能', key: '0-1' },
-  { title: '大数据', key: '0-2' },
-  { title: '短链接分享', key: '0-3' },
-]
+const props = defineProps<{
+  treeData?: any
+}>()
 
 const expandedKeys = ref<string[]>(['0-0'])
 const selectedKeys = ref<string[]>(['0-0'])
@@ -55,36 +52,37 @@ const handleDropdownVisibleChange = (key: string, visible: boolean) => {
     v-model:selectedKeys="selectedKeys"
     v-model:checkedKeys="checkedKeys"
     :tree-data="treeData"
+    :fieldNames="{ title: 'name', key: 'id' }"
   >
-    <template #title="{ title, key }">
-      <span @mouseenter="handleMouseEnter(key)" @mouseleave="handleMouseLeave(key)">
-        <a-flex justify="space-between" align="center" style="width: 200px; height: 40px">
-          <span>{{ title }}</span>
+    <template #title="{ name, id }">
+      <span @mouseenter="handleMouseEnter(id)" @mouseleave="handleMouseLeave(id)">
+        <a-flex justify="space-between" align="center" style="width: 160px; height: 40px">
+          <span>{{ name }}</span>
           <div class="menu-container">
-            <a-flex v-if="hoverStates[key]" :gap="8" class="menu fade">
-              <div>菜单</div>
-              <a-dropdown
-                :visible="dropdownVisible[key]"
-                @visibleChange="(visible) => handleDropdownVisibleChange(key, visible)"
+            <a-flex v-show="hoverStates[id]" :gap="8" class="menu fade" align="center">
+              <div>编辑</div>
+<!--              <a-dropdown
+                :visible="dropdownVisible[id]"
+                @visibleChange="(visible) => handleDropdownVisibleChange(id, visible)"
               >
                 <div
                   class="ant-dropdown-link"
-                  @mouseenter="handleMouseEnter(key)"
-                  @mouseleave="handleMouseLeave(key)"
+                  @mouseenter="handleMouseEnter(id)"
+                  @mouseleave="handleMouseLeave(id)"
                   @click.prevent
                 >
-                  更多
+                  ...
                 </div>
                 <template #overlay>
-                  <a-menu @mouseenter="handleMouseEnter(key)" @mouseleave="handleMouseLeave(key)">
+                  <a-menu @mouseenter="handleMouseEnter(id)" @mouseleave="handleMouseLeave(id)">
                     <a-menu-item>
                       <a href="javascript:;">编辑</a>
                     </a-menu-item>
                   </a-menu>
                 </template>
-              </a-dropdown>
+              </a-dropdown>-->
             </a-flex>
-            <span v-else class="placeholder">3</span>
+            <span v-show="!hoverStates[id]" class="placeholder">3</span>
           </div>
         </a-flex>
       </span>
