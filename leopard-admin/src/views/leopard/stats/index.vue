@@ -1,5 +1,6 @@
 <template>
   <div style="width: 100%">
+    <DocTree />
     <a-flex vertical gap="large">
       <a-flex justify="space-between" align="center" :gap="20">
         <a-card style="width: 25%" v-for="i in 4">
@@ -51,6 +52,7 @@
 import { LikeOutlined,ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons-vue'
 
 import LineChart from "@/components/echart/line/index.vue";
+import DocTree from "@/components/doc-tree/index.vue";
 </script>
 
 <style scoped>

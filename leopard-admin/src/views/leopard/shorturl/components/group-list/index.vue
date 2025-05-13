@@ -2,13 +2,13 @@
   <a-flex>
     <a-flex vertical gap="small" style="width: 100%">
       <a-flex justify="space-between">
-        <div style="font-size: 18px">短链分组</div>
+        <div style="font-size: 16px">短链分组</div>
         <PlusSquareOutlined @click="onOpenGroupModal" />
       </a-flex>
       <a-flex vertical gap="small">
         <div v-for="item in groupList">
           <a-flex justify="space-between" align="center">
-            <div style="font-size: 15px">{{ item.name }}</div>
+            <div style="font-size: 14px">{{ item.name }}</div>
             <span>10</span>
           </a-flex>
         </div>
