@@ -101,7 +101,8 @@ const handleOk = (e: MouseEvent) => {
   formRef.value.validate().then(() => {
     const payload = {
       ...toRaw(formState),
-      expiredAt: dayjs(formState.expiredAt).format('YYYY-MM-DD'),
+      // 只有当expiredAt有值时才格式化
+      expiredAt: formState.expiredAt ? dayjs(formState.expiredAt).format('YYYY-MM-DD') : null
     }
     if (!isEdit.value) {
       delete payload.shortUrl
@@ -123,7 +124,7 @@ const INITIAL_STATE = {
   id: undefined,
   title: '',
   originalUrl: '',
-  expiredAt: undefined,
+  expiredAt: null,
   status: 1,
   groupId: '',
   remark: '',
@@ -135,7 +136,7 @@ interface FormState {
   originalUrl: string
   shortUrl?: string
   qrUrl?: string
-  expiredAt?: string | Dayjs
+  expiredAt?: string | Dayjs|null
   status: number
   groupId: string
   remark: string
@@ -156,12 +157,23 @@ const rules: Record<string, Rule[]> = {
   groupId: [{ required: true, message: '必须指定一个分组', trigger: 'change' }],
   domain: [{ required: true, message: '必须选择一个域名', trigger: 'change' }],
   remark: [{ max: 50, message: '长度在50内', trigger: 'blur' }],
+  expiredAt: [
+    {
+      validator: (_, value) => {
+        if (value && dayjs(value).isBefore(dayjs(), 'day')) {
+          return Promise.reject('过期时间不能早于当前时间')
+        }
+        return Promise.resolve()
+      }
+    }
+  ]
 }
 const resetForm = () => {
   formRef.value?.resetFields()
   Object.assign(formState, {
     ...INITIAL_STATE,
     groupId: groupData.value[0]?.id || '',
+    expiredAt: null
   })
 }
 </script>
