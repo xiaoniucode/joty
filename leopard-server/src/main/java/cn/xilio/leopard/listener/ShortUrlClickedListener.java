@@ -14,6 +14,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 public class ShortUrlClickedListener {
@@ -34,7 +35,7 @@ public class ShortUrlClickedListener {
         record.setShortCode(event.getShortCode());
         record.setIpAddress(event.getIp());
         record.setAccessTime(event.getClickedAt());
-        record.setReferer(event.getReferer());
+        record.setReferer(StringUtils.hasText(event.getReferer()) ? event.getReferer() : "直接访问");//todo需国际化
         record.setUserAgent(event.getUserAgent());
         record.setBrowser(BrowserUtils.detectBrowser(event.getUserAgent()));
         record.setOs(OSDetector.detectFromUserAgent(event.getUserAgent()).getName());

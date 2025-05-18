@@ -32,7 +32,7 @@ instance.interceptors.response.use(
     const { code, msg, data } = response.data
     if (code == '0') {
       return data
-    } else if (code == '401') {
+    } else if (code == '401'||code == '403') {
       message.error(msg)
       useUserStore().resetUserState()
       router.push({ path: '/login' })
@@ -41,11 +41,12 @@ instance.interceptors.response.use(
       return Promise.reject({ code: code, msg: msg })
     }
   },
-  function (error) {
+  async function (error) {
     if (error.status === 401) {
-      useUserStore().logout()
+      await useUserStore().logout()
       throw error
     }
+
     let message = error.message
     if (message === 'Network Error') {
       message = '服务端网络故障'
