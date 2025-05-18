@@ -6,7 +6,7 @@
         <PlusSquareOutlined @click="onOpenGroupModal" />
       </a-flex>
       <a-flex vertical gap="small">
-        <DocTree @onDelete="onDeleteGroup" :tree-data="groupList"/>
+        <DocTree @onDelete="onDeleteGroup" @onSelect="onSelect"   :tree-data="groupList"/>
       </a-flex>
     </a-flex>
     <a-divider type="vertical" style="height: 100vh" />
@@ -33,13 +33,14 @@ const loadGroups = async () => {
 }
 loadGroups()
 //选中节点
-const onSelect = (selectedKeys: any) => {
-  emit('onSelectGroup', selectedKeys[0])
+const onSelect = (id: string) => {
+  emit('onSelectGroup', id)
 }
 const onSaveSuccess = async () => {
   await loadGroups()
   emit('onChange')
 }
+//删除分组
 const onDeleteGroup = ( id: string) => {
   if (id == '1') {
     message.warn('默认分组不能编辑和删除')

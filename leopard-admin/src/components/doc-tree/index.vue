@@ -2,14 +2,14 @@
 import { ref, watch } from 'vue'
 
 defineOptions({ name: 'DocTree' })
-const emit=defineEmits(['onDelete'])
+const emit = defineEmits(['onDelete', 'onUpdate', 'onSelect'])
 const props = defineProps<{
   treeData?: any
 }>()
 
 const expandedKeys = ref<string[]>(['0-0'])
 const selectedKeys = ref<string[]>(['0-0'])
-const checkedKeys = ref<string[]>(['0-0',])
+const checkedKeys = ref<string[]>(['0-0'])
 const hoverStates = ref<Record<string, boolean>>({})
 const dropdownVisible = ref<Record<string, boolean>>({})
 const hideTimeouts = ref<Record<string, number>>({})
@@ -43,6 +43,10 @@ const handleDropdownVisibleChange = (key: string, visible: boolean) => {
     hoverStates.value[key] = false
   }
 }
+const onSelect = (selectedKeys: any) => {
+  emit('onSelect', selectedKeys[0])
+}
+import more from '@/assets/icon/more.svg'
 </script>
 
 <template>
@@ -50,6 +54,7 @@ const handleDropdownVisibleChange = (key: string, visible: boolean) => {
     v-model:expandedKeys="expandedKeys"
     v-model:selectedKeys="selectedKeys"
     v-model:checkedKeys="checkedKeys"
+    @select="onSelect"
     :tree-data="treeData"
     :fieldNames="{ title: 'name', key: 'id' }"
   >
@@ -59,10 +64,10 @@ const handleDropdownVisibleChange = (key: string, visible: boolean) => {
           <span>{{ name }}</span>
           <div class="menu-container">
             <a-flex v-show="hoverStates[id]" :gap="8" class="menu fade" align="center">
-              <div>编辑</div>
+              <div @click="emit('onUpdate', id)">编辑</div>
               <a-dropdown
                 :visible="dropdownVisible[id]"
-                @visibleChange="(visible) => handleDropdownVisibleChange(id, visible)"
+                @visibleChange="(visible: any) => handleDropdownVisibleChange(id, visible)"
               >
                 <div
                   class="ant-dropdown-link"
@@ -70,12 +75,12 @@ const handleDropdownVisibleChange = (key: string, visible: boolean) => {
                   @mouseleave="handleMouseLeave(id)"
                   @click.prevent
                 >
-                  ...
+                  <a-image :preview="false" :width="20" :src="more" />
                 </div>
                 <template #overlay>
                   <a-menu @mouseenter="handleMouseEnter(id)" @mouseleave="handleMouseLeave(id)">
                     <a-menu-item>
-                      <div @click="emit('onDelete',id)">删除</div>
+                      <div @click="emit('onDelete', id)">删除</div>
                     </a-menu-item>
                   </a-menu>
                 </template>
