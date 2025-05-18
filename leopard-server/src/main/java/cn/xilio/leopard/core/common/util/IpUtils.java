@@ -22,12 +22,12 @@ public class IpUtils {
         HttpServletRequest request = attributes.getRequest();
         // 定义可能包含真实 IP 的请求头字段，按优先级排序
         String[] ipHeaders = {
-            "X-Forwarded-For",
-            "X-Real-IP",
-            "Proxy-Client-IP",
-            "WL-Proxy-Client-IP",
-            "HTTP_CLIENT_IP",
-            "HTTP_X_FORWARDED_FOR"
+                "X-Forwarded-For",
+                "X-Real-IP",
+                "Proxy-Client-IP",
+                "WL-Proxy-Client-IP",
+                "HTTP_CLIENT_IP",
+                "HTTP_X_FORWARDED_FOR"
         };
 
         String ip = null;
@@ -82,5 +82,9 @@ public class IpUtils {
             }
         }
         return ipHeader.trim();
+    }
+
+    public static boolean isLocal(String ip) {
+        return ("localhost".equalsIgnoreCase(ip) || "127.0.0.1".equals(ip));
     }
 }

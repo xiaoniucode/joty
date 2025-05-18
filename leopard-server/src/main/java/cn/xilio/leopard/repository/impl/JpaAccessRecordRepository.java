@@ -1,7 +1,6 @@
 package cn.xilio.leopard.repository.impl;
 
 
-
 import cn.xilio.leopard.adapter.portal.dto.response.StatsResponse;
 import cn.xilio.leopard.core.common.page.PageResponse;
 import cn.xilio.leopard.domain.dataobject.AccessRecord;
@@ -32,49 +31,49 @@ public class JpaAccessRecordRepository implements AccessRecordRepository {
     private EntityManager entityManager;
 
     public List<StatsResponse> findStatsCountByType(String shortCode, String type) {
-                String sql = """
-            SELECT 
-                :type AS type,
-                ANY_VALUE(CASE :type
-                    WHEN 'IP' THEN ip_address
-                    WHEN 'OS' THEN COALESCE(os,'Unknown')
-                    WHEN 'BROWSER' THEN COALESCE(browser,'Unknown')
-                    WHEN 'DEVICE' THEN COALESCE(device_type,'Unknown')
-                    WHEN 'COUNTRY' THEN COALESCE(country,'Unknown')
-                    WHEN 'PROVINCE' THEN COALESCE(province,'未知')
-                    ELSE 'unknown'
-                END) AS name,
-                COUNT(id) AS count
-            FROM access_record
-            WHERE short_code = :shortCode AND (:type != 'PROVINCE' OR country = '中国')
-            GROUP BY 
-                CASE :type
-                    WHEN 'IP' THEN ip_address
-                    WHEN 'OS' THEN os
-                    WHEN 'BROWSER' THEN browser
-                    WHEN 'COUNTRY' THEN country
-                    WHEN 'DEVICE' THEN device_type
-                    WHEN 'PROVINCE' THEN province
-                    ELSE 'unknown'
-                END
-            ORDER BY count DESC
-            LIMIT 10
-        """;
+        String sql = """
+                    SELECT 
+                        :type AS type,
+                        ANY_VALUE(CASE :type
+                            WHEN 'IP' THEN ip_address
+                            WHEN 'OS' THEN COALESCE(os,'Unknown')
+                            WHEN 'BROWSER' THEN COALESCE(browser,'Unknown')
+                            WHEN 'DEVICE' THEN COALESCE(device_type,'Unknown')
+                            WHEN 'COUNTRY' THEN COALESCE(country,'Unknown')
+                            WHEN 'PROVINCE' THEN COALESCE(province,'未知')
+                            ELSE 'unknown'
+                        END) AS name,
+                        COUNT(id) AS count
+                    FROM access_record
+                    WHERE short_code = :shortCode AND (:type != 'PROVINCE' OR country = '中国')
+                    GROUP BY 
+                        CASE :type
+                            WHEN 'IP' THEN ip_address
+                            WHEN 'OS' THEN os
+                            WHEN 'BROWSER' THEN browser
+                            WHEN 'COUNTRY' THEN country
+                            WHEN 'DEVICE' THEN device_type
+                            WHEN 'PROVINCE' THEN province
+                            ELSE 'unknown'
+                        END
+                    ORDER BY count DESC
+                    LIMIT 10
+                """;
 
-                // 创建原生查询并手动映射结果
-                List<Object[]> results = entityManager.createNativeQuery(sql)
-                        .setParameter("type", type)
-                        .setParameter("shortCode", shortCode)
-                        .getResultList();
+        // 创建原生查询并手动映射结果
+        List<Object[]> results = entityManager.createNativeQuery(sql)
+                .setParameter("type", type)
+                .setParameter("shortCode", shortCode)
+                .getResultList();
 
-                // 转换为StatsResponse对象
-                return results.stream()
-                        .map(row -> new StatsResponse(
-                                (String) row[0],  // type
-                                (String) row[1],  // name
-                                ((Number) row[2]).longValue()  // count
-                        ))
-                        .collect(Collectors.toList());
+        // 转换为StatsResponse对象
+        return results.stream()
+                .map(row -> new StatsResponse(
+                        (String) row[0],  // type
+                        (String) row[1],  // name
+                        ((Number) row[2]).longValue()  // count
+                ))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -95,6 +94,11 @@ public class JpaAccessRecordRepository implements AccessRecordRepository {
                 entityPage.getSize(),
                 entityPage.hasNext()
         );
+    }
+
+    @Override
+    public AccessRecord saveAccessRecord(AccessRecord record) {
+        return accessRecordEntityRepository.save(record);
     }
 
 }

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class ShortUrlClickedEvent extends ApplicationEvent {
     private final String shortCode;
     private final String ip;
+
     private final LocalDateTime clickedAt;
 
     public ShortUrlClickedEvent(Object source, String shortCode, String ip, LocalDateTime clickedAt) {
