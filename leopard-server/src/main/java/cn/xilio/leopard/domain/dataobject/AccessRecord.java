@@ -76,6 +76,11 @@ public class AccessRecord {
      */
     @Column(name = "short_code", length = 7, nullable = false)
     private String shortCode;
+    /**
+     * User-Agent
+     */
+    @Column(name = "ua"  )
+    private String ua;
 
     /**
      * 访问时间

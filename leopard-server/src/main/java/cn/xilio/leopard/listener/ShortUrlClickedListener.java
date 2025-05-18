@@ -1,7 +1,10 @@
 package cn.xilio.leopard.listener;
 
 import cn.xilio.leopard.core.common.service.RegionService;
+import cn.xilio.leopard.core.common.util.BrowserUtils;
+import cn.xilio.leopard.core.common.util.DeviceDetector;
 import cn.xilio.leopard.core.common.util.IpUtils;
+import cn.xilio.leopard.core.common.util.OSDetector;
 import cn.xilio.leopard.domain.dataobject.AccessRecord;
 import cn.xilio.leopard.domain.event.ShortUrlClickedEvent;
 
@@ -29,6 +32,11 @@ public class ShortUrlClickedListener {
         record.setShortCode(event.getShortCode());
         record.setIpAddress(event.getIp());
         record.setAccessTime(event.getClickedAt());
+        record.setReferer(event.getReferer());
+        record.setUa(event.getUserAgent());
+        record.setBrowser(BrowserUtils.detectBrowser(event.getUserAgent()));
+        record.setOs(OSDetector.detectFromUserAgent(event.getUserAgent()).getName());
+        record.setDeviceType(DeviceDetector.detectDevice(event.getUserAgent()).getName());
         boolean isLocal = IpUtils.isLocal(event.getIp());
         if (!isLocal) {
             String region = regionService.getRegion(event.getIp());
