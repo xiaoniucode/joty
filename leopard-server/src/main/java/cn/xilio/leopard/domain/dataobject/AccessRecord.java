@@ -81,6 +81,11 @@ public class AccessRecord {
      */
     @Column(name = "ua"  )
     private String ua;
+    /**
+     * 网络类型
+     */
+    @Column(name = "networkType"  )
+    private String networkType;
 
     /**
      * 访问时间
