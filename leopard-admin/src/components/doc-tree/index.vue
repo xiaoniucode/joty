@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import type { TreeProps } from 'ant-design-vue'
 
 defineOptions({ name: 'DocTree' })
-
+const emit=defineEmits(['onDelete'])
 const props = defineProps<{
   treeData?: any
 }>()
@@ -61,7 +60,7 @@ const handleDropdownVisibleChange = (key: string, visible: boolean) => {
           <div class="menu-container">
             <a-flex v-show="hoverStates[id]" :gap="8" class="menu fade" align="center">
               <div>编辑</div>
-<!--              <a-dropdown
+              <a-dropdown
                 :visible="dropdownVisible[id]"
                 @visibleChange="(visible) => handleDropdownVisibleChange(id, visible)"
               >
@@ -76,11 +75,11 @@ const handleDropdownVisibleChange = (key: string, visible: boolean) => {
                 <template #overlay>
                   <a-menu @mouseenter="handleMouseEnter(id)" @mouseleave="handleMouseLeave(id)">
                     <a-menu-item>
-                      <a href="javascript:;">编辑</a>
+                      <div @click="emit('onDelete',id)">删除</div>
                     </a-menu-item>
                   </a-menu>
                 </template>
-              </a-dropdown>-->
+              </a-dropdown>
             </a-flex>
             <span v-show="!hoverStates[id]" class="placeholder">3</span>
           </div>

@@ -6,7 +6,7 @@
         <PlusSquareOutlined @click="onOpenGroupModal" />
       </a-flex>
       <a-flex vertical gap="small">
-        <DocTree :tree-data="groupList"/>
+        <DocTree @onDelete="onDeleteGroup" :tree-data="groupList"/>
       </a-flex>
     </a-flex>
     <a-divider type="vertical" style="height: 100vh" />
@@ -40,15 +40,11 @@ const onSaveSuccess = async () => {
   await loadGroups()
   emit('onChange')
 }
-const onContextMenuClick = (treeKey: string, menuKey: string) => {
-  if (treeKey == '1') {
+const onDeleteGroup = ( id: string) => {
+  if (id == '1') {
     message.warn('默认分组不能编辑和删除')
     return
   }
-  if (menuKey == 'edit') {
-    onOpenGroupEdit({ id: treeKey })
-  }
-  if (menuKey == 'delete') {
     Modal.confirm({
       title: '你确定删除该分组?',
       content: '删除后短链接自动迁移到默认分组',
@@ -56,13 +52,12 @@ const onContextMenuClick = (treeKey: string, menuKey: string) => {
       okType: 'danger',
       cancelText: '取消',
       onOk() {
-        api.action(group.del, {}, [treeKey]).then((res) => {
+        api.action(group.del, {}, [id]).then((res) => {
           message.success('删除成功')
           loadGroups()
         })
       },
     })
-  }
 }
 
 const groupFormModalRef = ref()
