@@ -38,4 +38,6 @@ public interface AccessRecordEntityRepository extends JpaRepository<AccessRecord
     List<Object[]> findTodayStatsByShortCodes(
             @Param("shortCodes") List<String> shortCodes,
             @Param("today") LocalDate today);
+
+    boolean existsByIpAddressAndUserAgent(String ipAddress, String userAgent);
 }

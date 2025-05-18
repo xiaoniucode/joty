@@ -80,7 +80,13 @@ public class AccessRecord {
      * User-Agent
      */
     @Column(name = "ua"  )
-    private String ua;
+    private String userAgent;
+
+    /**
+     * 用户类型：老用户或新用户
+     */
+    @Column(name = "user_type"  )
+    private String userType;
     /**
      * 网络类型
      */

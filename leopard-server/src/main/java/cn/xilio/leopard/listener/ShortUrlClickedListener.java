@@ -7,6 +7,8 @@ import cn.xilio.leopard.domain.event.ShortUrlClickedEvent;
 
 import cn.xilio.leopard.domain.model.IpRegionInfo;
 import cn.xilio.leopard.repository.AccessRecordRepository;
+import cn.xilio.leopard.service.StatsService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -21,20 +23,25 @@ public class ShortUrlClickedListener {
     private AccessRecordRepository accessRecordRepository;
     @Autowired
     private RegionService regionService;
+    @Autowired
+    private StatsService statsService;
 
     @Async("shortUrlEventExecutor")
     @EventListener
+    @Transactional(rollbackOn = Exception.class)
     public void handleClick(ShortUrlClickedEvent event) {
         AccessRecord record = new AccessRecord();
         record.setShortCode(event.getShortCode());
         record.setIpAddress(event.getIp());
         record.setAccessTime(event.getClickedAt());
         record.setReferer(event.getReferer());
-        record.setUa(event.getUserAgent());
+        record.setUserAgent(event.getUserAgent());
         record.setBrowser(BrowserUtils.detectBrowser(event.getUserAgent()));
         record.setOs(OSDetector.detectFromUserAgent(event.getUserAgent()).getName());
         record.setDeviceType(DeviceDetector.detectDevice(event.getUserAgent()).getName());
         record.setNetworkType(NetworkTypeDetector.detectNetworkType(event.getUserAgent()));
+        //Need to optimize
+        record.setUserType(statsService.getAccessUserType(event.getIp(), event.getUserAgent()).getValue());
         boolean isLocal = IpUtils.isLocal(event.getIp());
         if (!isLocal) {
             String region = regionService.getRegion(event.getIp());

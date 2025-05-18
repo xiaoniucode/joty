@@ -101,5 +101,10 @@ public class JpaAccessRecordRepository implements AccessRecordRepository {
         return accessRecordEntityRepository.save(record);
     }
 
+    @Override
+    public boolean existsByIpAddressAndUserAgent(String ipAddress, String userAgent) {
+        return accessRecordEntityRepository.existsByIpAddressAndUserAgent(ipAddress, userAgent);
+    }
+
 }
 

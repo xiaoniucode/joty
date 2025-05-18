@@ -5,6 +5,7 @@ import cn.xilio.leopard.adapter.portal.dto.response.StatsResponse;
 import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.page.PageResponse;
 import cn.xilio.leopard.domain.dataobject.AccessRecord;
+import cn.xilio.leopard.domain.enums.AccessUserType;
 import cn.xilio.leopard.domain.enums.StatsDimension;
 import cn.xilio.leopard.repository.AccessRecordRepository;
 import cn.xilio.leopard.service.StatsService;
@@ -27,5 +28,9 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public PageResponse<AccessRecord> records(String shortCode, PageQuery request) {
         return accessRecordRepository.findAccessRecords(shortCode,request.getPage(),request.getSize());
+    }
+    public AccessUserType getAccessUserType(String ipAddress, String userAgent) {
+       return !accessRecordRepository.existsByIpAddressAndUserAgent(ipAddress, userAgent)? AccessUserType.NEW_USER: AccessUserType.OLD_USER;
+
     }
 }
