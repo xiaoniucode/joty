@@ -25,6 +25,13 @@ public class OpenApiConfig {
                 .build();
     }
     @Bean
+    public GroupedOpenApi openApiGroup() {
+        return GroupedOpenApi.builder()
+                .group("Leopard-openApi")
+                .packagesToScan("cn.xilio.leopard.adapter.open.controller")
+                .build();
+    }
+    @Bean
     public OpenApiCustomizer customOpenApiCustomizer() {
         return openApi -> openApi.info(
                 new Info()

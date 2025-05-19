@@ -83,4 +83,11 @@ public interface UserService {
      * @return open api key
      */
     String getOpenApiKey();
+
+    /**
+     *
+     * @param apiKey
+     * @return
+     */
+    boolean isValidApiKey(String apiKey);
 }

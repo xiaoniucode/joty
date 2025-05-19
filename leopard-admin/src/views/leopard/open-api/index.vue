@@ -31,17 +31,29 @@ const onResetOpenApiKey = async () => {
 </script>
 
 <template>
- <div>
-   <a-alert message="ApiKey密钥用于开放接口授权使用，每个用户拥有唯一的ApiKey！" type="success" />
-   <a-flex :gap="12" align="center">
-     <a-flex align="center" :gap="8">
-       <span>ApiKey: </span>
-       <span>{{ apiKey }}</span>
-     </a-flex>
-     <a-button type="primary" size="small" @click="common.copy(apiKey, true)">复制</a-button>
-     <a-button type="ghost" @click="onResetOpenApiKey">重置</a-button>
+  <div>
+    <a-alert message="ApiKey密钥用于开放接口授权使用，每个用户拥有唯一的ApiKey！" type="success" />
+    <a-flex :gap="12" align="center">
+      <a-flex align="center" :gap="8">
+        <span>ApiKey: </span>
+        <span>{{ apiKey }}</span>
+      </a-flex>
+      <a-button type="primary" size="small" @click="common.copy(apiKey, true)">复制</a-button>
+      <a-button type="ghost" @click="onResetOpenApiKey">重置</a-button>
+    </a-flex>
+  </div>
+
+  <div>
+    <h2>开放接口文档</h2>
+   <a-flex vertical :gap="12">
+     <a-card title="1、创建短链接">
+     </a-card>
+     <a-card title="2、获取短链接详情">
+     </a-card>
+     <a-card title="3、删除短链接">
+     </a-card>
    </a-flex>
- </div>
+  </div>
 </template>
 
 <style scoped></style>

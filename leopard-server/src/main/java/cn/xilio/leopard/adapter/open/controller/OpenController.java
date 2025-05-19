@@ -4,6 +4,8 @@ import cn.xilio.leopard.adapter.open.request.CreateShortUrlRequest;
 import cn.xilio.leopard.core.common.util.Result;
 import cn.xilio.leopard.service.ShortUrlService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -13,11 +15,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api/v1", name = "Open Interface")
 @RequiredArgsConstructor
+@Tag(name = "短链接平台开放接口")
 public class OpenController {
     @Autowired
     private ShortUrlService shortUrlService;
 
-    @Operation(summary = "创建短链接")
+    @Operation(summary = "创建短链接", parameters = {
+            @Parameter(name = "urls",
+                    description = "需要缩短的链接，每行一个",
+                    required = true,
+                    example = "abc123")
+    })
     @PostMapping(value = "short-url/create", name = "Create shorturl")
     public Result createShortUrl(@Validated @RequestBody CreateShortUrlRequest request) {
         return Result.success();

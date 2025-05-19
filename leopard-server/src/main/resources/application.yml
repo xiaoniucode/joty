@@ -41,6 +41,7 @@ security:
   concurrent: true
   ignore-urls:
     - /api/user/login
+    - /api/v1/**
     - /{code:^[a-zA-Z0-9]{6}$}
     - /favicon.ico
     - /doc.html

@@ -221,4 +221,13 @@ public class UserServiceImpl implements UserService {
         String userId = SecurityUtils.getLoginIdAsString();
         return userRepository.findApiKeyByUserId(userId);
     }
+
+    /**
+     * @param apiKey
+     * @return
+     */
+    @Override
+    public boolean isValidApiKey(String apiKey) {
+        return true;
+    }
 }
