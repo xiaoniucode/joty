@@ -42,7 +42,7 @@ public class ShortUrlClickedListener {
         record.setDeviceType(DeviceDetector.detectDevice(event.getUserAgent()).getName());
         record.setNetworkType(NetworkTypeDetector.detectNetworkType(event.getUserAgent()));
         //Need to optimize
-        record.setUserType(statsService.getAccessUserType(event.getIp(), event.getUserAgent()).getValue());
+        record.setUserType(statsService.getAccessUserType(event.getShortCode(),event.getIp(), event.getUserAgent()).getValue());
         boolean isLocal = IpUtils.isLocal(event.getIp());
         if (!isLocal) {
             String region = regionService.getRegion(event.getIp());

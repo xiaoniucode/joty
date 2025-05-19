@@ -29,8 +29,8 @@ public class StatsServiceImpl implements StatsService {
     public PageResponse<AccessRecord> records(String shortCode, PageQuery request) {
         return accessRecordRepository.findAccessRecords(shortCode,request.getPage(),request.getSize());
     }
-    public AccessUserType getAccessUserType(String ipAddress, String userAgent) {
-       return !accessRecordRepository.existsByIpAddressAndUserAgent(ipAddress, userAgent)? AccessUserType.NEW_USER: AccessUserType.OLD_USER;
+    public AccessUserType getAccessUserType(String shortCode,String ipAddress, String userAgent) {
+       return !accessRecordRepository.existsByIpAddressAndUserAgent(shortCode,ipAddress, userAgent)? AccessUserType.NEW_USER: AccessUserType.OLD_USER;
 
     }
 }

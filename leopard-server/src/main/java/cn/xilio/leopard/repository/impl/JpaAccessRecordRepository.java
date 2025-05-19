@@ -102,9 +102,8 @@ public class JpaAccessRecordRepository implements AccessRecordRepository {
     }
 
     @Override
-    public boolean existsByIpAddressAndUserAgent(String ipAddress, String userAgent) {
-        return accessRecordEntityRepository.existsByIpAddressAndUserAgent(ipAddress, userAgent);
+    public boolean existsByIpAddressAndUserAgent(String shortCode, String ipAddress, String userAgent) {
+        return accessRecordEntityRepository.existsByIpAddressAndUserAgentAndShortCode(ipAddress, userAgent,shortCode);
     }
-
 }
 

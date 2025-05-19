@@ -10,7 +10,7 @@ import cn.xilio.leopard.domain.enums.AccessUserType;
 import java.util.List;
 
 public interface StatsService {
-    public AccessUserType getAccessUserType(String ipAddress, String userAgent);
+    public AccessUserType getAccessUserType(String shortCode,String ipAddress, String userAgent);
 
     List<StatsResponse> getAccessCountByType(StatsAccessCountRequest request);
 

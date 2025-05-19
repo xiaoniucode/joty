@@ -12,5 +12,5 @@ public interface AccessRecordRepository {
     PageResponse<AccessRecord> findAccessRecords(String shortCode, int page, int size);
 
     AccessRecord saveAccessRecord(AccessRecord record);
-    boolean existsByIpAddressAndUserAgent(String ipAddress, String userAgent);
+    boolean existsByIpAddressAndUserAgent(String shortCode,String ipAddress, String userAgent);
 }

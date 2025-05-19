@@ -43,9 +43,9 @@ const columns = [
   },
   {
     title: '访客类型',
-    name: 'visitorType',
-    dataIndex: 'visitorType',
-    key: 'visitorType',
+    name: 'userType',
+    dataIndex: 'userType',
+    key: 'userType',
   },
 ]
 const pageQuery = reactive({
@@ -100,6 +100,9 @@ import wifi from '@/assets/icon/browser/wifi.svg'
           <a-image :preview="false" :width="20" :src="diannao" />
           <a-image :preview="false" :width="20" :src="wifi" />
         </a-flex>
+      </template>
+      <template v-if="column.key === 'userType'">
+         <a-tag  :bordered="false" :color="record.userType=='新用户'?'success':'orange'">{{record.userType}}</a-tag>
       </template>
     </template>
   </a-table>
