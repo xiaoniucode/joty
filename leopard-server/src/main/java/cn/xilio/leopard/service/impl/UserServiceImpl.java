@@ -1,6 +1,5 @@
 package cn.xilio.leopard.service.impl;
 
-import cn.hutool.core.lang.UUID;
 import cn.xilio.leopard.adapter.admin.dto.request.AddUserRequest;
 import cn.xilio.leopard.adapter.admin.dto.request.UpdateUserRequest;
 import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
@@ -8,6 +7,7 @@ import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;
 import cn.xilio.leopard.core.common.page.PageResponse;
 import cn.xilio.leopard.core.common.util.APIKeyGenerator;
+import cn.xilio.leopard.core.common.util.MD5;
 import cn.xilio.leopard.core.config.CacheManager;
 import cn.xilio.leopard.core.security.SecurityUtils;
 import cn.xilio.leopard.core.security.TokenInfo;
@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -54,7 +55,9 @@ public class UserServiceImpl implements UserService {
     public TokenInfo login(LoginRequest request) {
         User user = userRepository.findByUsername(request.username());
         BizException.checkNull("6001", user);
-        BizException.checkExpr("6003", UserStatus.DISABLED.getCode() == user.getStatus());
+        BizException.checkExpr("6003", Objects.equals(UserStatus.DISABLED.getCode(), user.getStatus()));
+        String encrypt = MD5.encrypt(request.password());
+        BizException.checkExpr("6002", !Objects.equals(encrypt, user.getPassword()));
         TokenInfo tokenInfo = SecurityUtils.login(user.getId());
         eventPublisher.publishEvent(new LoginEvent(this));
         return tokenInfo;
@@ -90,7 +93,8 @@ public class UserServiceImpl implements UserService {
         String apiKey = APIKeyGenerator.generateKey();
         newUser.setApiKey(apiKey);
         //密码加密
-
+        String encrypt = MD5.encrypt(request.password());
+        newUser.setPassword(encrypt);
         User regResult = userRepository.saveUser(newUser);
         //Auto login
         TokenInfo tokenInfo = SecurityUtils.login(regResult.getId());
@@ -161,7 +165,8 @@ public class UserServiceImpl implements UserService {
         String apiKey = APIKeyGenerator.generateKey();
         newUser.setApiKey(apiKey);
         //密码加密
-        newUser.setPassword(request.password());
+        String encrypt = MD5.encrypt(request.password());
+        newUser.setPassword(encrypt);
         User u = userRepository.saveUser(newUser);
         //创建默认分组
         groupService.createDefaultGroup(u.getId());
@@ -230,4 +235,6 @@ public class UserServiceImpl implements UserService {
     public boolean isValidApiKey(String apiKey) {
         return true;
     }
+
+
 }
