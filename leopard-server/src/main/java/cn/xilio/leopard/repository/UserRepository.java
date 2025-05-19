@@ -18,4 +18,6 @@ public interface UserRepository {
     User findById(String userId);
 
     void logicDeleteUser(List<String> ids);
+
+    String findApiKeyByUserId(String userId);
 }

@@ -96,7 +96,7 @@ export const asyncRoutes = [
         path: 'open-api',
         name: 'OpenApi',
         meta: { title: '开放接口', icon: 'UngroupOutlined' },
-        component: () => import('@/views/leopard/stats/index.vue'),
+        component: () => import('@/views/leopard/open-api/index.vue'),
       },
     ],
   },

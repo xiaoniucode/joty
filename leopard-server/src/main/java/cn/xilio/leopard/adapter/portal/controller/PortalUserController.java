@@ -46,4 +46,18 @@ public class PortalUserController {
         userService.logout();
         return Result.success();
     }
+
+    @Operation(summary = "获取开放接口api-key")
+    @GetMapping("get-api-key")
+    public Result getApiKey() {
+        String apiKey = userService.getOpenApiKey();
+        return Result.success(apiKey);
+    }
+
+    @Operation(summary = "重置开放接口api-key")
+    @PutMapping("reset-api-key")
+    public Result resetApiKey() {
+        String apiKey = userService.resetOpenApiKey();
+        return Result.success(apiKey);
+    }
 }

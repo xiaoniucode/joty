@@ -7,9 +7,9 @@ const props = defineProps<{
   treeData?: any
 }>()
 
-const expandedKeys = ref<string[]>(['0-0'])
-const selectedKeys = ref<string[]>(['0-0'])
-const checkedKeys = ref<string[]>(['0-0'])
+const expandedKeys = ref<string[]>(['1'])
+const selectedKeys = ref<string[]>(['1'])
+const checkedKeys = ref<string[]>(['1'])
 const hoverStates = ref<Record<string, boolean>>({})
 const dropdownVisible = ref<Record<string, boolean>>({})
 const hideTimeouts = ref<Record<string, number>>({})

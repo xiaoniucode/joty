@@ -1,11 +1,13 @@
 package cn.xilio.leopard.service.impl;
 
+import cn.hutool.core.lang.UUID;
 import cn.xilio.leopard.adapter.admin.dto.request.AddUserRequest;
 import cn.xilio.leopard.adapter.admin.dto.request.UpdateUserRequest;
 import cn.xilio.leopard.adapter.admin.dto.request.UserPageQueryRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;
 import cn.xilio.leopard.core.common.page.PageResponse;
+import cn.xilio.leopard.core.common.util.APIKeyGenerator;
 import cn.xilio.leopard.core.config.CacheManager;
 import cn.xilio.leopard.core.security.SecurityUtils;
 import cn.xilio.leopard.core.security.TokenInfo;
@@ -85,6 +87,8 @@ public class UserServiceImpl implements UserService {
         newUser.setRole(UserRole.USER.name());
         newUser.setStatus(UserStatus.NORMAL.getCode());
         newUser.setNickname(request.username());
+        String apiKey = APIKeyGenerator.generateKey();
+        newUser.setApiKey(apiKey);
         //密码加密
 
         User regResult = userRepository.saveUser(newUser);
@@ -154,6 +158,8 @@ public class UserServiceImpl implements UserService {
         User newUser = request.toUser();
         newUser.setRole(UserRole.USER.name());
         newUser.setStatus(UserStatus.NORMAL.getCode());
+        String apiKey = APIKeyGenerator.generateKey();
+        newUser.setApiKey(apiKey);
         //密码加密
         newUser.setPassword(request.password());
         User u = userRepository.saveUser(newUser);
@@ -189,5 +195,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(List<String> ids) {
         userRepository.logicDeleteUser(ids);
+    }
+
+    /**
+     * Reset open api key
+     *
+     * @return open api key after reset
+     */
+    @Override
+    public String resetOpenApiKey() {
+        String userId = SecurityUtils.getLoginIdAsString();
+        String apiKey = APIKeyGenerator.generateKey();
+        User user = userRepository.findById(userId);
+        user.setApiKey(apiKey);
+        return userRepository.saveUser(user).getApiKey();
+    }
+
+    /**
+     * Get open api key
+     *
+     * @return open api key
+     */
+    @Override
+    public String getOpenApiKey() {
+        String userId = SecurityUtils.getLoginIdAsString();
+        return userRepository.findApiKeyByUserId(userId);
     }
 }

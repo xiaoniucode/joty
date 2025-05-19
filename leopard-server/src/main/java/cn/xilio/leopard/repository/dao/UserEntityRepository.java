@@ -16,5 +16,6 @@ public interface  UserEntityRepository extends JpaRepository<User, String>, JpaS
     @Modifying
     @Query("UPDATE User u SET u.deleted = 1 WHERE u.id IN :ids")
     void updateDeletedStatusByIds(@Param("ids") List<String> ids );
-
+    @Query("SELECT u.apiKey FROM User u WHERE u.id = :userId")
+    String findApiKeyById(@Param("userId") String userId);
 }

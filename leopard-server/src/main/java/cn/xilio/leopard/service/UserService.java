@@ -71,4 +71,16 @@ public interface UserService {
      * @param ids id list
      */
     void deleteUser(List<String> ids);
+
+    /**
+     * Reset open api key
+     * @return open api key after reset
+     */
+    String resetOpenApiKey();
+
+    /**
+     *  Get open api key
+     * @return open api key
+     */
+    String getOpenApiKey();
 }

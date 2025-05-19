@@ -76,6 +76,11 @@ public class JpaUserRepository implements UserRepository {
                 userEntityRepository.updateDeletedStatusByIds(batch)
         );
     }
+
+    @Override
+    public String findApiKeyByUserId(String userId) {
+        return userEntityRepository.findApiKeyById(userId);
+    }
 }
 
 

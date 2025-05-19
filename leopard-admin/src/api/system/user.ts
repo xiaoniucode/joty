@@ -9,5 +9,7 @@ export const user: ApiModule = {
   login: { url: '/api/user/login', method: 'post' },
   register: { url: '/api/user/reg', method: 'post' },
   logout: { url: '/api/user/logout', method: 'post' },
+  getApiKey: { url: '/api/user/get-api-key', method: 'get' },
+  resetApikey: { url: '/api/user/reset-api-key', method: 'put' },
   uploadAvatar: { url: '/user/upload-avatar', method: 'post' },
 } as const
