@@ -25,4 +25,8 @@ public class PortalStatsController {
     public Result dashboard() {
         return Result.success();
     }
+    @GetMapping("get-data-stats")
+    public Result getDataStats() {
+        return Result.success();
+    }
 }
