@@ -49,7 +49,6 @@ public class PortalUserController {
     }
 
     @Operation(summary = "获取开放接口api-key")
-    @RateLimit(rate = 1)
     @GetMapping("get-api-key")
     public Result getApiKey() {
         String apiKey = userService.getOpenApiKey();

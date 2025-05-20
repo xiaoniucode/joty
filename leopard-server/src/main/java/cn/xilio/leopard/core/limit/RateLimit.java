@@ -22,7 +22,7 @@ public @interface RateLimit {
     int warmupPeriod() default 1;
 
     /**
-     * 限流提示信息
+     * 限流提示信息 支持国际化 国际化需要填写key 也可以直接填写文字 但是不支持国际化
      */
-    String message() default "1100";
+    String messageKey() default "访问速度太快了";
 }

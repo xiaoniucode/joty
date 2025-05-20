@@ -27,7 +27,7 @@ public class RateLimitAspect {
                 : RateLimiter.create(rateLimit.rate()));
 
         if (!limiter.tryAcquire()) {
-            throw new BizException(rateLimit.message());
+            throw new BizException(rateLimit.messageKey());
         }
         return joinPoint.proceed();
     }

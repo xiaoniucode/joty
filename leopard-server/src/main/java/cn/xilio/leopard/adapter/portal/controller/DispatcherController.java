@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class DispatcherController {
     @Autowired
     private DispatcherService dispatcherService;
-    @RateLimit
+    @RateLimit(rate = 1000, messageKey = "1100")
     @GetMapping(value = "/{code:[a-zA-Z0-9]{6}}", name = "JUMP TO")
     public String trigger(@PathVariable String code, HttpServletRequest request) {
         String longUrl = dispatcherService.getLongUrl(code,request);
