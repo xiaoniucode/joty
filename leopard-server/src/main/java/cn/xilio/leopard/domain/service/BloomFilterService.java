@@ -9,7 +9,6 @@ import java.nio.charset.Charset;
 /**
  * 短链生成服务
  *
- * @author BreezAm
  */
 @Service
 @SuppressWarnings("all")
@@ -22,7 +21,7 @@ public class BloomFilterService {
     /**
      * 期望的误判率
      */
-    private Double error=0.01;
+    private Double error=0.001;
     /**
      * 实例化布隆过滤器
      */

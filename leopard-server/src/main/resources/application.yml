@@ -1,4 +1,11 @@
 spring:
+  freemarker:
+    charset: UTF-8
+    template-loader-path: classpath:/templates/
+    settings:
+      template_update_delay: 0 # 开发环境禁用缓存
+      classic_compatible: true # 兼容空值处理
+
   cache:
     type: caffeine
     cache-names: shortUrlCache
@@ -57,3 +64,9 @@ knife4j:
     enable: true
     username: admin
     password: 123456
+server:
+  tomcat:
+    max-connections: 8192
+
+
+

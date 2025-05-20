@@ -10,20 +10,25 @@ import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
     private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(BizException.class)
+    @ResponseBody
     public Result handleBizException(BizException e) {
         return Result.error(e.getMessageKey(), e.getMessage());
     }
 
     @ExceptionHandler(BindException.class)
+    @ResponseBody
     public Result handleBindException(BindException e) {
         String defaultMessage = e.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
         logger.error("Bind error: {}", defaultMessage);
@@ -32,12 +37,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AuthorizationDeniedException.class)
+    @ResponseBody
     public Result handleAuthorizationDeniedException(AuthorizationDeniedException e) {
         String message = LocaleUtils.getLocaleMessage("403");
         return Result.error(Integer.toString(HttpStatus.FORBIDDEN.value()), message);
     }
 
     @ExceptionHandler(AuthenticationException.class)
+    @ResponseBody
     public Result handleAuthenticationException(AuthenticationException e) {
         String message = LocaleUtils.getLocaleMessage("401");
         return Result.error(Integer.toString(HttpStatus.UNAUTHORIZED.value()), message);
@@ -45,6 +52,7 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
     public Result handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         String defaultMessage = e.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
         logger.error("Validation error: {}", defaultMessage);
@@ -53,6 +61,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
+    @ResponseBody
     public Result handleGenericException(Exception e) {
         logger.error("Unexpected error", e);
         String message = LocaleUtils.getLocaleMessage("5000");
@@ -60,6 +69,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
+    @ResponseBody
     public Result handleGenericException(NoResourceFoundException e) {
         String message = LocaleUtils.getLocaleMessage("404", null);
         return Result.error("404", message);

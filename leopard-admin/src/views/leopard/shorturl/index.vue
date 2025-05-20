@@ -78,7 +78,8 @@
             <template v-else-if="column.key === 'expiredAt'">
               <span>
                 <a-tag color="orange" :bordered="false" v-if="!record.expiredAt">永不过期</a-tag>
-                <span v-else> {{ record.expiredAt }}</span>
+                <a-tag color="red" :bordered="false" v-else-if="isExpired(record.expiredAt)">已过期</a-tag>
+                <span v-else>{{record.expiredAt }}</span>
               </span>
             </template>
             <template v-else-if="column.key === 'action'">
@@ -212,6 +213,10 @@ watch(
   },
   { deep: true },
 )
+const isExpired = (dateString: string | null): boolean => {
+  if (!dateString) return false
+  return new Date(dateString).getTime() < Date.now()
+}
 const onDelete = async (id: string) => {
   Modal.confirm({
     title: '你确定删除该短链接?',

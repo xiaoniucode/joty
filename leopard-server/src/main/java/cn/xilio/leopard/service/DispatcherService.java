@@ -1,6 +1,7 @@
 package cn.xilio.leopard.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface DispatcherService {
     /**
@@ -8,5 +9,5 @@ public interface DispatcherService {
      * @param code short code
      * @return Long link
      */
-    String getLongUrl(String code, HttpServletRequest request);
+    String getLongUrl(String code, HttpServletRequest request, HttpServletResponse response);
 }
