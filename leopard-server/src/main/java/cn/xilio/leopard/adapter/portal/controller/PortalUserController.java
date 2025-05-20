@@ -3,6 +3,7 @@ package cn.xilio.leopard.adapter.portal.controller;
 
 import cn.xilio.leopard.adapter.portal.dto.request.LoginRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.RegisterRequest;
+import cn.xilio.leopard.core.limit.RateLimit;
 import cn.xilio.leopard.core.security.SecurityUtils;
 import cn.xilio.leopard.domain.model.LoginUser;
 import cn.xilio.leopard.service.UserService;
@@ -48,6 +49,7 @@ public class PortalUserController {
     }
 
     @Operation(summary = "获取开放接口api-key")
+    @RateLimit(rate = 1)
     @GetMapping("get-api-key")
     public Result getApiKey() {
         String apiKey = userService.getOpenApiKey();
