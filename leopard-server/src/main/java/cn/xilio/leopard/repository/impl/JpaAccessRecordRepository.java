@@ -5,6 +5,7 @@ import cn.xilio.leopard.adapter.portal.dto.response.StatsResponse;
 import cn.xilio.leopard.core.common.page.PageResponse;
 import cn.xilio.leopard.domain.dataobject.AccessRecord;
 import cn.xilio.leopard.domain.dataobject.ShortUrl;
+import cn.xilio.leopard.domain.model.DailyStatsDTO;
 import cn.xilio.leopard.repository.AccessRecordRepository;
 import cn.xilio.leopard.repository.dao.AccessRecordEntityRepository;
 import jakarta.annotation.Resource;
@@ -19,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,6 +106,21 @@ public class JpaAccessRecordRepository implements AccessRecordRepository {
     @Override
     public boolean existsByIpAddressAndUserAgent(String shortCode, String ipAddress, String userAgent) {
         return accessRecordEntityRepository.existsByIpAddressAndUserAgentAndShortCode(ipAddress, userAgent,shortCode);
+    }
+
+    @Override
+    public List<DailyStatsDTO> getDailyAccessStats(String startDate, String endDate, String shortCode) {
+        return accessRecordEntityRepository.getRawDailyStats(startDate,endDate,shortCode).stream()
+                .map(row -> {
+                    Date rawDate = row[0] != null ?
+                            new java.util.Date(((java.sql.Date)row[0]).getTime()) : null;
+                    return new DailyStatsDTO(
+                            rawDate,
+                            ((Number)row[1]).longValue(),
+                            ((Number)row[2]).longValue()
+                    );
+                })
+                .collect(Collectors.toList());
     }
 }
 

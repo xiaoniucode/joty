@@ -6,6 +6,7 @@ import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.page.PageResponse;
 import cn.xilio.leopard.domain.dataobject.AccessRecord;
 import cn.xilio.leopard.domain.enums.AccessUserType;
+import cn.xilio.leopard.domain.model.DailyStatsDTO;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface StatsService {
     List<StatsResponse> getAccessCountByType(StatsAccessCountRequest request);
 
     PageResponse<AccessRecord> records(String shortCode, PageQuery request);
+
+    public List<DailyStatsDTO> getDailyAccessStats(String startDate, String endDate, String shortCode);
 }

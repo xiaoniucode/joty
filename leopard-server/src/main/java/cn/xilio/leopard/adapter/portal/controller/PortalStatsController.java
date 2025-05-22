@@ -1,5 +1,6 @@
 package cn.xilio.leopard.adapter.portal.controller;
 
+import cn.xilio.leopard.adapter.portal.dto.request.DailyAccessStatsRequest;
 import cn.xilio.leopard.adapter.portal.dto.request.StatsAccessCountRequest;
 import cn.xilio.leopard.core.common.page.PageQuery;
 import cn.xilio.leopard.core.common.util.Result;
@@ -29,4 +30,10 @@ public class PortalStatsController {
     public Result getDataStats() {
         return Result.success();
     }
+
+    @PostMapping("get-daily-access-stats")
+    public Result getDailyAccessStats(@RequestBody DailyAccessStatsRequest request) {
+        return Result.success(statsService.getDailyAccessStats(request.startDate(),request.endDate(), request.shortCode()));
+    }
+
 }

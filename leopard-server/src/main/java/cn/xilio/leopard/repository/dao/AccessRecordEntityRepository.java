@@ -1,6 +1,7 @@
 package cn.xilio.leopard.repository.dao;
 
 import cn.xilio.leopard.domain.dataobject.AccessRecord;
+import cn.xilio.leopard.domain.model.DailyStatsDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -38,4 +39,29 @@ public interface AccessRecordEntityRepository extends JpaRepository<AccessRecord
     List<Object[]> findTodayStatsByShortCodes(@Param("shortCodes") List<String> shortCodes, @Param("today") LocalDate today);
 
     boolean existsByIpAddressAndUserAgentAndShortCode(String shortCode, String ipAddress, String userAgent);
+
+    @Query(nativeQuery = true, value = """
+    WITH RECURSIVE date_range AS (
+        SELECT CAST(:startDate AS DATE) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY)
+        FROM date_range
+        WHERE date < :endDate
+    )
+    SELECT 
+        dr.date,
+        COUNT(DISTINCT ar.ip_address) AS unique_visitors,
+        COUNT(ar.id) AS total_visits
+    FROM date_range dr
+    LEFT JOIN access_record ar ON 
+        DATE(ar.access_time) = dr.date AND
+        ar.short_code = :shortCode
+    GROUP BY dr.date
+    ORDER BY dr.date""")
+    List<Object[]> getRawDailyStats(
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate,
+            @Param("shortCode") String shortCode);
+
+
 }
