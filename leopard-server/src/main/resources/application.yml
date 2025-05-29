@@ -67,6 +67,6 @@ knife4j:
 server:
   tomcat:
     max-connections: 8192
-
+  port: 8090
 
 

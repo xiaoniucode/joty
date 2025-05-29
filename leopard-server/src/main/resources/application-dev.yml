@@ -19,7 +19,16 @@ spring:
       password:
       database: 2
       timeout: 10000
+#      cluster:
+#        nodes:
+#          - 127.0.0.1:7001
+#          - 127.0.0.1:7002
+#        max-redirects: 3
       lettuce:
+#        cluster:
+#          refresh:
+#            adaptive: true
+#            period: 2000
         pool:
           # 连接池最大连接数
           max-active: 200
