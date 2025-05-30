@@ -85,9 +85,7 @@
         :style="{ margin: '16px', overflow: 'auto', padding: '24px', background: '#fff', borderRadius: '4px', minHeight: '280px' }"
       >
         <router-view v-slot="{ Component }">
-          <transition name="fade-transform" mode="out-in">
             <component :is="Component" />
-          </transition>
         </router-view>
       </a-layout-content>
     </a-layout>
