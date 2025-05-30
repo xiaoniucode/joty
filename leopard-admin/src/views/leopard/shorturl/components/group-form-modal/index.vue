@@ -31,16 +31,19 @@ import { group } from '@/api/leopard/group.ts'
 const emit=defineEmits(['onSaveSuccess'])
 const open = ref<boolean>(false)
 const formRef = ref()
-const showModal = (data = null) => {
-  open.value = true
-  if (data == null) {
-    isEdit.value = false
-    resetForm()
-  } else {
-    isEdit.value = true
-    api.action(group.get, { id: data.id }).then((res: any) => {
+const showModal = async (data = null) => {
+  try {
+    open.value = true
+    if (data == null) {
+      isEdit.value = false
+      resetForm()
+    } else {
+      isEdit.value = true
+      const res = await api.action(group.get, { id: data.id })
       Object.assign(formState, res)
-    })
+    }
+  } catch (error) {
+    console.error(error)
   }
 }
 defineExpose({
@@ -84,5 +87,11 @@ const rules: Record<string, Rule[]> = {
 
 const resetForm = () => {
   formRef.value.resetFields()
+  Object.assign(formState, {
+    id: undefined,
+    name: '',
+    remark: '',
+    sort: 0
+  })
 }
 </script>

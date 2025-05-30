@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-    title: '🐆Leopard 短链平台',
+    title: '🐆Leopard 蜂鸟短链平台',
     tagline: '大道至简',
     favicon: 'img/favicon.ico',
 
@@ -67,7 +67,7 @@ const config: Config = {
         // Replace with your project's social card
         image: 'img/logo.svg',
         navbar: {
-            title: 'Leopard 短链平台',
+            title: 'Leopard 蜂鸟短链平台',
             logo: {
                 alt: 'Leopard Logo',
                 src: 'img/logo.svg',

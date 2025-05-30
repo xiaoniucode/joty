@@ -7,5 +7,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class UserPageQueryRequest extends PageQuery {
+    /** 用户名 */
     private String username;
 }
