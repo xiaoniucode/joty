@@ -1,7 +1,6 @@
-# Leopard 蜂鸟短链接平台
+# joty
 ![logo.png](doc/screenshot/logo.png)
 
-官方文档：https://xilio-dev.github.io/leopard
 ## 截图
 
  ![f955026431d24633b06b3b6dd7b1ffc6.png](doc/screenshot/f955026431d24633b06b3b6dd7b1ffc6.png)

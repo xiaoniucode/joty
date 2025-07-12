@@ -16,4 +16,10 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 .idea
-leopard-server/upload
+joty-server/upload
+upload/
+joty-server/target/
+joty-admin/node_modules/
+joty-admin/dist/
+joty-admin/pnpm-lock.yaml
+joty-admin/build
