@@ -3,7 +3,7 @@
 </script>
 
 <template>
-非常牛逼的哈
+  <div>用户注册页面</div>
 </template>
 
 <style scoped>
