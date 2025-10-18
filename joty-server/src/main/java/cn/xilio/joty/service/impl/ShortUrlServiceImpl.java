@@ -11,8 +11,6 @@ import cn.xilio.joty.domain.event.ShortUrlDeleteEvent;
 import cn.xilio.joty.domain.event.ShortUrlUpdateEvent;
 import cn.xilio.joty.service.ShortUrlService;
 import cn.xilio.joty.service.UploadService;
-import cn.xilio.joty.domain.dataobject.Group;
-import cn.xilio.joty.service.GroupService;
 import cn.xilio.joty.domain.event.ShortUrlCreatedEvent;
 import cn.xilio.joty.domain.dataobject.ShortUrl;
 import cn.xilio.joty.repository.ShortUrlRepository;
@@ -48,8 +46,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     @Autowired
     private ShortUrlRepository shortUrlRepository;
     @Autowired
-    private GroupService groupService;
-    @Autowired
     private UploadService uploadService;
     private final Lock lock = new ReentrantLock();
 
@@ -64,9 +60,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     public SingleShortUrlResponse createSingle(CreateSingleShortUrlRequest request) {
         lock.lock();
         try {
-            Group group = groupService.getById(request.groupId());
-            //检查分组是否存在
-            BizException.checkNull("6005", group);
             //生成短码
             String code = shortCodeGenerator.genShortCode(request.originalUrl());
             //如果生成的短码存在则加随机数重新生成 保证唯一性
@@ -109,7 +102,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
             CreateSingleShortUrlRequest single = new CreateSingleShortUrlRequest(
                     "未命名",
                     originalUrl,
-                    request.groupId(),
                     request.expiredAt(),
                     null);
             SingleShortUrlResponse created = createSingle(single);
@@ -219,7 +211,6 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         CreateSingleShortUrlRequest single = new CreateSingleShortUrlRequest(
                 "快速创建",
                 request.url(),
-                "1",
                 null,
                 null);
         return createSingle(single);
@@ -247,20 +238,5 @@ public class ShortUrlServiceImpl implements ShortUrlService {
                 info.getQrUrl(),
                 info.getExpiredAt());
 
-    }
-
-    /**
-     * Migrate group to default
-     *
-     * @param groupIds Group ID List
-     */
-    @Override
-    @Transactional(rollbackOn = Exception.class)
-    public void migrateGroupToDefault(List<String> groupIds) {
-        if (CollectionUtils.isEmpty(groupIds)) {
-            return;
-        }
-        //Migration of short chains with group ID over groupIds to default group 1
-        shortUrlRepository.updateGroupToNew(groupIds, "1");
     }
 }

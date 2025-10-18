@@ -38,3 +38,16 @@ spring:
           max-idle: 10
           # 连接池中的最小空闲连接
           min-idle: 0
+joty:
+  code:
+    # 生成短链接时，发生重复的时候最多尝试次数，用于保证短码的唯一性
+    max-try-times: 10
+  task:
+    #定时任务 定期清理掉过期的短链接
+    expire-url-clean: 0 0 0 * * ?
+  file:
+    upload-model: Local
+    public-path: /fs
+    local-path: ./joty/upload
+  # 是否开启演示模式 演示模式不支持用户更新某些数据
+  demo-model: false

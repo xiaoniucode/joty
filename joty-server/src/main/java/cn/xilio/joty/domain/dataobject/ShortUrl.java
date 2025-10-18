@@ -32,11 +32,6 @@ public class ShortUrl extends Auditable {
     @Column(name = "title", nullable = true, length = 64)
     private String title;
 
-    /**
-     * 分组ID
-     */
-    @Column(name = "group_id", length = 64, nullable = false)
-    private String groupId;
 
     /**
      * Original Long Link

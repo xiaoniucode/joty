@@ -12,7 +12,4 @@ import java.util.List;
 
 @Repository
 public interface  ShortUrlEntityRepository extends JpaRepository<ShortUrl, String>, JpaSpecificationExecutor<ShortUrl> {
-    @Modifying
-    @Query("UPDATE ShortUrl su SET su.groupId = :newGroup WHERE  su.groupId!=:newGroup AND su.groupId IN :groupIds")
-    void updateGroupId(@Param("groupIds") List<String> groupIds, @Param("newGroup") String newGroup);
 }

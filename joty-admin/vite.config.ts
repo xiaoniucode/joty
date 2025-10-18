@@ -33,6 +33,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: "http://localhost:8090",
+       // target: "http://xxx.com",
         secure: false,
         ws: false,
         changeOrigin: true,

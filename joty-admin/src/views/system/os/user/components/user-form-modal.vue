@@ -58,8 +58,8 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, reactive, toRaw, computed} from 'vue'
-import {message, type UploadChangeParam} from 'ant-design-vue'
+import { ref, reactive, toRaw, computed } from 'vue'
+import { message, type UploadChangeParam } from 'ant-design-vue'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import type { UploadProps } from 'ant-design-vue'
 import api from '@/utils/api.ts'
@@ -71,8 +71,9 @@ const formRef = ref()
 const emit = defineEmits(['onSaveSuccess'])
 const userStore = useUserStore()
 const headers = computed(() => ({
-  [userStore.getTokenName()]: 'Bearer '+userStore.getToken()
+  [userStore.getTokenName()]: 'Bearer ' + userStore.getToken(),
 }))
+
 // 表单状态
 interface FormState {
   id?: undefined
@@ -121,16 +122,16 @@ const beforeUpload: UploadProps['beforeUpload'] = (file) => {
 }
 const handleChange = (info: UploadChangeParam) => {
   if (info.file.status !== 'uploading') {
-    console.log(info.file, info.fileList);
+    console.log(info.file, info.fileList)
   }
   if (info.file.status === 'done') {
-    const avatar=info.file.response.data
-    formState.avatar=avatar
-    message.success(`上传成功`);
+    const avatar = info.file.response.data
+    formState.avatar = avatar
+    message.success(`上传成功`)
   } else if (info.file.status === 'error') {
-    message.error(`上传失败`);
+    message.error(`上传失败`)
   }
-};
+}
 
 // 表单验证规则
 const rules = {

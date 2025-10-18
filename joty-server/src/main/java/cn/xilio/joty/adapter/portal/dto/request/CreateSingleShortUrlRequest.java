@@ -18,8 +18,6 @@ public record CreateSingleShortUrlRequest(
                 message = "请输入有效的URL链接（需包含协议头）"
         )
         String originalUrl,
-        @NotEmpty(message = "分组ID不能为空")
-        String groupId,
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         LocalDate expiredAt,
         String remark
@@ -28,7 +26,6 @@ public record CreateSingleShortUrlRequest(
         ShortUrl shortUrl = new ShortUrl();
         shortUrl.setTitle(title);
         shortUrl.setOriginalUrl(originalUrl);
-        shortUrl.setGroupId(groupId);
         shortUrl.setRemark(remark);
         shortUrl.setExpiredAt(expiredAt);
         return shortUrl;

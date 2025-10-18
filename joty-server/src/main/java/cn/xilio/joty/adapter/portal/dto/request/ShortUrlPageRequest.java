@@ -7,6 +7,5 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ShortUrlPageRequest extends PageQuery {
-    /** 分组ID */
-    private String groupId;
+
 }

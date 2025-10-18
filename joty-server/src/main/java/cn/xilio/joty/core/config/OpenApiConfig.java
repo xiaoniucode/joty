@@ -25,13 +25,6 @@ public class OpenApiConfig {
                 .build();
     }
     @Bean
-    public GroupedOpenApi openApiGroup() {
-        return GroupedOpenApi.builder()
-                .group("joty-openApi")
-                .packagesToScan("cn.xilio.joty.adapter.open.controller")
-                .build();
-    }
-    @Bean
     public OpenApiCustomizer customOpenApiCustomizer() {
         return openApi -> openApi.info(
                 new Info()
