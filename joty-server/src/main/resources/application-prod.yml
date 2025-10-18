@@ -1,22 +1,22 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/leopard?characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://host.docker.internal:3306/joty?characterEncoding=utf-8&useSSL=false
     username: root
     password: 123456
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
         format_sql: true
   data:
     redis:
-      host: 127.0.0.1
+      host: host.docker.internal
       port: 6379
-      password:
+      password: 123456
       database: 0
       timeout: 10000
       lettuce:
@@ -29,3 +29,16 @@ spring:
           max-idle: 10
           # 连接池中的最小空闲连接
           min-idle: 0
+joty:
+  code:
+    # 生成短链接时，发生重复的时候最多尝试次数，用于保证短码的唯一性
+    max-try-times: 10
+  task:
+    #定时任务 定期清理掉过期的短链接
+    expire-url-clean: 0 0 0 * * ?
+  file:
+    upload-model: Local
+    public-path: /fs
+    local-path: /opt/joty/upload
+  # 是否开启演示模式 演示模式不支持用户更新某些数据
+  demo-model: false

@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
+    "type-check": "tsc --noEmit",
     "preview": "vite preview",
     "build-only": "vite build",
-    "type-check": "vue-tsc --build",
     "format": "prettier --write src/"
   },
   "dependencies": {
