@@ -12,7 +12,7 @@
     <groupId>cn.xilio</groupId>
     <version>1.0.0</version>
     <name>joty-server</name>
-    <description>短链接管理平台，用于将长链接缩短为短链接</description>
+    <description>短链接管理平台</description>
     <packaging>jar</packaging>
 
     <properties>
@@ -30,7 +30,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
