@@ -33,29 +33,6 @@ export const asyncRoutes = [
   },
   {
     path: '/',
-    name: 'setting',
-    component: Layout,
-    meta: { title: '系统设置', icon: 'SlackCircleFilled', roles: ['admin'] },
-    alwaysShow: true,
-    children: [
-      {
-        path: 'cache',
-        name: 'Cache',
-        component: () => import('@/views/system/setting/cache/index.vue'),
-        hidden: false,
-        meta: { title: '缓存管理', icon: 'IeCircleFilled' },
-      },
-      {
-        path: 'site-config',
-        name: 'SiteConfig',
-        component: () => import('@/views/system/setting/cache/index.vue'),
-        hidden: false,
-        meta: { title: '网站配置', icon: 'IeCircleFilled' },
-      },
-    ],
-  },
-  {
-    path: '/',
     name: 'ShortUrl',
     component: Layout,
     alwaysShow: false,
@@ -91,12 +68,6 @@ export const asyncRoutes = [
         name: 'RestoreUrl',
         meta: { title: '短链还原', icon: 'AppstoreAddOutlined' },
         component: () => import('@/views/joty/restore-url/index.vue'),
-      },
-      {
-        path: 'open-api',
-        name: 'OpenApi',
-        meta: { title: '开放接口', icon: 'UngroupOutlined' },
-        component: () => import('@/views/joty/open-api/index.vue'),
       },
     ],
   },

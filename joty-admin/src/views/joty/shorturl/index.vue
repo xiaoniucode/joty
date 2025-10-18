@@ -1,10 +1,5 @@
 <template>
   <a-row>
-    <a-col :span="4">
-      <group-list @onSelectGroup="onSelectGroup" @onChange="onGroupChange" />
-    </a-col>
-    <a-col :span="20">
-      <a-flex style="flex: 1" vertical>
         <page-header>
           <a-button danger @click="onBatchDelete" type="primary">批量删除</a-button>
           <a-button @click="onOpenCreateModal" v-hasPerm="'add'" type="primary">新增</a-button>
@@ -16,7 +11,6 @@
           :pagination="false"
           :data-source="tableData"
           row-key="id"
-          :scroll="{ y: 500 }"
         >
           <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'title'">
@@ -84,7 +78,6 @@
             </template>
             <template v-else-if="column.key === 'action'">
               <span>
-                <a @click="onShowAnalysis(record)">数据</a>
                 <a-divider type="vertical" />
                 <a @click="onDelete(record.id)">删除</a>
                 <a-divider type="vertical" />
@@ -102,12 +95,8 @@
             :total="total"
           />
         </div>
-      </a-flex>
-    </a-col>
   </a-row>
-
   <url-form-modal ref="urlFormModalRef" @onSaveSuccess="onSaveSuccess" />
-  <Analysis ref="analysisRef" :key="new Date().getMilliseconds()" />
 </template>
 <script lang="ts" setup>
 import { QrcodeOutlined, CopyOutlined } from '@ant-design/icons-vue'
@@ -116,8 +105,6 @@ import api from '@/utils/api.ts'
 import { short_url } from '@/api/joty/shorturl.ts'
 import PageHeader from '@/components/page-header.vue'
 import UrlFormModal from './components/url-form-modal/index.vue'
-import GroupList from './components/group-list/index.vue'
-import Analysis from './components/analysis/index.vue'
 import { message, Modal } from 'ant-design-vue'
 import common from '@/utils/common.ts'
 
@@ -189,10 +176,6 @@ const onGroupChange = async () => {
 const onEdit = (data: object) => {
   urlFormModalRef.value.showModal(data)
 }
-const onShowAnalysis = (item: object) => {
-  analysisRef.value.showDrawer(item)
-}
-
 const total = ref(0)
 const tableData = ref([])
 const onLoadTableData = async () => {

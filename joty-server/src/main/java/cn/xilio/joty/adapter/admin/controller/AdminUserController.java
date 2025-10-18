@@ -60,20 +60,6 @@ public class AdminUserController {
         if (file.isEmpty()) {
             throw new BizException("6008");
         }
-//        // 2. 文件类型校验
-//        String originalFilename = file.getOriginalFilename();
-//        String extension = originalFilename != null ?
-//                originalFilename.substring(originalFilename.lastIndexOf(".") + 1) : "";
-//        if (!Arrays.asList("jpg", "jpeg", "png", "gif").contains(extension.toLowerCase())) {
-//            throw new IllegalArgumentException("仅支持jpg/jpeg/png/gif格式图片");
-//        }
-//
-//        // 3. 文件大小校验（示例限制2MB）
-//        long maxSize = 2 * 1024 * 1024;
-//        if (file.getSize() > maxSize) {
-//            throw new IllegalArgumentException("文件大小不能超过2MB");
-//        }
-
         // 4. 执行上传
         String fileUrl = uploadService.upload(file);
         return Result.success(fileUrl);

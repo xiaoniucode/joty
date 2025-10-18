@@ -22,8 +22,8 @@ interface FormState {
 }
 
 const formState = ref<FormState>({
-  username: 'admin',
-  password: 'hlsh@$@$&%',
+  username: 'user',
+  password: '123456',
 })
 
 const loading = ref(false)
@@ -73,7 +73,7 @@ const enableRegister = appStore.config.enableRegister
     </a-form-item>
   </a-form>
   <a-flex v-if="enableRegister" align="center" justify="center">
-    <div>还没有帐号?<a @click="emit('onRegister', formState.username)"> 注册新帐号</a></div>
+    <div>还没有帐号?<a> 注册新帐号</a></div>
   </a-flex>
 </template>
 

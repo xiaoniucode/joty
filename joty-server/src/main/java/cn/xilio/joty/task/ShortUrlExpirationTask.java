@@ -26,7 +26,7 @@ public class ShortUrlExpirationTask {
                     deletedCount, System.currentTimeMillis() - startTime);
         } catch (Exception e) {
             log.error("过期短链接清理任务执行失败", e);
-            throw e; // 触发重试
+            throw e;
         }
     }
 }

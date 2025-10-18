@@ -1,23 +1,12 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import api from '@/utils/api.ts'
-import { group } from '@/api/joty/group.ts'
-import { message, type TableProps } from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 import { short_url } from '@/api/joty/shorturl.ts'
 
 const formState = reactive({
   urls: '',
   expiredAt: undefined,
-  groupId: '1',
-})
-const groupData = ref([])
-const loadGroupData = async () => {
-  const res = await (<any>api.action(group.list, {}, {}))
-  groupData.value = res.records
-  formState.groupId = groupData.value[0]?.id || '' // 数据加载后更新默认值
-}
-onMounted(() => {
-  loadGroupData()
 })
 const columns = [
   {
@@ -102,17 +91,6 @@ const onBatchCreate = () => {
               placeholder="永久"
               style="width: 120px"
             />
-            <span>分组:</span>
-            <a-select
-              size="small"
-              style="min-width: 120px"
-              v-model:value="formState.groupId"
-              placeholder="选择分组"
-            >
-              <a-select-option v-for="item in groupData" :value="item.id"
-                >{{ item.name }}
-              </a-select-option>
-            </a-select>
           </a-flex>
           <a-button @click="onBatchCreate" size="small" type="primary">立即创建</a-button>
         </a-flex>

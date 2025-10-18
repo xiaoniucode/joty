@@ -25,14 +25,6 @@
           <a-radio :value="formState.domain">{{formState.domain}}</a-radio>
         </a-radio-group>
       </a-form-item>
-
-      <a-form-item label="分组" name="groupId">
-        <a-select style="width: 40%" v-model:value="formState.groupId" placeholder="选择分组">
-          <a-select-option v-for="item in groupData" :value="item.id"
-            >{{ item.name }}
-          </a-select-option>
-        </a-select>
-      </a-form-item>
       <a-form-item label="有效期" name="expiredAt">
         <a-date-picker
           :disabled="isEdit"
@@ -62,22 +54,12 @@ import { reactive, toRaw } from 'vue'
 import type { UnwrapRef } from 'vue'
 import type { Rule } from 'ant-design-vue/es/form'
 import api from '@/utils/api.ts'
-import { group } from '@/api/joty/group.ts'
 import { short_url } from '@/api/joty/shorturl.ts'
 import { message } from 'ant-design-vue'
 
 const open = ref<boolean>(false)
 const formRef = ref()
 const emit = defineEmits(['onSaveSuccess'])
-const groupData = ref([])
-const loadGroupData = async () => {
-  const res = await (<any>api.action(group.list, {}, {}))
-  groupData.value = res.records
-  formState.groupId = groupData.value[0]?.id || '' // 数据加载后更新默认值
-}
-onMounted(() => {
-  loadGroupData()
-})
 const isEdit = ref(false)
 const showModal = (data: object) => {
   open.value = true
@@ -89,12 +71,8 @@ const showModal = (data: object) => {
     Object.assign(formState, { ...data, expiredAt: data.expiredAt ? dayjs(data.expiredAt) : null })
   }
 }
-const flushData=async ()=>{
-  await loadGroupData()
-}
 defineExpose({
   showModal,
-  flushData
 })
 
 const handleOk = (e: MouseEvent) => {
@@ -126,7 +104,6 @@ const INITIAL_STATE = {
   originalUrl: '',
   expiredAt: null,
   status: 1,
-  groupId: '',
   remark: '',
 }
 
@@ -138,7 +115,6 @@ interface FormState {
   qrUrl?: string
   expiredAt?: string | Dayjs|null
   status: number
-  groupId: string
   remark: string
 }
 
@@ -154,7 +130,6 @@ const rules: Record<string, Rule[]> = {
   ],
   originalUrl: [{ required: true, message: '请输入长链接', trigger: 'change' }],
   status: [{ required: true }],
-  groupId: [{ required: true, message: '必须指定一个分组', trigger: 'change' }],
   domain: [{ required: true, message: '必须选择一个域名', trigger: 'change' }],
   remark: [{ max: 50, message: '长度在50内', trigger: 'blur' }],
   expiredAt: [
@@ -172,7 +147,6 @@ const resetForm = () => {
   formRef.value?.resetFields()
   Object.assign(formState, {
     ...INITIAL_STATE,
-    groupId: groupData.value[0]?.id || '',
     expiredAt: null
   })
 }
