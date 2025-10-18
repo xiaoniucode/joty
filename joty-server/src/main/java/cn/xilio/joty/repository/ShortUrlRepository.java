@@ -62,11 +62,5 @@ public interface ShortUrlRepository {
      */
     List<ShortUrl> findByIds(List<String> ids, String userId);
 
-    /**
-     *  Update group to new group
-     * @param groupIds List of group IDs
-     * @param newGroup New group
-     */
-    void updateGroupToNew(List<String> groupIds, String newGroup);
     public PageResponse<ShortUrlWithStats> pageWithStats(ShortUrlPageRequest request, String userId);
 }

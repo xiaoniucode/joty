@@ -15,11 +15,7 @@ public record CreateBatchShortUrlRequest(
         /**
          * 短链接过期时间
          */
-        LocalDate expiredAt,
-        /**
-         * 短链接所属分组ID
-         */
-        @NotEmpty
-        String groupId
+        LocalDate expiredAt
+
 ) {
 }

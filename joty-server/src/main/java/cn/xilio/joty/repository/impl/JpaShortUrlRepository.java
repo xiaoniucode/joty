@@ -55,13 +55,9 @@ public class JpaShortUrlRepository implements ShortUrlRepository {
     public PageResponse<ShortUrl> page(ShortUrlPageRequest request, String userId) {
         int page = request.getPage();
         int size = request.getSize();
-        String groupId = request.getGroupId();
         // 3. 动态条件组装
         Specification<ShortUrl> spec = (root, query, cb) -> {
             Predicate predicate = cb.equal(root.get("createdBy"), userId);
-            if (StringUtils.hasText(groupId)) {
-                predicate = cb.and(predicate, cb.equal(root.get("groupId"), groupId));
-            }
             return predicate;
         };
         PageRequest pageRequest = PageRequest.of(page < 1 ? 0 : (page - 1), size, Sort.by(Sort.Direction.DESC, "updatedAt"));
@@ -78,14 +74,9 @@ public class JpaShortUrlRepository implements ShortUrlRepository {
     public PageResponse<ShortUrlWithStats> pageWithStats(ShortUrlPageRequest request, String userId) {
         int page = request.getPage();
         int size = request.getSize();
-        String groupId = request.getGroupId();
-
         // 1. 查询短链接分页数据
         Specification<ShortUrl> spec = (root, query, cb) -> {
             Predicate predicate = cb.equal(root.get("createdBy"), userId);
-            if (StringUtils.hasText(groupId)) {
-                predicate = cb.and(predicate, cb.equal(root.get("groupId"), groupId));
-            }
             return predicate;
         };
 
@@ -257,17 +248,6 @@ public class JpaShortUrlRepository implements ShortUrlRepository {
                         root.get("id").in(ids)
                 );
         return shortUrlEntityRepository.findAll(spec);
-    }
-
-    /**
-     * Update group to new group
-     *
-     * @param groupIds List of group IDs
-     * @param newGroup New group
-     */
-    @Override
-    public void updateGroupToNew(List<String> groupIds, String newGroup) {
-        shortUrlEntityRepository.updateGroupId(groupIds, newGroup);
     }
 }
 

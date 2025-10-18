@@ -14,7 +14,6 @@ import cn.xilio.joty.core.security.TokenInfo;
 import cn.xilio.joty.domain.CacheKey;
 import cn.xilio.joty.domain.enums.UserRole;
 import cn.xilio.joty.domain.model.LoginUser;
-import cn.xilio.joty.service.GroupService;
 import cn.xilio.joty.service.UserService;
 import cn.xilio.joty.domain.event.LoginEvent;
 import cn.xilio.joty.domain.event.LogoutEvent;
@@ -42,9 +41,6 @@ public class UserServiceImpl implements UserService {
     private ApplicationEventPublisher eventPublisher;
     @Autowired
     private CacheManager cacheManager;
-    @Autowired
-    private GroupService groupService;
-
     /**
      * Login
      *
@@ -167,9 +163,7 @@ public class UserServiceImpl implements UserService {
         //密码加密
         String encrypt = MD5.encrypt(request.password());
         newUser.setPassword(encrypt);
-        User u = userRepository.saveUser(newUser);
-        //创建默认分组
-        groupService.createDefaultGroup(u.getId());
+      userRepository.saveUser(newUser);
 
     }
 
