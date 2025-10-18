@@ -43,7 +43,9 @@ public class DispatcherServiceImpl implements DispatcherService {
      */
     @Override
     public String getLongUrl(String code, HttpServletRequest request, HttpServletResponse response) {
-        BizException.checkExpr("1001", !bloomFilterService.contain(code));
+        if(!bloomFilterService.contain(code)){
+            return null;
+        }
         String longUrl = cacheManager.getHash(CacheKey.SHORTURL_URL, code, key -> {
             ShortUrl shortUrl = shortUrlService.getByShortCode(code);
             BizException.checkExpr("1009", Objects.equals(shortUrl.getStatus(), ShortUrlStatus.DISABLED.getCode()));
@@ -51,7 +53,9 @@ public class DispatcherServiceImpl implements DispatcherService {
             BizException.checkExpr("1007", (!ObjectUtils.isEmpty(expiredAt) && expiredAt.isBefore(LocalDate.now())));
             return shortUrl.getOriginalUrl();
         });
-        BizException.checkExpr("1001", !StringUtils.hasText(longUrl));
+        if ( !StringUtils.hasText(longUrl)){
+            return null;
+        }
         String ip = IpUtils.getClientIp();
         eventPublisher.publishEvent(new ShortUrlClickedEvent(this, code, ip, request.getHeader("Referer"), request.getHeader("User-Agent"), LocalDateTime.now()));
         return longUrl;

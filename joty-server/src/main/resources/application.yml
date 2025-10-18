@@ -1,10 +1,8 @@
 spring:
   freemarker:
-    charset: UTF-8
     template-loader-path: classpath:/templates/
-    settings:
-      template_update_delay: 0 # 开发环境禁用缓存
-      classic_compatible: true # 兼容空值处理
+    suffix: .ftl # 模板文件后缀
+    cache: true # 模版缓存
 
   cache:
     type: caffeine
