@@ -4,9 +4,7 @@ import { router } from '@/router'
 import { useAppStore } from '@/stores/modules/app.ts'
 import { useUserStore } from '@/stores/modules/user.ts'
 
-//const baseApi = import.meta.env.VITE_APP_BASE_API|| 'http://xnkfz.com'
-const baseApi ='http://xnkfz.com'
-
+const baseApi = import.meta.env.VITE_APP_BASE_API
 const instance = axios.create({
   baseURL: baseApi + '/',
   timeout: 60 * 1000,

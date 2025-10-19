@@ -1,5 +1,4 @@
 import { message } from 'ant-design-vue'
-
 /**
  * 通用工具类
  */

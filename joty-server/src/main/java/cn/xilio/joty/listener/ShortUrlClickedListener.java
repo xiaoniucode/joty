@@ -1,11 +1,9 @@
 package cn.xilio.joty.listener;
 
-import cn.xilio.joty.core.common.service.RegionService;
 import cn.xilio.joty.core.common.util.*;
 import cn.xilio.joty.domain.dataobject.AccessRecord;
 import cn.xilio.joty.domain.event.ShortUrlClickedEvent;
 
-import cn.xilio.joty.domain.model.IpRegionInfo;
 import cn.xilio.joty.repository.AccessRecordRepository;
 import cn.xilio.joty.service.StatsService;
 import jakarta.transaction.Transactional;
@@ -23,8 +21,6 @@ public class ShortUrlClickedListener {
     @Autowired
     private AccessRecordRepository accessRecordRepository;
     @Autowired
-    private RegionService regionService;
-    @Autowired
     private StatsService statsService;
 
     @Async("shortUrlEventExecutor")
@@ -35,23 +31,13 @@ public class ShortUrlClickedListener {
         record.setShortCode(event.getShortCode());
         record.setIpAddress(event.getIp());
         record.setAccessTime(event.getClickedAt());
-        record.setReferer(StringUtils.hasText(event.getReferer()) ? event.getReferer() : "直接访问");//todo需国际化
+        record.setReferer(StringUtils.hasText(event.getReferer()) ? event.getReferer() : "直接访问");
         record.setUserAgent(event.getUserAgent());
         record.setBrowser(BrowserUtils.detectBrowser(event.getUserAgent()));
         record.setOs(OSDetector.detectFromUserAgent(event.getUserAgent()).getName());
         record.setDeviceType(DeviceDetector.detectDevice(event.getUserAgent()).getName());
         record.setNetworkType(NetworkTypeDetector.detectNetworkType(event.getUserAgent()));
-        //Need to optimize
         record.setUserType(statsService.getAccessUserType(event.getShortCode(),event.getIp(), event.getUserAgent()).getValue());
-        boolean isLocal = IpUtils.isLocal(event.getIp());
-        if (!isLocal) {
-            String region = regionService.getRegion(event.getIp());
-            regionService.close();
-            IpRegionInfo regionInfo = IpRegionInfo.parse(region);
-            record.setCountry(regionInfo.getCountry());
-            record.setProvince(regionInfo.getProvince());
-            record.setCity(regionInfo.getCity());
-        }
         accessRecordRepository.saveAccessRecord(record);
     }
 }

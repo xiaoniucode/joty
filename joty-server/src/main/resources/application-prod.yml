@@ -42,3 +42,9 @@ joty:
     local-path: /opt/joty/upload
   # 是否开启演示模式 演示模式不支持用户更新某些数据
   demo-model: false
+knife4j:
+  production: false
+  basic:
+    enable: false
+    username: admin
+    password: 123456

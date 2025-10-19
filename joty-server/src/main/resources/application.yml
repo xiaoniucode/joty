@@ -3,7 +3,6 @@ spring:
     template-loader-path: classpath:/templates/
     suffix: .ftl # 模板文件后缀
     cache: true # 模版缓存
-
   cache:
     type: caffeine
     cache-names: shortUrlCache
@@ -43,12 +42,6 @@ security:
     - /v3/api-docs/**
     - /swagger-ui/**
     - ${joty.file.public-path}/**
-knife4j:
-  production: false
-  basic:
-    enable: true
-    username: admin
-    password: 123456
 server:
   tomcat:
     max-connections: 8192
