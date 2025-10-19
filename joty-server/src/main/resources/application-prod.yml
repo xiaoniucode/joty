@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://host.docker.internal:3306/joty?characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://host.docker.internal:3525/joty?characterEncoding=utf-8&useSSL=false
     username: root
-    password: 123456 #生产千万不要将端口暴露在公网，血的教训！！
+    password: hkisb4478 #生产千万不要将端口暴露在公网，血的教训！！
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
@@ -15,8 +15,8 @@ spring:
   data:
     redis:
       host: host.docker.internal
-      port: 6379
-      password: 123456
+      port: 3645
+      password: hkisb4478
       database: 0
       timeout: 10000
       lettuce:

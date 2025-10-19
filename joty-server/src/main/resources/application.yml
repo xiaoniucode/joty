@@ -11,7 +11,7 @@ spring:
   application:
     name: joty
   profiles:
-    active: prod
+    active: dev
   task:
     execution:
       pool:
