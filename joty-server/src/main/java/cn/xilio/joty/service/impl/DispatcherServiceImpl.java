@@ -43,20 +43,28 @@ public class DispatcherServiceImpl implements DispatcherService {
      */
     @Override
     public String getLongUrl(String code, HttpServletRequest request, HttpServletResponse response) {
-        if(!bloomFilterService.contain(code)){
+        //短链接不存在
+        if (!bloomFilterService.contain(code)) {
             return null;
         }
         String longUrl = cacheManager.getHash(CacheKey.SHORTURL_URL, code, key -> {
             ShortUrl shortUrl = shortUrlService.getByShortCode(code);
-            BizException.checkExpr("1009", Objects.equals(shortUrl.getStatus(), ShortUrlStatus.DISABLED.getCode()));
+            //短链接被禁用
+            if (Objects.equals(shortUrl.getStatus(), ShortUrlStatus.DISABLED.getCode())) {
+                return null;
+            }
             LocalDate expiredAt = shortUrl.getExpiredAt();
-            BizException.checkExpr("1007", (!ObjectUtils.isEmpty(expiredAt) && expiredAt.isBefore(LocalDate.now())));
+            //短链接已经过期
+            if ((!ObjectUtils.isEmpty(expiredAt) && expiredAt.isBefore(LocalDate.now()))) {
+                return null;
+            }
             return shortUrl.getOriginalUrl();
         });
-        if ( !StringUtils.hasText(longUrl)){
+        if (!StringUtils.hasText(longUrl)) {
             return null;
         }
         String ip = IpUtils.getClientIp();
+        //发布记录访问信息的异步事件
         eventPublisher.publishEvent(new ShortUrlClickedEvent(this, code, ip, request.getHeader("Referer"), request.getHeader("User-Agent"), LocalDateTime.now()));
         return longUrl;
     }
